@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Персональный отчёт — FinTablo</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="report-header">
+  <div class="logo">
+    <img src="https://static.tildacdn.com/tild3138-6332-4262-a166-613434313066/Logo.png" alt="FinTablo" height="28">
+    <span class="logo-fallback">FinTablo</span>
+  </div>
+  <div class="report-meta">
+    <span>Персональный отчёт</span>
+    <span class="dot">·</span>
+    <span id="report-name">Загрузка...</span>
+    <span class="dot">·</span>
+    <span id="report-date"></span>
+  </div>
+</header>
+
+<div class="container-wide">
+
+  <!-- Dashboard -->
+  <div class="report-section">
+    <h2>Ваша модель сейчас</h2>
+    <div id="dashboard"></div>
+  </div>
+
+  <!-- 5 Metrics -->
+  <div class="report-section">
+    <h2>5 метрик вашей практики</h2>
+    <div id="metrics"></div>
+  </div>
+
+  <!-- Profile -->
+  <div class="report-section">
+    <h2>Ваш финансовый профиль</h2>
+    <div id="profile"></div>
+  </div>
+
+  <!-- Lost Potential -->
+  <div class="report-section">
+    <h2>Счётчик упущенного потенциала</h2>
+    <div id="lost-potential"></div>
+  </div>
+
+  <!-- 3 Scenarios -->
+  <div class="report-section">
+    <h2>3 сценария роста</h2>
+    <div id="scenarios"></div>
+  </div>
+
+  <!-- 90-day Roadmap -->
+  <div class="report-section">
+    <h2>Карта пути: 90 дней</h2>
+    <div id="roadmap"></div>
+  </div>
+
+  <!-- FinTablo Benefits -->
+  <div class="report-section">
+    <h2>Ваш потенциал с FinTablo</h2>
+    <div id="fintablo"></div>
+  </div>
+
+  <!-- CTA -->
+  <div id="report-cta"></div>
+
+  <!-- Share -->
+  <div id="share-section" class="mb-24"></div>
+
+</div>
+
+<!-- Persistent banner for those who skipped contact -->
+<div class="persistent-banner" id="persistent-banner">
+  <div class="banner-inner">
+    <div class="banner-text">Хотите разбор с экспертом? Оставьте номер — перезвоним.</div>
+    <button class="btn-banner" onclick="window.location.href='thankyou.html'">Получить звонок</button>
+  </div>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/calculator.js"></script>
+<script src="js/report.js"></script>
+</body>
+</html>
