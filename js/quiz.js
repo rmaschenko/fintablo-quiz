@@ -427,71 +427,156 @@ function onTargetChange(input) {
   document.getElementById('btn-next').disabled = false;
 }
 
-/* ============ INTERMEDIATE SCREEN ============ */
+/* ============ INTERMEDIATE SCREEN (enriched) ============ */
 function renderIntermediate() {
   var a = getAllAnswers();
   var checkMid = CHECK_MIDS[a.avgCheckRange] || 35000;
-  var income = (a.clients || 0) * checkMid;
-  var rate = Math.round(checkMid / (a.hoursPerClient || 20));
-  var totalH = (a.clients || 0) * (a.hoursPerClient || 20);
+  var clients = a.clients || 0;
+  var hpc = a.hoursPerClient || 20;
+  var income = clients * checkMid;
+  var rate = hpc > 0 ? Math.round(checkMid / hpc) : 0;
+  var totalH = clients * hpc;
+  var benchRate = 1500;
 
+  // Basic metrics
   document.getElementById('inter-name').textContent = a.name || '';
-  document.getElementById('inter-clients').textContent = a.clients || 0;
+  document.getElementById('inter-clients').textContent = clients;
   document.getElementById('inter-income').textContent = formatMoneyShort(income) + '/мес';
   document.getElementById('inter-rate').textContent = formatMoney(rate) + ' ₽/ч';
   document.getElementById('inter-hours').textContent = totalH + ' ч';
 
   // Color coding
+  setMetricSub('inter-clients-sub', clients, [3, 5], ['Зона уязвимости', 'Растущая база', 'Устойчивый портфель'], ['red', 'yellow', 'green']);
   setMetricSub('inter-income-sub', income, [100000, 250000], ['Ниже 100к', 'Средний уровень', 'Хороший уровень'], ['red', 'yellow', 'green']);
-  setMetricSub('inter-rate-sub', rate, [500, 1200], ['Ниже рынка', 'Есть потенциал', 'Верхний уровень'], ['red', 'yellow', 'green']);
+  setMetricSub('inter-rate-sub', rate, [500, 1500], ['Ниже рынка', 'Есть потенциал', 'Верхний уровень'], ['red', 'yellow', 'green']);
   setMetricSub('inter-hours-sub', totalH, [80, 120], ['Комфортно', 'Умеренно', 'Высокая нагрузка'], ['green', 'yellow', 'red']);
 
-  // Insight
-  var insightText;
-  if (rate < 500 && (a.clients || 0) > 5) {
-    insightText = 'Тревожная комбинация: большой объём работы при низкой ставке. Наращивание клиентской базы при такой модели приведёт к выгоранию за 6–12 месяцев. Нужна не «ещё больше клиентов», а принципиально другая модель работы.';
-  } else if (income < 100000) {
-    insightText = 'Ваша практика пока в стартовой фазе. Это не проблема навыков: финансисты с вашим опытом, изменившие модель работы, выходят на 200–250 тыс. за 3–4 месяца. Следующие вопросы покажут, где именно ваши точки роста.';
-  } else if (income < 180000) {
-    insightText = 'Вы перешли психологический барьер «зарабатываю как в найме». Но ' + formatMoneyShort(income) + ' — это ловушка: кажется, что всё нормально, но дальнейший рост требует непропорционально больших усилий. Здесь большинство застревает на годы.';
-  } else if (income < 280000) {
-    insightText = 'Верхняя треть рынка. Вы доказали, что модель работает. Следующий уровень — 350–450 тыс. — требует не «больше клиентов», а другой структуры: другие чеки, другая автоматизация, другие каналы.';
-  } else {
-    insightText = 'Сильная позиция. При таком доходе главный риск — зависимость от 1–2 крупных клиентов. Диверсификация и автоматизация — ключи к следующему уровню и к вашей финансовой безопасности.';
+  // === Benchmark comparison ===
+  var benchEl = document.getElementById('inter-benchmark');
+  if (benchEl) {
+    var ratePercent = Math.min(100, Math.round(rate / benchRate * 100));
+    var incomeTarget = 300000;
+    var incomePct = Math.min(100, Math.round(income / incomeTarget * 100));
+    benchEl.innerHTML =
+      '<div style="font-size:13px;font-weight:600;color:var(--brand-navy);margin-bottom:8px">Сравнение с рынком</div>' +
+      '<div class="bench-row"><span class="bench-label">Ваша ставка</span><span class="bench-you">' + formatMoney(rate) + ' ₽/ч</span></div>' +
+      '<div class="bench-row"><span class="bench-label">Медиана финдиректоров на аутсорсе</span><span class="bench-market">' + formatMoney(benchRate) + ' ₽/ч</span></div>' +
+      '<div class="bench-row"><span class="bench-label">Ваша ставка vs. рынок</span><span class="bench-you" style="color:' + (ratePercent >= 80 ? 'var(--accent-green)' : ratePercent >= 50 ? 'var(--warning)' : 'var(--danger)') + '">' + ratePercent + '%</span></div>' +
+      '<div class="bench-row"><span class="bench-label">Ваш доход vs. цель 300к/мес</span><span class="bench-you" style="color:' + (incomePct >= 80 ? 'var(--accent-green)' : incomePct >= 40 ? 'var(--warning)' : 'var(--danger)') + '">' + incomePct + '%</span></div>';
   }
 
-  document.getElementById('inter-insight').innerHTML =
-    '<strong>' + (a.name || '') + '</strong>, вот что диагностика уже знает о вас:<br><br>' + insightText;
+  // === Expert insight ===
+  var insightText;
+  if (rate < 500 && clients > 5) {
+    insightText = '<strong>Тревожная комбинация.</strong> Вы работаете с ' + clients + ' клиентами, но ставка ' + formatMoney(rate) + ' ₽/ч — это уровень начинающего специалиста, а не финансового директора с вашим опытом. При такой модели каждый новый клиент приближает вас к выгоранию, а не к росту дохода. Приоритет №1 — не «ещё клиенты», а радикальное изменение ценообразования. Финансисты в аналогичной ситуации, переупаковавшие своё предложение, удваивали ставку за 2–3 месяца без потери клиентов.';
+  } else if (income < 100000) {
+    insightText = '<strong>Стартовая фаза практики.</strong> При доходе ' + formatMoneyShort(income) + '/мес вы пока в зоне, где фриланс не оправдывает ожиданий. Это не вопрос квалификации — это вопрос модели. Финансисты с вашим опытом, которые выстроили правильный поток клиентов и переупаковали предложение, выходят на 200–250 тыс. за 3–4 месяца. Ваш полный отчёт покажет конкретные шаги, как это сделать.';
+  } else if (income < 180000) {
+    insightText = '<strong>Ловушка «нормального дохода».</strong> ' + formatMoneyShort(income) + '/мес — это уровень, на котором кажется, что всё работает. Но это самый коварный коридор: чтобы вырасти дальше, нужно не «больше работать», а менять структуру практики. При ставке ' + formatMoney(rate) + ' ₽/ч и ' + totalH + ' часах в месяц у вас есть конкретный потенциал роста — диагностика покажет, где именно.';
+  } else if (income < 280000) {
+    insightText = '<strong>Верхняя треть рынка.</strong> Доход ' + formatMoneyShort(income) + '/мес подтверждает, что ваша модель работает. Следующий уровень — 350–450 тыс. — достигается не через «ещё больше клиентов», а через повышение среднего чека, автоматизацию и подключение партнёрских каналов. Ваш полный отчёт покажет конкретный сценарий.';
+  } else {
+    insightText = '<strong>Сильная позиция.</strong> При доходе ' + formatMoneyShort(income) + '/мес ваша ключевая задача — устойчивость. Главный риск на этом уровне — зависимость от 1–2 крупных клиентов. Диверсификация источников и автоматизация рутины — ваши рычаги для следующего рывка.';
+  }
 
-  // Next hint
+  document.getElementById('inter-insight').innerHTML = insightText;
+
+  // === Key finding ===
+  var findEl = document.getElementById('inter-finding');
+  if (findEl) {
+    var monthlyPotential = Math.max(0, (benchRate - rate)) * totalH;
+    var findClass = '';
+    var findText = '';
+
+    if (rate >= benchRate) {
+      findClass = 'positive';
+      findText = '💪 <strong>Ваша ставка выше рыночной медианы</strong> — это сильный показатель. Следующие вопросы помогут определить, как масштабировать практику без увеличения нагрузки.';
+    } else if (monthlyPotential > 50000) {
+      findClass = 'negative';
+      findText = '⚡ <strong>Ключевая находка:</strong> разница между вашей ставкой и рыночным уровнем = <strong>' + formatMoney(monthlyPotential) + ' ₽/мес</strong> потенциального роста дохода. Это ' + formatMoney(monthlyPotential * 12) + ' ₽ в год — без единого нового клиента, только через правильное позиционирование.';
+    } else {
+      findClass = '';
+      findText = '📊 <strong>Промежуточный вывод:</strong> ваша модель работает, но есть конкретные точки роста. Следующие вопросы покажут, где именно вы можете увеличить доход с наименьшими усилиями.';
+    }
+
+    findEl.className = 'inter-finding ' + findClass;
+    findEl.innerHTML = findText;
+  }
+
+  // === Live cost counter ===
+  var costEl = document.getElementById('inter-live-cost');
+  if (costEl && rate < benchRate) {
+    var dailyLoss = Math.round(monthlyPotential / 22);
+    costEl.innerHTML =
+      '<div class="cost-label">Каждый рабочий день при текущей ставке вы недополучаете</div>' +
+      '<div class="cost-value">~' + formatMoney(dailyLoss) + ' ₽</div>' +
+      '<div class="cost-sub">Это разница между вашей текущей и рыночной ставкой финдиректора</div>';
+  } else if (costEl) {
+    costEl.style.display = 'none';
+  }
+
+  // === Next hint ===
   var nextHint = document.getElementById('inter-next-hint');
   if (nextHint) {
-    nextHint.innerHTML = 'Осталось 4 вопроса: рутина, источники клиентов, барьеры роста и целевой доход. После них — ваш персональный план роста.';
+    nextHint.innerHTML = '👉 <strong>Осталось 4 вопроса</strong> — рутина, источники клиентов, барьеры и целевой доход. После них вы получите:<br>' +
+      '• 5 ключевых метрик вашей практики с рыночными бенчмарками<br>' +
+      '• 3 сценария роста с конкретными цифрами<br>' +
+      '• Пошаговый план на 90 дней';
   }
 }
 
-/* ============ CAPTURE SCREEN ============ */
+/* ============ CAPTURE SCREEN (enriched) ============ */
 function renderCapturePreview() {
   var a = getAllAnswers();
   var m = calculate(a);
 
+  // Title
   var el = document.getElementById('capture-name');
-  if (el) el.textContent = (a.name || '') + ', ваш персональный план готов';
+  if (el) el.textContent = (a.name || '') + ', ваш персональный план роста готов';
 
-  var prev = {
-    'preview-rate': formatMoney(m.hourlyRate) + ' ₽/час',
-    'preview-type': m.practiceType,
-    'preview-barrier': (a.barriers && a.barriers[0]) || '—',
-    'preview-growth': '+' + m.checkGrowthPct + '%'
-  };
+  // Personalized hook
+  var hookEl = document.getElementById('capture-hook');
+  if (hookEl) {
+    var hookText = '';
+    if (m.hourlyRate < 1500 && m.lostPotential > 0) {
+      hookText = 'При вашей ставке <strong>' + formatMoney(m.hourlyRate) + ' ₽/ч</strong> и <strong>' + m.clients + '</strong> клиентах ваш потенциал роста дохода — <strong>+' + formatMoney(m.lostPotential) + ' ₽/мес</strong>. Полный отчёт покажет, как этого достичь.';
+    } else {
+      hookText = 'При <strong>' + m.clients + '</strong> клиентах и доходе <strong>' + formatMoneyShort(m.currentIncome) + '/мес</strong> у вас сильная позиция. Полный отчёт покажет, как выйти на <strong>' + formatMoneyShort(m.targetIncome) + '/мес</strong>.';
+    }
+    hookEl.innerHTML = hookText;
+  }
 
-  for (var id in prev) {
-    var pEl = document.getElementById(id);
-    if (pEl) pEl.textContent = prev[id];
+  // Visual gauge preview (2 visible + locked)
+  var gaugesEl = document.getElementById('capture-gauges');
+  if (gaugesEl) {
+    var rateColor = m.rateEfficiency >= 70 ? 'green' : m.rateEfficiency >= 40 ? 'yellow' : 'red';
+    var portColor = m.portfolioStability >= 70 ? 'green' : m.portfolioStability >= 40 ? 'yellow' : 'red';
+
+    gaugesEl.innerHTML =
+      '<div class="capture-gauge-item">' +
+        '<div class="cg-header"><span class="cg-title">Эффективность ставки</span><span class="cg-value">' + m.rateEfficiency + '%</span></div>' +
+        '<div class="cg-bar"><div class="cg-fill ' + rateColor + '" style="width:' + m.rateEfficiency + '%"></div></div>' +
+      '</div>' +
+      '<div class="capture-gauge-item">' +
+        '<div class="cg-header"><span class="cg-title">Устойчивость портфеля</span><span class="cg-value">' + m.portfolioStability + '%</span></div>' +
+        '<div class="cg-bar"><div class="cg-fill ' + portColor + '" style="width:' + m.portfolioStability + '%"></div></div>' +
+      '</div>' +
+      '<div style="display:flex;gap:8px;margin-top:8px">' +
+        '<div style="flex:1;height:6px;background:#E5E7EB;border-radius:3px;position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,#E5E7EB 0,#E5E7EB 4px,#D1D5DB 4px,#D1D5DB 8px)"></div></div>' +
+        '<div style="flex:1;height:6px;background:#E5E7EB;border-radius:3px;position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,#E5E7EB 0,#E5E7EB 4px,#D1D5DB 4px,#D1D5DB 8px)"></div></div>' +
+        '<div style="flex:1;height:6px;background:#E5E7EB;border-radius:3px;position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,#E5E7EB 0,#E5E7EB 4px,#D1D5DB 4px,#D1D5DB 8px)"></div></div>' +
+      '</div>' +
+      '<div style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:6px">Ещё 3 метрики доступны в полном отчёте</div>';
+  }
+
+  // Personalize FinTablo value line
+  var ftLine = document.getElementById('capture-value-fintablo');
+  if (ftLine && m.scenarioB_bonus > 0) {
+    ftLine.textContent = 'Расчёт: +' + formatMoney(2 * m.checkMid) + ' ₽/мес дополнительно через партнёрскую программу FinTablo';
   }
 }
 
-/* ============ PHONE FORMATTING ============ */
+/* ============ PHONE FORMATTING + CONSENT ============ */
 function formatPhone(input) {
   var val = input.value.replace(/\D/g, '');
   if (val.startsWith('7') || val.startsWith('8')) val = val.slice(1);
@@ -501,9 +586,22 @@ function formatPhone(input) {
   if (val.length >= 7) formatted += '-' + val.substring(6, 8);
   if (val.length >= 9) formatted += '-' + val.substring(8, 10);
   input.value = formatted;
-  var isValid = val.length === 10;
+  updateSubmitButton();
+}
+
+function updateSubmitButton() {
+  var phoneVal = (document.getElementById('phone').value || '').replace(/\D/g, '');
+  var phoneValid = phoneVal.length === 11 || (phoneVal.length === 10 && !phoneVal.startsWith('7') && !phoneVal.startsWith('8'));
+  // Accept 10 digits (without leading 7/8) or 11 digits (with)
+  var rawDigits = document.getElementById('phone').value.replace(/\D/g, '');
+  if (rawDigits.startsWith('7') || rawDigits.startsWith('8')) rawDigits = rawDigits.slice(1);
+  var isPhoneValid = rawDigits.length === 10;
+
+  var consentEl = document.getElementById('consent-pd');
+  var isConsent = consentEl ? consentEl.checked : true;
+
   var submitBtn = document.getElementById('btn-submit-lead');
-  if (submitBtn) submitBtn.disabled = !isValid;
+  if (submitBtn) submitBtn.disabled = !(isPhoneValid && isConsent);
 }
 
 /* ============ HELPERS ============ */

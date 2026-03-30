@@ -549,6 +549,57 @@ input[type=range]::-moz-range-thumb {
 .metric-card .metric-sub.yellow { color: var(--warning); }
 .metric-card .metric-sub.red { color: var(--danger); }
 
+/* Intermediate — benchmark block */
+.inter-benchmark {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.inter-benchmark .bench-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.inter-benchmark .bench-row:last-child { border-bottom: none; }
+.inter-benchmark .bench-label { color: var(--text-secondary); }
+.inter-benchmark .bench-you { font-weight: 700; color: var(--brand-navy); }
+.inter-benchmark .bench-market { font-size: 12px; color: var(--text-muted); }
+
+/* Intermediate — key finding */
+.inter-finding {
+  background: var(--warning-light);
+  border-left: 3px solid var(--warning);
+  border-radius: 0 8px 8px 0;
+  padding: 14px;
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.55;
+  margin: 16px 0;
+}
+
+.inter-finding.positive { background: var(--accent-green-light); border-left-color: var(--accent-green); }
+.inter-finding.negative { background: var(--danger-light); border-left-color: var(--danger); }
+
+/* Intermediate — live cost counter */
+.inter-live-cost {
+  background: var(--brand-blue-light);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+  margin: 16px 0;
+}
+
+.inter-live-cost .cost-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+.inter-live-cost .cost-value { font-size: 24px; font-weight: 700; color: var(--brand-blue); }
+.inter-live-cost .cost-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
 .inter-next-hint {
   margin-top: 16px;
   padding: 14px;
@@ -559,6 +610,40 @@ input[type=range]::-moz-range-thumb {
   text-align: center;
   line-height: 1.5;
 }
+
+/* Capture — personalized hook */
+.capture-hook {
+  background: var(--brand-blue-light);
+  border-radius: var(--radius);
+  padding: 16px;
+  font-size: 15px;
+  color: var(--brand-navy);
+  line-height: 1.55;
+  margin-bottom: 20px;
+}
+
+.capture-hook strong { color: var(--brand-blue); }
+
+/* Capture — mini gauge preview */
+.capture-gauge-item { margin-bottom: 12px; }
+
+.capture-gauge-item .cg-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.capture-gauge-item .cg-title { color: var(--text-secondary); }
+.capture-gauge-item .cg-value { font-weight: 600; color: var(--brand-navy); }
+
+.capture-gauge-item .cg-bar { height: 6px; background: #E5E7EB; border-radius: 3px; overflow: hidden; }
+
+.capture-gauge-item .cg-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+.capture-gauge-item .cg-fill.green { background: var(--accent-green); }
+.capture-gauge-item .cg-fill.blue { background: var(--brand-blue); }
+.capture-gauge-item .cg-fill.yellow { background: var(--warning); }
+.capture-gauge-item .cg-fill.red { background: var(--danger); }
 
 /* ===== Navigation Footer ===== */
 .step-nav {

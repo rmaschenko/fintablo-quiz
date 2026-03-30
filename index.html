@@ -159,11 +159,13 @@
   <!-- INTERMEDIATE SCREEN -->
   <div class="step" id="step-65">
     <div class="intermediate-screen">
-      <h2>Вот что диагностика уже знает о вас, <span id="inter-name"></span></h2>
+      <h2><span id="inter-name"></span>, вот первые результаты вашей диагностики</h2>
+
       <div class="metrics-grid">
         <div class="metric-card">
           <div class="metric-label">Клиентов</div>
           <div class="metric-value" id="inter-clients">—</div>
+          <div id="inter-clients-sub" class="metric-sub"></div>
         </div>
         <div class="metric-card">
           <div class="metric-label">Расч. доход</div>
@@ -171,7 +173,7 @@
           <div id="inter-income-sub" class="metric-sub"></div>
         </div>
         <div class="metric-card">
-          <div class="metric-label">Ставка</div>
+          <div class="metric-label">Ваша ставка</div>
           <div class="metric-value" id="inter-rate">—</div>
           <div id="inter-rate-sub" class="metric-sub"></div>
         </div>
@@ -181,7 +183,20 @@
           <div id="inter-hours-sub" class="metric-sub"></div>
         </div>
       </div>
-      <div class="insight-box" id="inter-insight"></div>
+
+      <!-- Benchmark comparison -->
+      <div id="inter-benchmark" class="inter-benchmark"></div>
+
+      <!-- Expert insight -->
+      <div class="insight-box" id="inter-insight" style="font-size:14px"></div>
+
+      <!-- Key finding -->
+      <div id="inter-finding" class="inter-finding"></div>
+
+      <!-- Live cost counter -->
+      <div id="inter-live-cost" class="inter-live-cost"></div>
+
+      <!-- What's next -->
       <div class="inter-next-hint" id="inter-next-hint"></div>
     </div>
   </div>
@@ -268,27 +283,34 @@
     <div class="capture-form">
       <h2 id="capture-name">Ваш персональный план готов</h2>
 
+      <!-- Personalized hook -->
+      <div id="capture-hook" class="capture-hook"></div>
+
+      <!-- Visual preview: gauge bars (partially revealed) -->
       <div class="preview-block">
-        <div class="preview-title">Предварительные результаты</div>
-        <div class="preview-item"><span class="check">✓</span> Текущая расчётная ставка: <strong id="preview-rate">—</strong></div>
-        <div class="preview-item"><span class="check">✓</span> Тип практики: <strong id="preview-type">—</strong></div>
-        <div class="preview-item"><span class="check">✓</span> Главный барьер: <strong id="preview-barrier">—</strong></div>
-        <div class="preview-item"><span class="check">✓</span> Потенциал роста чека: <strong id="preview-growth">—</strong></div>
-        <div class="preview-locked">🔒 Ещё 5 метрик, 3 сценария роста и персональная карта пути — в полном отчёте</div>
+        <div class="preview-title">Ваши результаты</div>
+        <div id="capture-gauges"></div>
+        <div class="preview-locked">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:18px">🔒</span>
+            <span>Ещё 3 метрики, 3 сценария роста с цифрами и пошаговый план на 90 дней — в полном отчёте</span>
+          </div>
+        </div>
       </div>
 
+      <!-- What full report contains — personalized -->
       <div class="capture-value-block">
-        <h4>Что вы получите в полном отчёте:</h4>
+        <h4>Что вы получите:</h4>
         <ul>
-          <li>5 ключевых метрик вашей практики с рыночными бенчмарками</li>
-          <li>3 сценария роста с конкретными цифрами и сроками</li>
-          <li>Пошаговый план на 90 дней под вашу ситуацию</li>
-          <li>Расчёт вашего потенциала с партнёрской программой FinTablo</li>
-          <li>Персональный разбор с экспертом FinTablo (по желанию)</li>
+          <li>Полный анализ 5 ключевых метрик вашей практики vs. рыночные показатели</li>
+          <li>3 конкретных сценария роста дохода — с расчётами под ваши цифры</li>
+          <li>Пошаговый план на 90 дней: что делать на каждой неделе</li>
+          <li id="capture-value-fintablo">Расчёт: сколько вы заработаете с партнёрской программой FinTablo</li>
+          <li>Персональный разбор с экспертом, который уже видит ваши данные</li>
         </ul>
       </div>
 
-      <p class="form-label">Куда отправить ваш план?</p>
+      <p class="form-label">Получите полный отчёт и разбор с экспертом</p>
 
       <div class="field-group">
         <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" oninput="formatPhone(this)">
@@ -297,7 +319,7 @@
 
       <div class="field-group">
         <input type="email" id="email" placeholder="email@example.com">
-        <p class="field-hint">Необязательно — для отправки отчёта на почту</p>
+        <p class="field-hint">Необязательно — отправим копию отчёта на почту</p>
       </div>
 
       <label class="checkbox-row">
@@ -305,15 +327,15 @@
         <span>Хочу персональный разбор с экспертом FinTablo (бесплатно, 20–30 мин)</span>
       </label>
 
-      <button class="btn-primary" id="btn-submit-lead" disabled onclick="submitLead()">Получить персональный план →</button>
+      <label class="checkbox-row">
+        <input type="checkbox" id="consent-pd" onchange="updateSubmitButton()">
+        <span>Даю согласие на обработку персональных данных в соответствии с <a href="https://fintablo.ru/position" target="_blank" style="color:var(--brand-blue)">политикой конфиденциальности</a></span>
+      </label>
 
-      <p class="legal-text">
-        Нажимая кнопку, вы соглашаетесь с
-        <a href="https://fintablo.ru/position" target="_blank">политикой обработки персональных данных</a>
-      </p>
+      <button class="btn-primary" id="btn-submit-lead" disabled onclick="submitLead()">Получить полный отчёт →</button>
 
       <p class="skip-link">
-        <a href="#" onclick="showReportPreview(); return false;">Посмотреть краткий результат без отправки</a>
+        <a href="#" onclick="showReportPreview(); return false;">Посмотреть краткий результат без отправки контактов</a>
       </p>
     </div>
   </div>
