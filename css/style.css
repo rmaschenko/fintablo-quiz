@@ -1850,7 +1850,7 @@ html { -webkit-overflow-scrolling: touch; }
 /* ===== Footer ===== */
 .site-footer {
   margin-top: 40px;
-  padding: 20px 24px;
+  padding: 24px 24px;
   border-top: 1px solid var(--border);
   background: var(--surface);
 }
@@ -1860,19 +1860,31 @@ html { -webkit-overflow-scrolling: touch; }
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 16px;
 }
 
+.footer-company { flex-shrink: 0; }
+
 .footer-brand {
-  font-size: 12px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.footer-legal {
+  font-size: 11px;
   color: var(--text-muted);
+  line-height: 1.5;
 }
 
 .footer-links {
   display: flex;
-  gap: 16px;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
 }
 
 .footer-links a {
@@ -1884,8 +1896,8 @@ html { -webkit-overflow-scrolling: touch; }
 .footer-links a:hover { color: var(--text-secondary); text-decoration: underline; }
 
 @media (max-width: 480px) {
-  .footer-inner { flex-direction: column; text-align: center; }
-  .footer-links { gap: 12px; }
+  .footer-inner { flex-direction: column; align-items: center; text-align: center; }
+  .footer-links { align-items: center; }
 }
 
 /* ===== Utility ===== */
