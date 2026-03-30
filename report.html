@@ -5,80 +5,118 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Персональный отчёт — FinTablo</title>
   <link rel="stylesheet" href="css/style.css">
+  <!-- Yandex.Metrika -->
+  <script type="text/javascript">
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();
+    for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}
+    k=e.createElement(t);a=e.getElementsByTagName(t)[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a)})
+    (window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
+    ym(61131877,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});
+  </script>
 </head>
 <body>
 
 <header class="report-header">
-  <div class="logo">
-    <img src="https://static.tildacdn.com/tild3138-6332-4262-a166-613434313066/Logo.png" alt="FinTablo" height="28">
-    <span class="logo-fallback">FinTablo</span>
-  </div>
-  <div class="report-meta">
-    <span>Персональный отчёт</span>
-    <span class="dot">·</span>
-    <span id="report-name">Загрузка...</span>
-    <span class="dot">·</span>
-    <span id="report-date"></span>
+  <div class="header-inner">
+    <div class="logo">
+      <img src="https://static.tildacdn.com/tild3138-6332-4262-a166-613434313066/Logo.png" alt="FinTablo" height="28">
+      <span class="logo-fallback">FinTablo</span>
+    </div>
+    <div class="report-meta">
+      <span>Персональный отчёт</span>
+      <span class="dot">·</span>
+      <span id="report-name">Загрузка...</span>
+      <span class="dot">·</span>
+      <span id="report-date"></span>
+    </div>
   </div>
 </header>
+
+<!-- Report navigation -->
+<nav class="report-nav" id="report-nav">
+  <div class="report-nav-inner">
+    <a href="#sec-dashboard">Обзор</a>
+    <a href="#sec-metrics">Метрики</a>
+    <a href="#sec-profile">Профиль</a>
+    <a href="#sec-potential">Потенциал</a>
+    <a href="#sec-scenarios">Сценарии</a>
+    <a href="#sec-roadmap">План</a>
+    <a href="#sec-fintablo">FinTablo</a>
+  </div>
+</nav>
 
 <div class="container-wide">
 
   <!-- Dashboard -->
-  <div class="report-section">
-    <h2>Ваша модель сейчас</h2>
+  <div class="report-section" id="sec-dashboard">
+    <h2>Ваша практика сейчас</h2>
     <div id="dashboard"></div>
   </div>
 
   <!-- 5 Metrics -->
-  <div class="report-section">
-    <h2>5 метрик вашей практики</h2>
+  <div class="report-section" id="sec-metrics">
+    <h2>5 ключевых метрик вашей практики</h2>
     <div id="metrics"></div>
   </div>
 
   <!-- Profile -->
-  <div class="report-section">
+  <div class="report-section" id="sec-profile">
     <h2>Ваш финансовый профиль</h2>
     <div id="profile"></div>
   </div>
 
   <!-- Lost Potential -->
-  <div class="report-section">
-    <h2>Счётчик упущенного потенциала</h2>
+  <div class="report-section" id="sec-potential">
+    <h2>Упущенный потенциал</h2>
     <div id="lost-potential"></div>
   </div>
 
-  <!-- 3 Scenarios -->
-  <div class="report-section">
-    <h2>3 сценария роста</h2>
-    <div id="scenarios"></div>
+  <!-- Locked overlay for preview mode -->
+  <div id="locked-section" class="hidden">
+    <div class="locked-cta">
+      <h3>Полный отчёт доступен после регистрации</h3>
+      <p>Вы видите 30% отчёта. Ещё 3 сценария роста, пошаговый план на 90 дней и расчёт вашего потенциала с FinTablo — доступны в полной версии.</p>
+      <button class="btn-primary" onclick="window.location.href='index.html?go=capture'">Получить полный отчёт →</button>
+    </div>
   </div>
 
-  <!-- 90-day Roadmap -->
-  <div class="report-section">
-    <h2>Карта пути: 90 дней</h2>
-    <div id="roadmap"></div>
+  <!-- Full report sections (hidden in preview mode) -->
+  <div id="full-report">
+
+    <!-- 3 Scenarios -->
+    <div class="report-section" id="sec-scenarios">
+      <h2>3 сценария роста</h2>
+      <div id="scenarios"></div>
+    </div>
+
+    <!-- 90-day Roadmap -->
+    <div class="report-section" id="sec-roadmap">
+      <h2>Карта пути: 90 дней</h2>
+      <div id="roadmap"></div>
+    </div>
+
+    <!-- FinTablo Benefits -->
+    <div class="report-section" id="sec-fintablo">
+      <h2>Ваш потенциал с FinTablo</h2>
+      <div id="fintablo"></div>
+    </div>
+
+    <!-- CTA -->
+    <div id="report-cta"></div>
+
+    <!-- Share -->
+    <div id="share-section" class="mb-24"></div>
+
   </div>
-
-  <!-- FinTablo Benefits -->
-  <div class="report-section">
-    <h2>Ваш потенциал с FinTablo</h2>
-    <div id="fintablo"></div>
-  </div>
-
-  <!-- CTA -->
-  <div id="report-cta"></div>
-
-  <!-- Share -->
-  <div id="share-section" class="mb-24"></div>
 
 </div>
 
-<!-- Persistent banner for those who skipped contact -->
+<!-- Persistent banner for preview mode -->
 <div class="persistent-banner" id="persistent-banner">
   <div class="banner-inner">
-    <div class="banner-text">Хотите разбор с экспертом? Оставьте номер — перезвоним.</div>
-    <button class="btn-banner" onclick="window.location.href='thankyou.html'">Получить звонок</button>
+    <div class="banner-text">Получите полный отчёт и персональный разбор с экспертом</div>
+    <button class="btn-banner" onclick="window.location.href='index.html?go=capture'">Получить →</button>
   </div>
 </div>
 

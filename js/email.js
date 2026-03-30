@@ -1,45 +1,6 @@
-function saveLead(data) {
-  const leads = JSON.parse(localStorage.getItem('fintablo_leads') || '[]');
-  leads.push({ ...data, timestamp: new Date().toISOString() });
-  localStorage.setItem('fintablo_leads', JSON.stringify(leads));
-}
-
-function sendEmailLead(answers, contact) {
-  const metrics = calculate(answers);
-  const subject = encodeURIComponent(
-    'Новый лид FinTablo: ' + answers.name + ', ' + formatMoney(metrics.currentIncome) + ' ₽/мес'
-  );
-
-  const lines = [
-    'НОВЫЙ ЛИД — ДИАГНОСТИКА ФИНАНСИСТА',
-    '',
-    'Имя: ' + answers.name,
-    'Телефон: ' + contact.phone,
-    'Email: ' + (contact.email || 'не указан'),
-    'Хочет разбор с экспертом: ' + (contact.wantExpert ? 'ДА' : 'нет'),
-    'Время: ' + new Date().toLocaleString('ru-RU'),
-    '',
-    '--- РЕЗУЛЬТАТЫ ДИАГНОСТИКИ ---',
-    'Опыт: ' + answers.experience,
-    'Статус: ' + answers.status,
-    'Клиентов: ' + answers.clients,
-    'Средний чек: ' + answers.avgCheckRange,
-    'Часов/клиент: ' + answers.hoursPerClient,
-    'Доля рутины: ' + answers.manualWorkPct + '%',
-    'Источники клиентов: ' + (answers.clientSources || []).join(', '),
-    'Барьеры: ' + (answers.barriers || []).join(', '),
-    'Целевой доход: ' + answers.targetIncome + ' ₽/мес',
-    '',
-    '--- РАСЧЁТНЫЕ МЕТРИКИ ---',
-    'Текущий доход: ' + metrics.currentIncome + ' ₽/мес',
-    'Ставка: ' + metrics.hourlyRate + ' ₽/час',
-    'Тип практики: ' + metrics.practiceType,
-    'Разрыв до цели: ' + metrics.incomeGap + ' ₽/мес'
-  ];
-
-  const body = encodeURIComponent(lines.join('\n'));
-  window.location.href = 'mailto:maschenko@icloud.com?subject=' + subject + '&body=' + body;
-}
+/* ===== Lead handling ===== */
+/* mailto removed. Leads go to localStorage.
+   AmoCRM integration: add webhook POST here when ready. */
 
 function submitLead() {
   var phone = document.getElementById('phone').value;
@@ -49,24 +10,79 @@ function submitLead() {
   var answers = getAllAnswers();
   var metrics = calculate(answers);
 
+  // Clear preview flag and enrich with computed metrics
+  delete answers.skippedContact;
   answers.currentIncome = metrics.currentIncome;
   answers.hourlyRate = metrics.hourlyRate;
   answers.practiceType = metrics.practiceType;
   answers.incomeGap = metrics.incomeGap;
+  answers.checkGrowthPct = metrics.checkGrowthPct;
 
   var contact = { phone: phone, email: email, wantExpert: wantExpert };
+  var leadData = {};
+  for (var k in answers) { leadData[k] = answers[k]; }
+  for (var j in contact) { leadData[j] = contact[j]; }
 
-  saveLead(Object.assign({}, answers, contact));
-  sendEmailLead(answers, contact);
+  // Save locally
+  saveLead(leadData);
 
-  setTimeout(function() {
-    window.location.href = 'report.html';
-  }, 800);
+  // Save enriched answers back so report.html can use them
+  localStorage.setItem(QUIZ_KEY, JSON.stringify(answers));
+
+  // Yandex.Metrika goal
+  if (typeof ym === 'function') {
+    ym(61131877, 'reachGoal', 'lead_submitted', {
+      practiceType: metrics.practiceType,
+      currentIncome: metrics.currentIncome,
+      hourlyRate: metrics.hourlyRate
+    });
+  }
+
+  /* === AmoCRM webhook (uncomment when ready) ===
+  fetch('YOUR_AMOCRM_WEBHOOK_URL', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: answers.name,
+      phone: phone,
+      email: email,
+      wantExpert: wantExpert,
+      // Quiz data
+      experience: answers.experience,
+      status: answers.workFormat,
+      clients: answers.clients,
+      avgCheck: answers.avgCheckRange,
+      hoursPerClient: answers.hoursPerClient,
+      manualWorkPct: answers.manualWorkPct,
+      clientSources: (answers.clientSources || []).join(', '),
+      barriers: (answers.barriers || []).join(', '),
+      targetIncome: answers.targetIncome,
+      // Computed
+      currentIncome: metrics.currentIncome,
+      hourlyRate: metrics.hourlyRate,
+      practiceType: metrics.practiceType,
+      incomeGap: metrics.incomeGap,
+      // UTM
+      utm: getUtmParams(),
+      referrer: document.referrer,
+      pageUrl: window.location.href
+    })
+  }).catch(function() {});
+  === */
+
+  // Redirect to report (full version, not preview)
+  window.location.href = 'report.html';
 }
 
-function showReportWithoutContact() {
+function showReportPreview() {
   var answers = getAllAnswers();
   answers.skippedContact = true;
-  localStorage.setItem('fintablo_quiz', JSON.stringify(answers));
+  localStorage.setItem(QUIZ_KEY, JSON.stringify(answers));
+
+  // Yandex.Metrika goal
+  if (typeof ym === 'function') {
+    ym(61131877, 'reachGoal', 'report_preview_nocontact');
+  }
+
   window.location.href = 'report.html';
 }

@@ -1,75 +1,103 @@
-var currentStep = 0;
-var totalSteps = 11; // 0=start, 1-9=questions, 10=capture, plus intermediate=5.5
+/* ===== Quiz Logic v2 ===== */
+/* Step order: 0(start) 1(name) 2(experience) 3(workFormat) 4(clients) 5(avgCheck)
+   6(hours) 65(intermediate) 7(manual%) 8(sources) 9(barriers) 10(targetIncome) 11(capture) */
 
+var currentStep = 0;
+var STEP_ORDER = [0, 1, 2, 3, 4, 5, 6, 65, 7, 8, 9, 10, 11];
+var TOTAL_QUESTION_STEPS = 10; // steps 1-10 are questions
+
+/* ============ INSIGHTS ============ */
 var INSIGHTS = {
-  status: {
-    'В найме (рассматриваю фриланс)': '73% финансистов, планирующих уйти во фриланс, откладывают переход на 1–2 года. Чаще всего не из-за отсутствия навыков, а из-за отсутствия модели, гарантирующей замену дохода в первые 3 месяца.',
-    'Фриланс/аутсорс до 1 года': 'Первый год — statistically самый сложный: 68% фрилансеров-финансистов зарабатывают меньше ожиданий. Не из-за некомпетентности — из-за неправильной модели монетизации опыта.',
-    'Фриланс/аутсорс 1–3 года': 'Период "функционального плато": клиенты есть, навыков достаточно, но доход не растёт пропорционально усилиям. Причина в 90% случаев — не в качестве работы, а в модели ценообразования и источниках клиентов.',
-    'Фриланс/аутсорс более 3 лет': 'Три года фриланса — это уже "маленький бизнес". Но большинство финансистов с таким опытом застревают на одном и том же доходе. Причина — в структуре практики, а не в количестве клиентов.'
+  experience: {
+    'До 3 лет': 'Начальный этап карьеры в финансах. На этом уровне ключевое преимущество — свежий взгляд и готовность к новым подходам. 74% финансистов, начавших фриланс на раннем этапе, быстрее адаптируют современные инструменты.',
+    '3–5 лет': 'Хороший фундамент. Вы уже понимаете типовые задачи бизнеса и можете решать их самостоятельно. На этом уровне важно правильно упаковать опыт, чтобы клиент видел не «годы», а конкретный результат.',
+    '5–10 лет': 'Уверенный профессионал. На этом уровне опыта финансист способен видеть системные проблемы бизнеса, а не только отдельные операции. Это и есть ваше конкурентное преимущество.',
+    'Более 10 лет': 'Глубокая экспертиза. Финансисты с таким стажем часто недооценивают свой опыт и занижают стоимость услуг. Ваши знания — это актив, который при правильной упаковке стоит значительно дороже, чем привычный вам ценник.'
+  },
+  workFormat: {
+    'В найме (рассматриваю фриланс)': '73% финансистов, планирующих уйти во фриланс, откладывают переход на 1–2 года. Чаще всего не из-за отсутствия навыков, а из-за отсутствия понятной модели, гарантирующей замену дохода в первые 3 месяца.',
+    'Фриланс/аутсорс до 1 года': 'Первый год — самый сложный этап: 68% финансистов-фрилансеров зарабатывают меньше ожиданий. Причина не в квалификации, а в неправильной модели монетизации опыта.',
+    'Фриланс/аутсорс 1–3 года': 'Период «функционального плато»: клиенты есть, навыков достаточно, но доход не растёт пропорционально усилиям. В 90% случаев причина — не в качестве работы, а в модели ценообразования и источниках клиентов.',
+    'Фриланс/аутсорс более 3 лет': 'Три года фриланса — это уже полноценная практика. Но большинство финансистов с таким опытом застревают на одном и том же доходе. Причина — в структуре практики, а не в количестве клиентов.'
   },
   clients: function(n) {
-    if (n <= 1) return 'Первый клиент — самый трудный психологически. Статистика: финансисты с опытом 3+ лет находят первого клиента через правильный канал в среднем за 3–5 недель. Ключевое слово — "правильный канал".';
-    if (n <= 3) return '2–3 клиента — зона финансовой уязвимости: уход одного клиента = падение дохода на 33–50%. Устойчивый минимум начинается с 4–5 клиентов с разными сроками договоров.';
-    if (n <= 6) return 'Работающая база. На этом уровне вопрос меняется: не "как найти клиентов", а "как обслуживать больше без пропорционального роста нагрузки". Это про автоматизацию, а не про усилие.';
-    if (n <= 10) return 'Серьёзный портфель. При 7+ клиентах без систематизации неизбежно выгорание. Главные вопросы: какие клиенты дают лучший ROI вашего времени, и как повысить средний чек без потери текущих.';
-    return 'Масштаб. На этом уровне единственный путь к росту дохода — не "больше клиентов", а "дороже каждый клиент" и "меньше времени на каждого". Нужна глубокая автоматизация и команда.';
+    if (n === 0) return 'Нулевая точка — но не нулевой потенциал. Финансисты с опытом от 3 лет находят первого клиента через правильный канал в среднем за 3–5 недель. Ключевое слово — «правильный канал».';
+    if (n <= 2) return '1–2 клиента — зона финансовой уязвимости: потеря одного клиента — это падение дохода на 50–100%. Устойчивый минимум начинается с 4–5 клиентов с разными сроками договоров.';
+    if (n <= 4) return '3–4 клиента — переходная зона. У вас есть база, но она ещё хрупкая. На этом этапе важнее не «искать ещё», а повышать средний чек у текущих и выстраивать предсказуемый поток новых.';
+    if (n <= 7) return 'Работающая база. Вопрос меняется: не «как найти клиентов», а «как обслуживать больше без пропорционального роста нагрузки». Это уже про автоматизацию и систему, а не про личное усилие.';
+    if (n <= 10) return 'Серьёзный портфель. При 8+ клиентах без систематизации неизбежно выгорание. Главные вопросы: какие клиенты дают лучшую отдачу на ваше время, и как повысить средний чек без потери текущих.';
+    return 'Масштабная практика. На этом уровне единственный путь к росту дохода — не «больше клиентов», а «дороже каждый клиент» и «меньше времени на каждого». Нужна глубокая автоматизация и, возможно, команда.';
   },
   avgCheck: {
-    'До 20 000 ₽': '20 000 ₽ — это чек бухгалтера на удалёнке, не CFO-консультанта. Финансисты с аналогичным опытом, переупаковавшие оффер под конкретный результат для бизнеса, выходят на 40–60к с теми же задачами. Разница — в формулировке ценности, не в объёме работы.',
-    '20 000 – 40 000 ₽': 'Самый распространённый диапазон (42% финансистов-фрилансеров). Хорошая новость: переход с 30–35к на 55–60к часто не требует новых клиентов — только переупаковки оффера под измеримый результат для бизнеса и разговора о повышении с текущими.',
-    '40 000 – 70 000 ₽': 'Верхняя треть рынка. Вы уже монетизируете CFO-экспертизу. На этом уровне главный вопрос — как перейти за черту 100к с одного клиента, не теряя существующих.',
-    '70 000 – 100 000 ₽': 'Топ-сегмент аутсорс-CFO. Вы продаёте стратегическую ценность, а не часы. Дальнейший рост — через расширение модели: ретейнеры на год вперёд, доля в росте результата клиента.',
-    'Более 100 000 ₽': 'CFO-партнёр уровня крупного бизнеса. Здесь масштаб — через делегирование операционного учёта и фокус на стратегических решениях. Или через упаковку собственной методологии в продукт.'
+    'До 20 000 ₽': '20 000 ₽ — это ставка помощника бухгалтера, не финансового директора на аутсорсе. Финансисты с аналогичным опытом, переупаковавшие предложение под конкретный результат для бизнеса, выходят на 40–60 тыс. с теми же задачами. Разница — в формулировке ценности.',
+    '20 000 – 40 000 ₽': 'Самый распространённый диапазон — более 40% финансистов-фрилансеров работают в нём. Хорошая новость: переход с 30–35 тыс. на 55–60 тыс. часто не требует новых клиентов — достаточно переупаковать предложение под измеримый результат.',
+    '40 000 – 70 000 ₽': 'Верхняя треть рынка. Вы уже продаёте экспертизу финансового директора. Главный вопрос — как перейти за 100 тыс. с одного клиента: через проектную составляющую или расширение объёма работ.',
+    '70 000 – 100 000 ₽': 'Верхний сегмент рынка аутсорс-финдиректоров. Вы продаёте стратегическую ценность, а не часы. Дальнейший рост — через расширение модели: долгосрочные контракты, привязка к результату клиента.',
+    'Более 100 000 ₽': 'Уровень финансового партнёра крупного бизнеса. Масштабирование — через делегирование операционного учёта и фокус на стратегических решениях. Или через упаковку собственной методологии в продукт.'
   },
   hourlyRate: function(rate) {
-    if (rate < 500) return 'Тревожный сигнал. Хороший бухгалтер на фрилансе берёт 600–800 ₽/ч. Финансовый директор с вашим опытом должен стоить 1 500–3 000 ₽/ч. Разрыв — это стоимость неправильного позиционирования.';
-    if (rate < 1000) return 'Средний рынок для финансовых специалистов уровня "просто делаю учёт". При переходе к позиционированию "CFO-результат" ставка вырастает до 1 500–2 500 ₽/ч с теми же клиентами.';
-    if (rate < 2000) return 'Хорошая ставка. Вы уже в зоне CFO-консалтинга. Главный вопрос следующего уровня: как снизить количество часов на клиента через автоматизацию, сохраняя или повышая чек.';
-    return 'Топовая ставка — вы монетизируете стратегическую ценность, а не время. Риск на этом уровне: если клиент видит много "времени" — он начнёт торговаться. Ключ — billing by outcome, не by hour.';
+    if (rate < 500) return 'Тревожный сигнал. Хороший бухгалтер на фрилансе берёт 600–800 ₽/ч. Финансовый директор с вашим опытом должен стоить от 1 500 ₽/ч. Разрыв — это стоимость неправильного позиционирования.';
+    if (rate < 1000) return 'Средний рынок для финансовых специалистов уровня «просто веду учёт». При переходе к позиционированию «результат для бизнеса» ставка вырастает до 1 500–2 500 ₽/ч с теми же клиентами.';
+    if (rate < 2000) return 'Хорошая ставка — вы уже в зоне финансового консалтинга. Главный вопрос следующего уровня: как снизить количество часов на клиента через автоматизацию, сохраняя или повышая чек.';
+    return 'Высокая ставка — вы монетизируете стратегическую ценность, а не время. На этом уровне важно выстраивать работу на основе результата, а не почасовой оплаты.';
   },
   manualWork: function(pct, hours, clients) {
     var totalH = hours * clients;
-    if (pct < 25) return 'Отличная автоматизация — вы уже в топ-20% по этому показателю. У большинства финансистов с аналогичным портфелем этот показатель 50–70%.';
-    if (pct < 45) return 'Умеренная рутинность. Каждые 10% снижения рутины при ' + clients + ' клиентах = +' + Math.round(totalH * 0.1) + ' свободных часов в месяц. Это время на нового клиента или на повышение ценности для текущих.';
-    if (pct < 65) return 'Половина вашего рабочего времени — это операционная рутина, за которую клиент платит как за CFO-экспертизу. Вы теряете ' + Math.round(totalH * 0.55 - totalH * 0.20) + ' часов в месяц, которые могли бы идти на стратегическую работу или развитие.';
-    return 'Критическая рутинность. При таком соотношении каждый новый клиент = ещё +' + hours + ' часов рутины в месяц. Масштабироваться без изменения инструментов невозможно — это математически верный тупик.';
+    if (pct < 25) return 'Отличная автоматизация — вы уже в числе лучших 20% по этому показателю. У большинства финансистов-фрилансеров с аналогичным портфелем этот показатель 50–70%.';
+    if (pct < 45) return 'Умеренная рутинность. Каждые 10% снижения рутины при ' + clients + ' клиентах = +' + Math.round(totalH * 0.1) + ' свободных часов в месяц. Это время на нового клиента или повышение ценности для текущих.';
+    if (pct < 65) return 'Половина рабочего времени уходит на операционные задачи, за которые клиент платит как за экспертизу финансового директора. Вы теряете ' + Math.round(totalH * (pct/100) - totalH * 0.20) + ' часов в месяц, которые могли бы идти на развитие.';
+    return 'Критический уровень рутины. При таком соотношении каждый новый клиент = ещё +' + hours + ' часов рутины. Масштабироваться без изменения инструментов невозможно — это математический тупик.';
   },
   sources: function(sources) {
-    if (sources.includes('Пока клиентов нет / ищу первых')) return 'Это самая честная точка старта. Первый клиент за сарафан занимает в среднем 2–4 месяца. Через правильный партнёрский канал — 3–6 недель. Выбор источника определяет скорость старта.';
-    if (sources.some(function(s) { return s.includes('Партнёрские'); })) return 'Партнёрский канал — единственный, который можно "включить" в нужный момент и получить квалифицированный поток. Вы уже понимаете эту логику — это ценно.';
-    if (sources.length >= 2) return 'Хорошая диверсификация. Вопрос не в количестве каналов, а в их качестве: какой из них даёт клиентов с лучшим соотношением чека и трудозатрат?';
-    if (sources.length === 1 && sources[0].includes('Сарафан')) return 'Сарафан — это "успех прошлого": он работает на репутации того, что вы уже сделали. Проблема — он не масштабируется: вы не можете "нажать кнопку" и получить больше заявок в нужный момент. 80% финансистов с нестабильным доходом зависят только от этого канала.';
-    return 'Один канал = одна точка отказа. Если он просядет — пустой месяц неизбежен. Финансисты с доходом 300к+ в среднем используют 2–3 независимых источника клиентов.';
+    if (sources.some(function(s) { return s.indexOf('Пока клиентов') >= 0; })) return 'Это самая честная точка старта. Первый клиент через «сарафанное радио» появляется в среднем через 2–4 месяца. Через партнёрский канал с готовым потоком — за 3–6 недель. Выбор источника определяет скорость старта.';
+    if (sources.some(function(s) { return s.indexOf('Партнёрск') >= 0; })) return 'Партнёрский канал — единственный, который можно «включить» в нужный момент и получить поток заявок. Вы уже понимаете эту логику — это ценно.';
+    if (sources.length >= 3) return 'Сильная диверсификация. Ключевой вопрос — не количество каналов, а их качество: какой даёт клиентов с лучшим соотношением чека и трудозатрат?';
+    if (sources.length === 2) return 'Два канала — хорошее начало. Но для устойчивого потока нужен хотя бы один канал, который даёт заявки без вашего активного участия. Партнёрская программа — один из таких вариантов.';
+    if (sources.length === 1 && sources[0].indexOf('Сарафан') >= 0) return '«Сарафанное радио» — это признание вашей прошлой работы. Но оно не масштабируется: вы не можете «нажать кнопку» и получить больше заявок в нужный момент. 80% финансистов с нестабильным доходом зависят только от этого канала.';
+    return 'Один канал — одна точка отказа. Если он ослабнет — месяц без новых клиентов неизбежен. Финансисты с доходом от 300 тыс. в месяц в среднем используют 2–3 независимых источника клиентов.';
   },
   barriers: {
-    'Нет стабильного потока новых клиентов': 'Это барьер №1 у 71% финансистов-фрилансеров. Ключевое наблюдение: финансисты, работающие через партнёрские каналы с готовым потоком лидов, тратят на поиск клиентов в 4 раза меньше времени, чем те, кто полагается только на сарафан.',
-    'Не умею / не хочу активно продавать': 'Финансисты редко "продают" — они диагностируют. Разница в подходе: не "я предлагаю услугу управленческого учёта", а "ваш бизнес теряет [конкретную сумму] ежемесячно — давайте я покажу где". Это разговор на языке владельца.',
-    'Перегружен — некогда заниматься развитием': 'Paradox of success в чистом виде: вы заняты, но не богаты. Математика простая: если 60% времени — рутина, то рост дохода заблокирован. Выход — не в "больше работать", а в автоматизации операционного ядра.',
-    'Не знаю, как повысить чек без потери клиентов': 'Самый распространённый страх без реальных оснований. 80% клиентов финансистов-фрилансеров не меняются при повышении чека на 20–30%, если повышение обосновано дополнительной ценностью.',
-    'Много рутины — нет времени на рост': 'При >50% рутины вы физически не можете брать больше клиентов без выгорания. Это не проблема дисциплины — это системная проблема инструментов. Автоматизация 30% рутины = возможность взять ещё 1–2 клиентов без роста часов.',
-    'Нет кейсов и портфолио под NDA': 'NDA — реальное ограничение. Но кейсы без имени работают так же хорошо: "помог проектной компании выявить убыточные контракты — сэкономили 2,3 млн в год" убеждает лучше, чем "ООО Ромашка". Нужна правильная упаковка.',
-    'Одиночество — не к кому обратиться': 'Это не "мягкая" боль — это реальный профессиональный риск. Финансист без экспертного сообщества принимает сложные решения в условиях информационной изоляции. Это влияет и на качество работы, и на психологическое состояние.',
-    'Страх потерять стабильный доход': 'Самый честный барьер из всех. Хорошая новость: партнёрская модель позволяет наращивать доход параллельно с текущим источником — без разрыва, без "прыжка в пропасть".'
+    'Нет стабильного потока новых клиентов': 'Это барьер №1 у 71% финансистов на аутсорсе. Ключевое наблюдение: финансисты, работающие через партнёрские каналы с готовым потоком, тратят на поиск клиентов в 4 раза меньше времени.',
+    'Не умею / не хочу активно продавать': 'Финансисты редко «продают» в классическом смысле — они диагностируют. Не «я предлагаю услугу», а «ваш бизнес, по моим наблюдениям, теряет конкретную сумму ежемесячно — давайте покажу, где именно». Это язык собственника, а не продавца.',
+    'Перегружен — некогда заниматься развитием': 'Парадокс успеха: вы заняты, но не зарабатываете на уровне своей квалификации. Если более 60% времени — рутина, рост дохода заблокирован. Выход — не «работать больше», а автоматизировать операционное ядро.',
+    'Не знаю, как повысить чек без потери клиентов': 'Самый распространённый страх, у которого нет реальных оснований. 80% лояльных клиентов принимают повышение чека на 20–30%, если оно обосновано дополнительной ценностью. Ключ — не «я прошу больше», а «теперь я даю результат, а не просто отчёт».',
+    'Много рутины — нет времени на рост': 'При 50%+ рутины вы не можете брать больше клиентов без выгорания. Это системная проблема инструментов, а не вопрос дисциплины. Автоматизация 30% рутины = возможность взять ещё 1–2 клиентов без роста нагрузки.',
+    'Нет кейсов и портфолио под NDA': 'Ограничение по NDA — реальное, но решаемое. Кейсы без названия компании работают так же убедительно: «помог проектной компании в строительстве выявить убыточные контракты — экономия 2,3 млн в год» — сильнее, чем «ООО "Ромашка"».',
+    'Одиночество — не к кому обратиться': 'Это не «мягкая» боль — это реальный профессиональный риск. Финансист без экспертного сообщества принимает сложные решения в условиях информационной изоляции. Это влияет и на качество работы, и на уверенность в себе.',
+    'Страх потерять стабильный доход': 'Самый честный барьер. Хорошая новость: партнёрская модель позволяет наращивать доход параллельно с текущим источником — без разрыва, без «прыжка в пропасть». Первый клиент через партнёрский канал не требует ухода из найма.'
   },
   incomeGap: function(gap) {
-    if (gap < 50000) return 'Вы в шаге от цели. Небольшие точечные изменения — повышение чека у 1–2 клиентов или добавление одного нового — закроют этот разрыв за 1–2 месяца.';
-    if (gap < 150000) return 'Достижимо за 3–5 месяцев при правильной стратегии. Обычно это комбинация: +1 клиент через партнёрский канал + повышение чека у текущих на 15–20%.';
-    if (gap < 300000) return 'Требует изменения модели, а не просто "больше клиентов". Переход к такому доходу обычно занимает 4–7 месяцев при наличии правильного потока и инструментов.';
-    return 'Трансформация практики. Такой скачок — это смена типа работы: от "делаю учёт" к "управляю финансами как CFO-партнёр". Достижимо, но требует системного плана.';
+    if (gap <= 0) return 'Вы уже на уровне или выше своей цели. Следующий шаг — закрепить этот результат и вывести практику на новый уровень стабильности и масштабируемости.';
+    if (gap < 50000) return 'Вы в шаге от цели. Точечные изменения — повышение чека у 1–2 клиентов или один новый контракт — закроют этот разрыв за 1–2 месяца.';
+    if (gap < 150000) return 'Достижимо за 3–5 месяцев при правильной стратегии. Обычно это комбинация: один новый клиент через партнёрский канал + повышение чека у текущих на 15–20%.';
+    if (gap < 300000) return 'Требует изменения модели, а не просто «ещё клиентов». Переход к такому доходу занимает 4–7 месяцев при наличии правильного потока и инструментов.';
+    return 'Трансформация практики. Это смена подхода: от «делаю учёт» к «управляю финансами как партнёр бизнеса». Достижимо, но требует системного плана и поддержки.';
   }
 };
 
-function getCurrentStep() { return currentStep; }
+/* ============ MOTIVATIONS — why we ask this question ============ */
+var MOTIVATIONS = {
+  1: { icon: '👤', text: 'Мы используем имя для персонализации вашего отчёта' },
+  2: { icon: '📊', text: 'Опыт определяет ваш потенциал ставки и типовые барьеры роста' },
+  3: { icon: '💼', text: 'Формат работы влияет на стратегию: в найме и на фрилансе — разные пути к цели' },
+  4: { icon: '👥', text: 'Количество клиентов определяет устойчивость и потенциал вашей практики' },
+  5: { icon: '💰', text: 'Средний чек — ключевая метрика, от которой зависит ваш расчётный доход' },
+  6: { icon: '⏱', text: 'Часы на клиента определяют вашу реальную ставку — она может вас удивить' },
+  7: { icon: '🔄', text: 'Доля рутины показывает, есть ли у вас ресурс для роста без выгорания' },
+  8: { icon: '📥', text: 'Источники клиентов — это основа предсказуемости вашего дохода' },
+  9: { icon: '🚧', text: 'Определение барьеров позволит дать точные рекомендации именно для вашей ситуации' },
+  10: { icon: '🎯', text: 'Целевой доход определяет сценарий роста и конкретные шаги в вашем плане' }
+};
 
-function getName() {
-  return getAllAnswers().name || '';
-}
+/* ============ NAVIGATION ============ */
+function getCurrentStep() { return currentStep; }
+function getName() { return getAllAnswers().name || ''; }
 
 function updateProgress() {
   var wrapper = document.querySelector('.progress-wrapper');
   var fill = document.querySelector('.progress-fill');
   var label = document.querySelector('.progress-label');
+  if (!wrapper || !fill || !label) return;
 
   if (currentStep === 0) {
     wrapper.classList.remove('visible');
@@ -78,120 +106,136 @@ function updateProgress() {
 
   wrapper.classList.add('visible');
 
-  // Map step IDs to sequential positions for progress
-  var stepPositions = {1:1, 2:2, 3:3, 4:4, 5:5, 55:6, 6:7, 7:8, 8:9, 9:10, 10:11};
-  var pos = stepPositions[currentStep] || 1;
-
-  var pct = Math.min(100, Math.round((pos / 11) * 100));
+  var idx = STEP_ORDER.indexOf(currentStep);
+  var pct = Math.min(100, Math.round((idx / (STEP_ORDER.length - 1)) * 100));
   fill.style.width = pct + '%';
 
-  if (pos >= 10) {
-    label.textContent = 'Почти готово';
-  } else if (currentStep === 55) {
-    label.textContent = 'Промежуточный результат';
+  if (currentStep === 11) {
+    label.innerHTML = '<span>Почти готово!</span><span>' + pct + '%</span>';
+  } else if (currentStep === 65) {
+    label.innerHTML = '<span>Промежуточный результат</span><span>' + pct + '%</span>';
+  } else if (currentStep >= 10) {
+    label.innerHTML = '<span>Последний вопрос</span><span>' + pct + '%</span>';
   } else {
-    label.textContent = 'Шаг ' + Math.min(currentStep, 9);
+    var stepNum = idx;
+    label.innerHTML = '<span>Шаг ' + stepNum + ' из ' + TOTAL_QUESTION_STEPS + '</span><span>' + pct + '%</span>';
   }
 }
 
 function goToStep(step) {
   var activeEl = document.querySelector('.step.active');
   var targetEl = document.getElementById('step-' + step);
-
   if (!targetEl) return;
 
   if (activeEl) {
     activeEl.classList.remove('active');
     activeEl.classList.add('leaving');
-    setTimeout(function() {
-      activeEl.classList.remove('leaving');
-    }, 220);
+    setTimeout(function() { activeEl.classList.remove('leaving'); }, 220);
   }
 
-  setTimeout(function() {
-    targetEl.classList.add('active');
-  }, activeEl ? 50 : 0);
+  setTimeout(function() { targetEl.classList.add('active'); }, activeEl ? 50 : 0);
 
   currentStep = step;
   updateProgress();
   updateNavButtons();
   window.scrollTo(0, 0);
+
+  // Special renders
+  if (step === 65) renderIntermediate();
+  if (step === 11) renderCapturePreview();
+  if (step >= 2) updateStepNames();
+  if (step >= 1) restoreStepState(step);
+
+  // Show motivation
+  showMotivation(step);
+
+  // Yandex.Metrika
+  if (typeof ym === 'function') {
+    if (step === 0) return;
+    if (step === 65) ym(61131877, 'reachGoal', 'quiz_intermediate');
+    else if (step === 11) ym(61131877, 'reachGoal', 'quiz_capture_screen');
+    else ym(61131877, 'reachGoal', 'quiz_step_' + step);
+  }
+}
+
+function showMotivation(step) {
+  var el = document.getElementById('motivation-' + step);
+  if (!el || !MOTIVATIONS[step]) return;
+  el.innerHTML = '<span class="motiv-icon">' + MOTIVATIONS[step].icon + '</span><span>' + MOTIVATIONS[step].text + '</span>';
 }
 
 function updateNavButtons() {
   var nav = document.querySelector('.step-nav');
   var backBtn = document.getElementById('btn-back');
   var nextBtn = document.getElementById('btn-next');
+  if (!nav) return;
 
-  if (currentStep === 0) {
-    nav.style.display = 'none';
-    return;
-  }
+  if (currentStep === 0) { nav.style.display = 'none'; return; }
 
   nav.style.display = 'block';
   backBtn.style.display = currentStep >= 2 ? 'flex' : 'none';
 
-  // Steps where next is managed differently
-  if (currentStep === 10) { // capture screen
+  if (currentStep === 11) {
     nextBtn.style.display = 'none';
   } else {
     nextBtn.style.display = 'block';
     nextBtn.disabled = !isStepValid(currentStep);
   }
 
-  if (currentStep >= 9) {
-    nextBtn.textContent = 'Далее →';
-  } else if (currentStep === 55) { // intermediate
-    nextBtn.textContent = 'Продолжить → Блок 2: Что мешает расти';
+  if (currentStep === 65) {
+    nextBtn.textContent = 'Продолжить → Что мешает расти';
+  } else if (currentStep === 10) {
+    nextBtn.textContent = 'Завершить →';
   } else {
     nextBtn.textContent = 'Далее →';
   }
 }
 
 function isStepValid(step) {
-  var answers = getAllAnswers();
+  var a = getAllAnswers();
   switch (step) {
-    case 1: return answers.name && answers.name.trim().length >= 2 && !/\d/.test(answers.name);
-    case 2: return answers.experience && answers.status;
-    case 3: return answers.clients !== undefined;
-    case 4: return !!answers.avgCheckRange;
-    case 5: return answers.hoursPerClient !== undefined;
-    case 55: return true; // intermediate
-    case 6: return answers.manualWorkPct !== undefined;
-    case 7: return answers.clientSources && answers.clientSources.length > 0;
-    case 8: return answers.barriers && answers.barriers.length >= 1 && answers.barriers.length <= 2;
-    case 9: return answers.targetIncome !== undefined;
+    case 1: return a.name && a.name.trim().length >= 2 && !/\d/.test(a.name);
+    case 2: return !!a.experience;
+    case 3: return !!a.workFormat;
+    case 4: return a.clients !== undefined;
+    case 5: return !!a.avgCheckRange;
+    case 6: return a.hoursPerClient !== undefined;
+    case 65: return true;
+    case 7: return a.manualWorkPct !== undefined;
+    case 8: return a.clientSources && a.clientSources.length > 0;
+    case 9: return a.barriers && a.barriers.length >= 1 && a.barriers.length <= 2;
+    case 10: return a.targetIncome !== undefined;
     default: return true;
   }
 }
 
 function nextStep() {
   if (!isStepValid(currentStep)) return;
-
-  var order = [0, 1, 2, 3, 4, 5, 55, 6, 7, 8, 9, 10];
-  var idx = order.indexOf(currentStep);
-  if (idx < order.length - 1) {
-    goToStep(order[idx + 1]);
+  var idx = STEP_ORDER.indexOf(currentStep);
+  if (idx < STEP_ORDER.length - 1) {
+    goToStep(STEP_ORDER[idx + 1]);
   }
 }
 
 function prevStep() {
-  var order = [0, 1, 2, 3, 4, 5, 55, 6, 7, 8, 9, 10];
-  var idx = order.indexOf(currentStep);
+  var idx = STEP_ORDER.indexOf(currentStep);
   if (idx > 0) {
-    goToStep(order[idx - 1]);
+    goToStep(STEP_ORDER[idx - 1]);
   }
 }
 
 function startQuiz() {
+  if (typeof ym === 'function') ym(61131877, 'reachGoal', 'quiz_started');
   goToStep(1);
 }
 
 function showInsight(containerId, text) {
   var el = document.getElementById(containerId);
-  if (!el) return;
+  if (!el || !text) return;
   el.innerHTML = '<div class="insight-box">' + text + '</div>';
 }
+
+/* ============ STEP HANDLERS ============ */
 
 // Step 1 — Name
 function onNameInput(input) {
@@ -206,118 +250,85 @@ function onNameInput(input) {
   }
 }
 
-// Step 2 — Experience & Status
-function selectOption(group, value, el) {
-  var cards = el.parentElement.querySelectorAll('.option-card');
+// Step 2 — Experience
+function selectExperience(value, el) {
+  var cards = document.querySelectorAll('#step-2 .option-card');
   cards.forEach(function(c) { c.classList.remove('selected'); });
   el.classList.add('selected');
-  saveAnswer(group, value);
-
-  if (group === 'status' && INSIGHTS.status[value]) {
-    showInsight('insight-2', INSIGHTS.status[value]);
-  }
-
-  document.getElementById('btn-next').disabled = !isStepValid(currentStep);
+  saveAnswer('experience', value);
+  showInsight('insight-2', INSIGHTS.experience[value]);
+  document.getElementById('btn-next').disabled = false;
 }
 
-// Step 3 — Clients slider
+// Step 3 — Work format
+function selectWorkFormat(value, el) {
+  var cards = document.querySelectorAll('#step-3 .option-card');
+  cards.forEach(function(c) { c.classList.remove('selected'); });
+  el.classList.add('selected');
+  saveAnswer('workFormat', value);
+  showInsight('insight-3', INSIGHTS.workFormat[value]);
+  document.getElementById('btn-next').disabled = false;
+}
+
+// Step 4 — Clients slider
 function onClientsChange(input) {
   var val = parseInt(input.value);
   saveAnswer('clients', val);
   document.getElementById('clients-value').textContent = val >= 15 ? '15+' : val;
   document.getElementById('clients-label').textContent = declension(val, 'клиент', 'клиента', 'клиентов');
   input.style.setProperty('--pct', ((val / 15) * 100) + '%');
-  showInsight('insight-3', INSIGHTS.clients(val));
+
+  updateSliderBadge('clients-badge', val,
+    [3, 5, 8],
+    ['Старт', 'Переходная зона', 'Устойчивая база', 'Масштаб'],
+    ['red', 'yellow', 'blue', 'green']
+  );
+
+  showInsight('insight-4', INSIGHTS.clients(val));
   document.getElementById('btn-next').disabled = false;
 }
 
-// Step 4 — Avg check
+// Step 5 — Avg check
 function selectCheck(value, el) {
-  var cards = document.querySelectorAll('#step-4 .option-card');
+  var cards = document.querySelectorAll('#step-5 .option-card');
   cards.forEach(function(c) { c.classList.remove('selected'); });
   el.classList.add('selected');
   saveAnswer('avgCheckRange', value);
   saveAnswer('avgCheckMid', CHECK_MIDS[value]);
-  showInsight('insight-4', INSIGHTS.avgCheck[value]);
+  showInsight('insight-5', INSIGHTS.avgCheck[value]);
   document.getElementById('btn-next').disabled = false;
 }
 
-// Step 5 — Hours per client
+// Step 6 — Hours per client
 function onHoursChange(input) {
   var val = parseInt(input.value);
   saveAnswer('hoursPerClient', val);
   document.getElementById('hours-value').textContent = val;
 
-  var answers = getAllAnswers();
-  var checkMid = CHECK_MIDS[answers.avgCheckRange] || 35000;
+  var a = getAllAnswers();
+  var checkMid = CHECK_MIDS[a.avgCheckRange] || 35000;
   var rate = Math.round(checkMid / val);
   document.getElementById('rate-display').textContent = formatMoney(rate) + ' ₽/час';
 
-  var badge = document.getElementById('rate-badge');
-  if (rate >= 2000) { badge.textContent = 'Топ-сегмент'; badge.className = 'rate-badge green'; }
-  else if (rate >= 1000) { badge.textContent = 'Хороший уровень'; badge.className = 'rate-badge blue'; }
-  else if (rate >= 500) { badge.textContent = 'Есть куда расти'; badge.className = 'rate-badge yellow'; }
-  else { badge.textContent = 'Ниже рынка'; badge.className = 'rate-badge red'; }
+  updateSliderBadge('rate-badge', rate,
+    [500, 1000, 2000],
+    ['Ниже рынка', 'Есть куда расти', 'Хороший уровень', 'Верхний сегмент'],
+    ['red', 'yellow', 'blue', 'green']
+  );
 
   input.style.setProperty('--pct', (((val - 4) / 76) * 100) + '%');
-  showInsight('insight-5', INSIGHTS.hourlyRate(rate));
+  showInsight('insight-6', INSIGHTS.hourlyRate(rate));
   document.getElementById('btn-next').disabled = false;
 }
 
-// Intermediate screen
-function renderIntermediate() {
-  var a = getAllAnswers();
-  var checkMid = CHECK_MIDS[a.avgCheckRange] || 35000;
-  var income = a.clients * checkMid;
-  var rate = Math.round(checkMid / (a.hoursPerClient || 15));
-  var totalH = a.clients * (a.hoursPerClient || 15);
-
-  document.getElementById('inter-name').textContent = a.name || '';
-  document.getElementById('inter-clients').textContent = a.clients;
-  document.getElementById('inter-income').textContent = formatMoney(income) + ' ₽/мес';
-  document.getElementById('inter-rate').textContent = formatMoney(rate) + ' ₽/ч';
-  document.getElementById('inter-hours').textContent = totalH + ' ч/мес';
-
-  // Color coding
-  var incomeEl = document.getElementById('inter-income-sub');
-  if (income < 100000) { incomeEl.textContent = 'Ниже 100к'; incomeEl.className = 'metric-sub red'; }
-  else if (income < 250000) { incomeEl.textContent = 'Средний уровень'; incomeEl.className = 'metric-sub yellow'; }
-  else { incomeEl.textContent = 'Хороший уровень'; incomeEl.className = 'metric-sub green'; }
-
-  var rateEl = document.getElementById('inter-rate-sub');
-  if (rate < 500) { rateEl.textContent = 'Ниже рынка'; rateEl.className = 'metric-sub red'; }
-  else if (rate < 1200) { rateEl.textContent = 'Есть потенциал'; rateEl.className = 'metric-sub yellow'; }
-  else { rateEl.textContent = 'Топ-уровень'; rateEl.className = 'metric-sub green'; }
-
-  var hoursEl = document.getElementById('inter-hours-sub');
-  if (totalH > 120) { hoursEl.textContent = 'Высокая нагрузка'; hoursEl.className = 'metric-sub red'; }
-  else if (totalH > 80) { hoursEl.textContent = 'Умеренно'; hoursEl.className = 'metric-sub yellow'; }
-  else { hoursEl.textContent = 'Комфортно'; hoursEl.className = 'metric-sub green'; }
-
-  // Insight
-  var insightText;
-  if (rate < 500 && a.clients > 5) {
-    insightText = 'Тревожная комбинация: много работы, низкая ставка. Рост через "ещё больше клиентов" приведёт к выгоранию за 6–12 месяцев. Нужна другая модель, не другие клиенты.';
-  } else if (income < 100000) {
-    insightText = 'Ваша практика сейчас работает в зоне выживания — дохода едва хватает на замену найма. Это не проблема навыков: финансисты с вашим опытом, изменившие модель работы, выходят на 200–250к за 3–4 месяца.';
-  } else if (income < 180000) {
-    insightText = 'Вы перешли психологический барьер "я зарабатываю как в найме". Но ' + formatMoneyShort(income) + ' — это ловушка: кажется, что всё нормально, но рост требует непропорционального роста нагрузки. Здесь большинство застревает на годы.';
-  } else if (income < 280000) {
-    insightText = 'Верхняя треть рынка. Вы уже доказали, что модель работает. Следующий уровень — 350–450к — требует не "больше клиентов", а другой структуры: другие чеки, другая автоматизация, другие каналы.';
-  } else {
-    insightText = 'Сильная позиция. При таком доходе главный риск — концентрация: 1–2 крупных клиента могут держать вас в заложниках. Диверсификация и автоматизация — ключи к следующему уровню.';
-  }
-  document.getElementById('inter-insight').textContent = a.name + ', вот что диагностика уже знает: ' + insightText;
-}
-
-// Step 6 — Manual work %
+// Step 7 — Manual work %
 function onManualChange(input) {
   var val = parseInt(input.value);
   saveAnswer('manualWorkPct', val);
   document.getElementById('manual-value').textContent = val + '%';
 
   var a = getAllAnswers();
-  var totalH = (a.clients || 0) * (a.hoursPerClient || 15);
+  var totalH = (a.clients || 0) * (a.hoursPerClient || 20);
   var routineH = Math.round(totalH * val / 100);
   document.getElementById('manual-hours').textContent = routineH + ' ч/мес уходит на рутину, которую можно автоматизировать';
 
@@ -325,17 +336,25 @@ function onManualChange(input) {
 
   // Color indicator
   var fill = document.getElementById('manual-color-fill');
-  if (val < 25) { fill.style.background = '#10B981'; }
-  else if (val < 45) { fill.style.background = '#F59E0B'; }
-  else if (val < 65) { fill.style.background = '#F97316'; }
-  else { fill.style.background = '#EF4444'; }
-  fill.style.width = val + '%';
+  if (fill) {
+    if (val < 25) fill.style.background = '#10B981';
+    else if (val < 45) fill.style.background = '#F59E0B';
+    else if (val < 65) fill.style.background = '#F97316';
+    else fill.style.background = '#EF4444';
+    fill.style.width = val + '%';
+  }
 
-  showInsight('insight-6', INSIGHTS.manualWork(val, a.hoursPerClient || 15, a.clients || 0));
+  updateSliderBadge('manual-badge', val,
+    [25, 45, 65],
+    ['Высокая автоматизация', 'Умеренная рутина', 'Много рутины', 'Критический уровень'],
+    ['green', 'blue', 'yellow', 'red']
+  );
+
+  showInsight('insight-7', INSIGHTS.manualWork(val, a.hoursPerClient || 20, a.clients || 0));
   document.getElementById('btn-next').disabled = false;
 }
 
-// Step 7 — Sources (multi-select)
+// Step 8 — Sources (multi-select)
 function toggleSource(value, el) {
   var a = getAllAnswers();
   var sources = a.clientSources || [];
@@ -350,13 +369,11 @@ function toggleSource(value, el) {
   }
 
   saveAnswer('clientSources', sources);
-  if (sources.length > 0) {
-    showInsight('insight-7', INSIGHTS.sources(sources));
-  }
+  if (sources.length > 0) showInsight('insight-8', INSIGHTS.sources(sources));
   document.getElementById('btn-next').disabled = sources.length === 0;
 }
 
-// Step 8 — Barriers (multi-select, max 2)
+// Step 9 — Barriers (multi-select, max 2)
 function toggleBarrier(value, el) {
   var a = getAllAnswers();
   var barriers = a.barriers || [];
@@ -366,15 +383,14 @@ function toggleBarrier(value, el) {
     barriers.splice(idx, 1);
     el.classList.remove('selected');
   } else {
-    if (barriers.length >= 2) return; // max 2
+    if (barriers.length >= 2) return;
     barriers.push(value);
     el.classList.add('selected');
   }
 
   saveAnswer('barriers', barriers);
 
-  // Disable unselected if 2 selected
-  var cards = document.querySelectorAll('#step-8 .option-card');
+  var cards = document.querySelectorAll('#step-9 .option-card');
   cards.forEach(function(c) {
     if (!c.classList.contains('selected') && barriers.length >= 2) {
       c.classList.add('disabled');
@@ -383,13 +399,11 @@ function toggleBarrier(value, el) {
     }
   });
 
-  if (barriers.length > 0) {
-    showInsight('insight-8', INSIGHTS.barriers[barriers[0]] || '');
-  }
+  if (barriers.length > 0) showInsight('insight-9', INSIGHTS.barriers[barriers[0]] || '');
   document.getElementById('btn-next').disabled = barriers.length === 0;
 }
 
-// Step 9 — Target income slider
+// Step 10 — Target income slider
 function onTargetChange(input) {
   var val = parseInt(input.value);
   saveAnswer('targetIncome', val);
@@ -402,23 +416,82 @@ function onTargetChange(input) {
   document.getElementById('target-gap').textContent = 'Разрыв с текущим: +' + formatMoney(gap) + ' ₽/мес';
 
   input.style.setProperty('--pct', (((val - 50000) / 950000) * 100) + '%');
-  showInsight('insight-9', INSIGHTS.incomeGap(gap));
+
+  updateSliderBadge('target-badge', gap,
+    [50000, 150000, 300000],
+    ['Почти на месте', 'Достижимо за 3–5 мес', 'Нужна новая модель', 'Трансформация'],
+    ['green', 'blue', 'yellow', 'red']
+  );
+
+  showInsight('insight-10', INSIGHTS.incomeGap(gap));
   document.getElementById('btn-next').disabled = false;
 }
 
-// Capture screen
+/* ============ INTERMEDIATE SCREEN ============ */
+function renderIntermediate() {
+  var a = getAllAnswers();
+  var checkMid = CHECK_MIDS[a.avgCheckRange] || 35000;
+  var income = (a.clients || 0) * checkMid;
+  var rate = Math.round(checkMid / (a.hoursPerClient || 20));
+  var totalH = (a.clients || 0) * (a.hoursPerClient || 20);
+
+  document.getElementById('inter-name').textContent = a.name || '';
+  document.getElementById('inter-clients').textContent = a.clients || 0;
+  document.getElementById('inter-income').textContent = formatMoneyShort(income) + '/мес';
+  document.getElementById('inter-rate').textContent = formatMoney(rate) + ' ₽/ч';
+  document.getElementById('inter-hours').textContent = totalH + ' ч';
+
+  // Color coding
+  setMetricSub('inter-income-sub', income, [100000, 250000], ['Ниже 100к', 'Средний уровень', 'Хороший уровень'], ['red', 'yellow', 'green']);
+  setMetricSub('inter-rate-sub', rate, [500, 1200], ['Ниже рынка', 'Есть потенциал', 'Верхний уровень'], ['red', 'yellow', 'green']);
+  setMetricSub('inter-hours-sub', totalH, [80, 120], ['Комфортно', 'Умеренно', 'Высокая нагрузка'], ['green', 'yellow', 'red']);
+
+  // Insight
+  var insightText;
+  if (rate < 500 && (a.clients || 0) > 5) {
+    insightText = 'Тревожная комбинация: большой объём работы при низкой ставке. Наращивание клиентской базы при такой модели приведёт к выгоранию за 6–12 месяцев. Нужна не «ещё больше клиентов», а принципиально другая модель работы.';
+  } else if (income < 100000) {
+    insightText = 'Ваша практика пока в стартовой фазе. Это не проблема навыков: финансисты с вашим опытом, изменившие модель работы, выходят на 200–250 тыс. за 3–4 месяца. Следующие вопросы покажут, где именно ваши точки роста.';
+  } else if (income < 180000) {
+    insightText = 'Вы перешли психологический барьер «зарабатываю как в найме». Но ' + formatMoneyShort(income) + ' — это ловушка: кажется, что всё нормально, но дальнейший рост требует непропорционально больших усилий. Здесь большинство застревает на годы.';
+  } else if (income < 280000) {
+    insightText = 'Верхняя треть рынка. Вы доказали, что модель работает. Следующий уровень — 350–450 тыс. — требует не «больше клиентов», а другой структуры: другие чеки, другая автоматизация, другие каналы.';
+  } else {
+    insightText = 'Сильная позиция. При таком доходе главный риск — зависимость от 1–2 крупных клиентов. Диверсификация и автоматизация — ключи к следующему уровню и к вашей финансовой безопасности.';
+  }
+
+  document.getElementById('inter-insight').innerHTML =
+    '<strong>' + (a.name || '') + '</strong>, вот что диагностика уже знает о вас:<br><br>' + insightText;
+
+  // Next hint
+  var nextHint = document.getElementById('inter-next-hint');
+  if (nextHint) {
+    nextHint.innerHTML = 'Осталось 4 вопроса: рутина, источники клиентов, барьеры роста и целевой доход. После них — ваш персональный план роста.';
+  }
+}
+
+/* ============ CAPTURE SCREEN ============ */
 function renderCapturePreview() {
   var a = getAllAnswers();
   var m = calculate(a);
 
-  document.getElementById('capture-name').textContent = a.name + ', ваш персональный план готов';
-  document.getElementById('preview-rate').textContent = formatMoney(m.hourlyRate) + ' ₽/час';
-  document.getElementById('preview-type').textContent = m.practiceType;
-  document.getElementById('preview-barrier').textContent = (a.barriers && a.barriers[0]) || '—';
-  document.getElementById('preview-growth').textContent = '+' + m.checkGrowthPct + '%';
+  var el = document.getElementById('capture-name');
+  if (el) el.textContent = (a.name || '') + ', ваш персональный план готов';
+
+  var prev = {
+    'preview-rate': formatMoney(m.hourlyRate) + ' ₽/час',
+    'preview-type': m.practiceType,
+    'preview-barrier': (a.barriers && a.barriers[0]) || '—',
+    'preview-growth': '+' + m.checkGrowthPct + '%'
+  };
+
+  for (var id in prev) {
+    var pEl = document.getElementById(id);
+    if (pEl) pEl.textContent = prev[id];
+  }
 }
 
-// Phone formatting
+/* ============ PHONE FORMATTING ============ */
 function formatPhone(input) {
   var val = input.value.replace(/\D/g, '');
   if (val.startsWith('7') || val.startsWith('8')) val = val.slice(1);
@@ -433,7 +506,7 @@ function formatPhone(input) {
   if (submitBtn) submitBtn.disabled = !isValid;
 }
 
-// Helpers
+/* ============ HELPERS ============ */
 function declension(n, one, two, five) {
   var abs = Math.abs(n) % 100;
   var n1 = abs % 10;
@@ -443,115 +516,98 @@ function declension(n, one, two, five) {
   return five;
 }
 
-// Step rendering with names
 function updateStepNames() {
   var name = getName();
-  var el2 = document.getElementById('q2-name');
-  if (el2) el2.textContent = name;
+  ['q2-name', 'q3-name', 'q4-name', 'q6-name', 'q10-name'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = name;
+  });
 }
 
-// beforeunload
-window.addEventListener('beforeunload', function(e) {
-  if (currentStep >= 3) {
-    e.preventDefault();
-    e.returnValue = 'Вы прошли ' + currentStep + ' шагов. Результаты уже рассчитываются — вернитесь, чтобы получить план!';
+function updateSliderBadge(badgeId, value, thresholds, labels, colors) {
+  var badge = document.getElementById(badgeId);
+  if (!badge) return;
+  var idx = 0;
+  for (var i = 0; i < thresholds.length; i++) {
+    if (value >= thresholds[i]) idx = i + 1;
   }
-});
+  badge.textContent = labels[idx];
+  badge.className = 'rate-badge ' + colors[idx];
+}
 
-// Logo fallback
-document.addEventListener('DOMContentLoaded', function() {
-  var logoImg = document.querySelector('.logo img');
-  if (logoImg) {
-    logoImg.onerror = function() {
-      this.style.display = 'none';
-      var fallback = this.parentElement.querySelector('.logo-fallback');
-      if (fallback) fallback.style.display = 'block';
-    };
+function setMetricSub(elId, value, thresholds, labels, colors) {
+  var el = document.getElementById(elId);
+  if (!el) return;
+  var idx = 0;
+  for (var i = 0; i < thresholds.length; i++) {
+    if (value >= thresholds[i]) idx = i + 1;
   }
+  el.textContent = labels[idx];
+  el.className = 'metric-sub ' + colors[idx];
+}
 
-  goToStep(0);
-});
-
-// Override goToStep to handle special cases
-var _origGoToStep = goToStep;
-goToStep = function(step) {
-  _origGoToStep(step);
-
-  if (step === 55) renderIntermediate();
-  if (step === 10) renderCapturePreview();
-  if (step >= 2) updateStepNames();
-
-  // Restore saved selections on back
-  if (step >= 1) restoreStepState(step);
-};
-
+/* ============ STATE RESTORATION (back navigation) ============ */
 function restoreStepState(step) {
   var a = getAllAnswers();
 
   if (step === 1 && a.name) {
     var nameInput = document.getElementById('name-input');
-    if (nameInput) nameInput.value = a.name;
+    if (nameInput && !nameInput.value) nameInput.value = a.name;
   }
 
-  if (step === 2) {
-    if (a.experience) {
-      var expCards = document.querySelectorAll('#step-2 .options-group:first-of-type .option-card');
-      expCards.forEach(function(c) { if (c.textContent.trim() === a.experience) c.classList.add('selected'); });
-    }
-    if (a.status) {
-      var statCards = document.querySelectorAll('#step-2 .options-group:last-of-type .option-card');
-      statCards.forEach(function(c) { if (c.textContent.trim() === a.status) c.classList.add('selected'); });
-    }
+  if (step === 2 && a.experience) {
+    document.querySelectorAll('#step-2 .option-card').forEach(function(c) {
+      var onclick = c.getAttribute('onclick') || '';
+      if (onclick.indexOf(a.experience) >= 0) c.classList.add('selected');
+    });
   }
 
-  if (step === 3) {
-    var slider = document.getElementById('clients-slider');
-    if (slider) {
-      if (a.clients !== undefined) slider.value = a.clients;
-      onClientsChange(slider);
-    }
+  if (step === 3 && a.workFormat) {
+    document.querySelectorAll('#step-3 .option-card').forEach(function(c) {
+      var onclick = c.getAttribute('onclick') || '';
+      if (onclick.indexOf(a.workFormat) >= 0) c.classList.add('selected');
+    });
   }
 
-  if (step === 4 && a.avgCheckRange) {
-    var checkCards = document.querySelectorAll('#step-4 .option-card');
-    checkCards.forEach(function(c) { if (c.textContent.trim() === a.avgCheckRange) c.classList.add('selected'); });
+  if (step === 4) {
+    var cSlider = document.getElementById('clients-slider');
+    if (cSlider) { if (a.clients !== undefined) cSlider.value = a.clients; onClientsChange(cSlider); }
   }
 
-  if (step === 5) {
-    var hSlider = document.getElementById('hours-slider');
-    if (hSlider) {
-      if (a.hoursPerClient !== undefined) hSlider.value = a.hoursPerClient;
-      onHoursChange(hSlider);
-    }
+  if (step === 5 && a.avgCheckRange) {
+    document.querySelectorAll('#step-5 .option-card').forEach(function(c) {
+      var onclick = c.getAttribute('onclick') || '';
+      if (onclick.indexOf(a.avgCheckRange) >= 0) c.classList.add('selected');
+    });
   }
 
   if (step === 6) {
-    var mSlider = document.getElementById('manual-slider');
-    if (mSlider) {
-      if (a.manualWorkPct !== undefined) mSlider.value = a.manualWorkPct;
-      onManualChange(mSlider);
-    }
+    var hSlider = document.getElementById('hours-slider');
+    if (hSlider) { if (a.hoursPerClient !== undefined) hSlider.value = a.hoursPerClient; onHoursChange(hSlider); }
   }
 
-  if (step === 7 && a.clientSources && a.clientSources.length > 0) {
-    var srcCards = document.querySelectorAll('#step-7 .option-card');
-    srcCards.forEach(function(c) {
+  if (step === 7) {
+    var mSlider = document.getElementById('manual-slider');
+    if (mSlider) { if (a.manualWorkPct !== undefined) mSlider.value = a.manualWorkPct; onManualChange(mSlider); }
+  }
+
+  if (step === 8 && a.clientSources && a.clientSources.length > 0) {
+    document.querySelectorAll('#step-8 .option-card').forEach(function(c) {
       var onclick = c.getAttribute('onclick') || '';
       a.clientSources.forEach(function(src) {
-        if (onclick.includes(src)) c.classList.add('selected');
+        if (onclick.indexOf(src) >= 0) c.classList.add('selected');
       });
     });
   }
 
-  if (step === 8 && a.barriers && a.barriers.length > 0) {
-    var barCards = document.querySelectorAll('#step-8 .option-card');
+  if (step === 9 && a.barriers && a.barriers.length > 0) {
+    var barCards = document.querySelectorAll('#step-9 .option-card');
     barCards.forEach(function(c) {
       var onclick = c.getAttribute('onclick') || '';
       a.barriers.forEach(function(b) {
-        if (onclick.includes(b)) c.classList.add('selected');
+        if (onclick.indexOf(b) >= 0) c.classList.add('selected');
       });
     });
-    // Disable unselected if 2 selected
     if (a.barriers.length >= 2) {
       barCards.forEach(function(c) {
         if (!c.classList.contains('selected')) c.classList.add('disabled');
@@ -559,11 +615,37 @@ function restoreStepState(step) {
     }
   }
 
-  if (step === 9) {
+  if (step === 10) {
     var tSlider = document.getElementById('target-slider');
-    if (tSlider) {
-      if (a.targetIncome !== undefined) tSlider.value = a.targetIncome;
-      onTargetChange(tSlider);
-    }
+    if (tSlider) { if (a.targetIncome !== undefined) tSlider.value = a.targetIncome; onTargetChange(tSlider); }
   }
 }
+
+/* ============ BEFOREUNLOAD ============ */
+window.addEventListener('beforeunload', function(e) {
+  if (currentStep >= 4) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+
+/* ============ INIT ============ */
+document.addEventListener('DOMContentLoaded', function() {
+  // Logo fallback
+  var logoImg = document.querySelector('.logo img');
+  if (logoImg) {
+    logoImg.onerror = function() {
+      this.style.display = 'none';
+      var fb = this.parentElement.querySelector('.logo-fallback');
+      if (fb) fb.style.display = 'block';
+    };
+  }
+
+  // Check if returning from report preview to fill contact form
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('go') === 'capture' && getAllAnswers().name) {
+    goToStep(11);
+  } else {
+    goToStep(0);
+  }
+});
