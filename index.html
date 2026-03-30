@@ -74,6 +74,25 @@
       <div class="step-motivation" id="motivation-1"></div>
       <input type="text" class="text-input" id="name-input" placeholder="Ваше имя" oninput="onNameInput(this)" autocomplete="given-name">
       <div id="insight-1"></div>
+
+      <div class="name-step-info">
+        <div class="nsi-title">Для кого эта диагностика</div>
+        <div class="nsi-items">
+          <div class="nsi-item">
+            <span class="nsi-icon">💼</span>
+            <span>Финансовые директора на аутсорсе и фрилансе</span>
+          </div>
+          <div class="nsi-item">
+            <span class="nsi-icon">🔄</span>
+            <span>Финансисты, рассматривающие переход из найма</span>
+          </div>
+          <div class="nsi-item">
+            <span class="nsi-icon">📈</span>
+            <span>Специалисты, которые хотят выйти на доход от 300 000 ₽/мес</span>
+          </div>
+        </div>
+      </div>
+
       <div class="steps-preview">
         <div class="sp-item"><div class="sp-icon">👤</div>О вас</div>
         <div class="sp-arrow">→</div>
@@ -362,6 +381,16 @@
     <button class="btn-primary" id="btn-next" disabled onclick="nextStep()">Далее →</button>
   </div>
 </div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">© 2026 Финтабло</div>
+    <div class="footer-links">
+      <a href="https://fintablo.ru" target="_blank">fintablo.ru</a>
+      <a href="https://fintablo.ru/position" target="_blank">Политика конфиденциальности</a>
+    </div>
+  </div>
+</footer>
 
 <script src="js/storage.js"></script>
 <script src="js/calculator.js"></script>

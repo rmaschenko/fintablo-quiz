@@ -1793,6 +1793,82 @@ html { -webkit-overflow-scrolling: touch; }
   body { font-size: 16px; }
 }
 
+/* ===== Name step — "For whom" block ===== */
+.name-step-info {
+  margin-top: 24px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.name-step-info .nsi-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.name-step-info .nsi-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.name-step-info .nsi-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.name-step-info .nsi-icon { font-size: 16px; flex-shrink: 0; }
+
+/* ===== Footer ===== */
+.site-footer {
+  margin-top: 40px;
+  padding: 20px 24px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.footer-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.footer-brand {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-links a {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.footer-links a:hover { color: var(--text-secondary); text-decoration: underline; }
+
+@media (max-width: 480px) {
+  .footer-inner { flex-direction: column; text-align: center; }
+  .footer-links { gap: 12px; }
+}
+
 /* ===== Utility ===== */
 .hidden { display: none !important; }
 .text-center { text-align: center; }
