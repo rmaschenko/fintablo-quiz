@@ -1812,6 +1812,47 @@ html { -webkit-overflow-scrolling: touch; }
   body { font-size: 16px; }
 }
 
+/* ===== Finding cards ===== */
+.finding-card {
+  background: var(--surface);
+  border-left: 3px solid var(--brand-blue);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.finding-card .fc-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.finding-card .fc-icon { font-size: 18px; }
+
+.finding-card .fc-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--brand-navy);
+}
+
+.finding-card .fc-body {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.finding-card .fc-action {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--brand-blue);
+  font-weight: 500;
+}
+
+.finding-card.warning { border-left-color: var(--warning); }
+.finding-card.danger { border-left-color: var(--danger); }
+.finding-card.success { border-left-color: var(--accent-green); }
+
 /* ===== Name step — "For whom" block ===== */
 .name-step-info {
   margin-top: 24px;

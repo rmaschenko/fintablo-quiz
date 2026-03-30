@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Render all sections
   renderHero(answers, m);
   renderDashboard(answers, m);
+  renderFindings(answers, m);
   renderMetrics(answers, m);
   renderProfile(answers, m);
   renderLostPotential(answers, m);
@@ -97,6 +98,88 @@ function renderHero(a, m) {
       '<div class="rh-stat"><div class="rh-stat-value">' + formatMoney(m.hourlyRate) + '₽</div><div class="rh-stat-label">Ставка/час</div></div>' +
       (potential > 0 ? '<div class="rh-stat"><div class="rh-stat-value" style="color:#F59E0B">+' + potential + '%</div><div class="rh-stat-label">Потенциал</div></div>' : '') +
     '</div>';
+}
+
+/* ===== FINDINGS — personalized insights from quiz answers ===== */
+function renderFindings(a, m) {
+  var el = document.getElementById('findings');
+  if (!el) return;
+
+  var findings = [];
+
+  // Rate finding
+  if (m.hourlyRate < 500) {
+    findings.push({ icon: '⚠️', title: 'Ваша ставка значительно ниже рынка', type: 'danger',
+      body: 'При ' + formatMoney(m.hourlyRate) + ' ₽/ч вы работаете на уровне начинающего бухгалтера, а не финансового директора. Медиана для финдиректоров на аутсорсе в 2026 году — ' + formatMoney(m.benchmarkRate) + ' ₽/ч.',
+      action: 'Решение: переупаковка предложения под измеримый результат для бизнеса позволяет поднять ставку в 2–3 раза' });
+  } else if (m.hourlyRate < 1000) {
+    findings.push({ icon: '📊', title: 'Есть потенциал роста ставки', type: 'warning',
+      body: 'Ваша ставка ' + formatMoney(m.hourlyRate) + ' ₽/ч — это средний рынок. До уровня ' + formatMoney(m.benchmarkRate) + ' ₽/ч вам не хватает правильного позиционирования.',
+      action: 'Решение: переход от формата «веду учёт» к формату «нахожу, где бизнес теряет деньги»' });
+  } else {
+    findings.push({ icon: '✅', title: 'Ваша ставка на хорошем уровне', type: 'success',
+      body: formatMoney(m.hourlyRate) + ' ₽/ч — это уровень CFO-консалтинга. Фокусируйтесь на масштабировании через автоматизацию.',
+      action: '' });
+  }
+
+  // Routine finding
+  if (m.automationLevel < 40) {
+    findings.push({ icon: '🔄', title: 'Критический уровень рутины: ' + a.manualWorkPct + '%', type: 'danger',
+      body: 'Вы тратите ' + m.routineHours + ' часов в месяц на операционные задачи. Это ' + m.routineFreedHours + ' часов, которые можно высвободить для роста.',
+      action: 'Решение: автоматизация через инструменты Финтабло сокращает рутину до 20%' });
+  } else if (m.automationLevel < 70) {
+    findings.push({ icon: '🔄', title: 'Рутина занимает ' + a.manualWorkPct + '% времени', type: 'warning',
+      body: 'Каждые 10% снижения рутины высвобождают ~' + Math.round(m.totalHours * 0.1) + ' часов в месяц. Это время на нового клиента или повышение качества работы.',
+      action: 'Решение: шаблонизация отчётов и автоматический сбор данных — первые шаги' });
+  }
+
+  // Client source finding
+  if (m.sourceCount <= 1) {
+    findings.push({ icon: '📥', title: 'Зависимость от одного источника клиентов', type: 'danger',
+      body: 'Один канал — одна точка отказа. Если он ослабнет, вы останетесь без новых клиентов. Финансисты с доходом от 300 тыс. используют 2–3 независимых канала.',
+      action: 'Решение: партнёрский канал Финтабло даёт входящий поток без затрат вашего времени на продажи' });
+  }
+
+  // Barrier-specific finding
+  if (a.barriers && a.barriers.length > 0) {
+    var barrier = a.barriers[0];
+    var barrierFindings = {
+      'Нет стабильного потока новых клиентов': { icon: '📥', title: 'Главный барьер — отсутствие потока', type: 'warning',
+        body: 'Это барьер номер один среди финансистов на аутсорсе. Партнёрские каналы решают эту проблему системно.',
+        action: 'Решение: подключение к партнёрской программе даёт первого клиента за 3–5 недель' },
+      'Не умею / не хочу активно продавать': { icon: '🎤', title: 'Барьер — нежелание продавать', type: 'warning',
+        body: 'Финансовый директор не продаёт — он диагностирует проблемы бизнеса. Это другой подход, и он работает.',
+        action: 'Решение: через партнёрский канал клиенты приходят сами — вам остаётся только подтвердить экспертизу' },
+      'Много рутины — нет времени на рост': { icon: '⏰', title: 'Рутина блокирует рост', type: 'warning',
+        body: 'При ' + a.manualWorkPct + '% рутины у вас физически нет ресурса на развитие практики.',
+        action: 'Решение: автоматизация операционных процессов высвободит ' + m.routineFreedHours + ' часов в месяц' }
+    };
+    var bf = barrierFindings[barrier];
+    if (bf && !findings.some(function(f) { return f.title === bf.title; })) {
+      findings.push(bf);
+    }
+  }
+
+  // Income gap
+  if (m.incomeGap > 100000) {
+    findings.push({ icon: '🎯', title: 'Разрыв до цели: ' + formatMoney(m.incomeGap) + ' ₽/мес', type: 'warning',
+      body: 'Для достижения ' + formatMoneyShort(m.targetIncome) + '/мес нужно ' + (m.newClientsNeeded <= 3 ? m.newClientsNeeded + ' новых клиента + повышение чека у текущих' : 'системное изменение модели работы') + '.',
+      action: 'Ваш персональный план на 90 дней — в разделе ниже' });
+  }
+
+  // Render
+  var html = '<p style="font-size:15px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6">' + a.name + ', на основе ваших ответов мы выявили ' + findings.length + ' ключевых моментов, которые влияют на ваш доход:</p>';
+
+  findings.forEach(function(f) {
+    html +=
+      '<div class="finding-card ' + f.type + '">' +
+        '<div class="fc-header"><span class="fc-icon">' + f.icon + '</span><span class="fc-title">' + f.title + '</span></div>' +
+        '<div class="fc-body">' + f.body + '</div>' +
+        (f.action ? '<div class="fc-action">→ ' + f.action + '</div>' : '') +
+      '</div>';
+  });
+
+  el.innerHTML = html;
 }
 
 /* ===== DASHBOARD ===== */
