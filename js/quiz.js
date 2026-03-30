@@ -516,13 +516,17 @@ function renderIntermediate() {
     costEl.style.display = 'none';
   }
 
-  // === Next hint ===
+  // === What's next — visual block ===
   var nextHint = document.getElementById('inter-next-hint');
   if (nextHint) {
-    nextHint.innerHTML = '👉 <strong>Осталось 4 вопроса</strong> — рутина, источники клиентов, барьеры и целевой доход. После них вы получите:<br>' +
-      '• 5 ключевых метрик вашей практики с рыночными бенчмарками<br>' +
-      '• 3 сценария роста с конкретными цифрами<br>' +
-      '• Пошаговый план на 90 дней';
+    nextHint.innerHTML =
+      '<div class="inb-title">Осталось 4 вопроса — и вы получите персональный план</div>' +
+      '<div class="inter-next-items">' +
+        '<div class="inter-next-item"><span class="ini-icon">🔄</span><div><strong>Доля рутины</strong> — сколько времени вы теряете</div></div>' +
+        '<div class="inter-next-item"><span class="ini-icon">📥</span><div><strong>Источники клиентов</strong> — насколько предсказуем поток</div></div>' +
+        '<div class="inter-next-item"><span class="ini-icon">🚧</span><div><strong>Барьеры роста</strong> — что конкретно мешает</div></div>' +
+        '<div class="inter-next-item"><span class="ini-icon">🎯</span><div><strong>Целевой доход</strong> — рассчитаем сценарии достижения</div></div>' +
+      '</div>';
   }
 }
 
@@ -553,6 +557,8 @@ function renderCapturePreview() {
     var rateColor = m.rateEfficiency >= 70 ? 'green' : m.rateEfficiency >= 40 ? 'yellow' : 'red';
     var portColor = m.portfolioStability >= 70 ? 'green' : m.portfolioStability >= 40 ? 'yellow' : 'red';
 
+    var autoColor = m.automationLevel >= 70 ? 'green' : m.automationLevel >= 40 ? 'yellow' : 'red';
+
     gaugesEl.innerHTML =
       '<div class="capture-gauge-item">' +
         '<div class="cg-header"><span class="cg-title">Эффективность ставки</span><span class="cg-value">' + m.rateEfficiency + '%</span></div>' +
@@ -562,12 +568,18 @@ function renderCapturePreview() {
         '<div class="cg-header"><span class="cg-title">Устойчивость портфеля</span><span class="cg-value">' + m.portfolioStability + '%</span></div>' +
         '<div class="cg-bar"><div class="cg-fill ' + portColor + '" style="width:' + m.portfolioStability + '%"></div></div>' +
       '</div>' +
-      '<div style="display:flex;gap:8px;margin-top:8px">' +
-        '<div style="flex:1;height:6px;background:#E5E7EB;border-radius:3px;position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,#E5E7EB 0,#E5E7EB 4px,#D1D5DB 4px,#D1D5DB 8px)"></div></div>' +
-        '<div style="flex:1;height:6px;background:#E5E7EB;border-radius:3px;position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,#E5E7EB 0,#E5E7EB 4px,#D1D5DB 4px,#D1D5DB 8px)"></div></div>' +
-        '<div style="flex:1;height:6px;background:#E5E7EB;border-radius:3px;position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,#E5E7EB 0,#E5E7EB 4px,#D1D5DB 4px,#D1D5DB 8px)"></div></div>' +
+      '<div class="capture-gauge-item" style="opacity:0.4">' +
+        '<div class="cg-header"><span class="cg-title">🔒 Автоматизация</span><span class="cg-value" style="filter:blur(4px)">' + m.automationLevel + '%</span></div>' +
+        '<div class="cg-bar"><div class="cg-fill ' + autoColor + '" style="width:' + m.automationLevel + '%;filter:blur(3px)"></div></div>' +
       '</div>' +
-      '<div style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:6px">Ещё 3 метрики доступны в полном отчёте</div>';
+      '<div class="capture-gauge-item" style="opacity:0.35">' +
+        '<div class="cg-header"><span class="cg-title">🔒 Масштабируемость</span><span class="cg-value" style="filter:blur(4px)">—</span></div>' +
+        '<div class="cg-bar"><div class="cg-fill blue" style="width:55%;filter:blur(3px)"></div></div>' +
+      '</div>' +
+      '<div class="capture-gauge-item" style="opacity:0.3">' +
+        '<div class="cg-header"><span class="cg-title">🔒 Предсказуемость потока</span><span class="cg-value" style="filter:blur(4px)">—</span></div>' +
+        '<div class="cg-bar"><div class="cg-fill yellow" style="width:40%;filter:blur(3px)"></div></div>' +
+      '</div>';
   }
 
   // Personalize FinTablo value line

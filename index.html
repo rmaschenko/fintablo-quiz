@@ -40,14 +40,30 @@
       <div class="social-proof">
         <span class="dot-green"></span> Более 800 финансистов уже прошли диагностику
       </div>
-      <h1>Узнайте, что удерживает вашу практику от дохода 300 000 ₽/мес</h1>
-      <p class="subtitle">Диагностика покажет, где именно вы теряете деньги и время, какой сценарий роста подходит вам, и как пройти этот путь быстрее с правильными инструментами</p>
-      <div class="trust-badges">
-        <span>⏱ ~4 минуты</span>
-        <span>📊 10 вопросов</span>
-        <span>📋 Персональный план</span>
+      <h1>Узнайте, сколько вы <span style="color:var(--brand-blue)">недозарабатываете</span> и как это исправить</h1>
+      <p class="subtitle">Ответьте на 10 вопросов о вашей практике — получите персональный план роста дохода с конкретными цифрами, сроками и шагами</p>
+
+      <div class="start-benefits">
+        <div class="start-benefit-item">
+          <div class="sb-icon">📊</div>
+          <div class="sb-text"><strong>5 метрик</strong> вашей практики vs. рыночные показатели</div>
+        </div>
+        <div class="start-benefit-item">
+          <div class="sb-icon">🎯</div>
+          <div class="sb-text"><strong>3 сценария</strong> роста дохода с расчётами под ваши данные</div>
+        </div>
+        <div class="start-benefit-item">
+          <div class="sb-icon">📋</div>
+          <div class="sb-text"><strong>План на 90 дней</strong> — конкретные действия на каждую неделю</div>
+        </div>
       </div>
-      <button class="btn-primary" onclick="startQuiz()">Начать диагностику</button>
+
+      <button class="btn-primary" onclick="startQuiz()" style="margin-top:24px">Начать диагностику — это бесплатно</button>
+
+      <div class="trust-badges" style="margin-top:16px">
+        <span>⏱ ~4 минуты</span>
+        <span>🔒 Данные не передаются третьим лицам</span>
+      </div>
     </div>
   </div>
 
@@ -160,6 +176,7 @@
   <div class="step" id="step-65">
     <div class="intermediate-screen">
       <h2><span id="inter-name"></span>, вот первые результаты вашей диагностики</h2>
+      <p class="step-subtitle" style="margin-bottom:16px">Мы проанализировали вашу клиентскую базу, средний чек и рабочую нагрузку. Ниже — ключевые показатели вашей практики в сравнении с рынком.</p>
 
       <div class="metrics-grid">
         <div class="metric-card">
@@ -197,7 +214,7 @@
       <div id="inter-live-cost" class="inter-live-cost"></div>
 
       <!-- What's next -->
-      <div class="inter-next-hint" id="inter-next-hint"></div>
+      <div id="inter-next-hint" class="inter-next-block"></div>
     </div>
   </div>
 
@@ -333,10 +350,6 @@
       </label>
 
       <button class="btn-primary" id="btn-submit-lead" disabled onclick="submitLead()">Получить полный отчёт →</button>
-
-      <p class="skip-link">
-        <a href="#" onclick="showReportPreview(); return false;">Посмотреть краткий результат без отправки контактов</a>
-      </p>
     </div>
   </div>
 

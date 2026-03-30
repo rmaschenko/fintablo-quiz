@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('report-date').textContent = new Date().toLocaleDateString('ru-RU');
 
   // Render all sections
+  renderHero(answers, m);
   renderDashboard(answers, m);
   renderMetrics(answers, m);
   renderProfile(answers, m);
@@ -75,6 +76,27 @@ function initNavScroll() {
       }
     });
   });
+}
+
+/* ===== HERO ===== */
+function renderHero(a, m) {
+  var el = document.getElementById('report-hero');
+  if (!el) return;
+
+  var icons = { 'Стартовый консультант': '🚀', 'Перегруженный эксперт': '⚡', 'Застрявшее плато': '📊', 'В шаге от цели': '🎯', 'Системный CFO-партнёр': '👑' };
+  var icon = icons[m.practiceType] || '📊';
+  var potential = m.currentIncome > 0 ? Math.round(m.incomeGap / m.currentIncome * 100) : 0;
+
+  el.innerHTML =
+    '<div class="rh-type">' + icon + ' ' + m.practiceType + '</div>' +
+    '<h1>Персональный план роста для ' + a.name + '</h1>' +
+    '<div class="rh-subtitle">На основе ваших ответов мы рассчитали ключевые метрики, определили точки роста и составили пошаговый план</div>' +
+    '<div class="rh-stats">' +
+      '<div class="rh-stat"><div class="rh-stat-value">' + formatMoneyShort(m.currentIncome) + '</div><div class="rh-stat-label">Доход сейчас</div></div>' +
+      '<div class="rh-stat"><div class="rh-stat-value" style="color:#10B981">' + formatMoneyShort(m.targetIncome) + '</div><div class="rh-stat-label">Цель</div></div>' +
+      '<div class="rh-stat"><div class="rh-stat-value">' + formatMoney(m.hourlyRate) + '₽</div><div class="rh-stat-label">Ставка/час</div></div>' +
+      (potential > 0 ? '<div class="rh-stat"><div class="rh-stat-value" style="color:#F59E0B">+' + potential + '%</div><div class="rh-stat-label">Потенциал</div></div>' : '') +
+    '</div>';
 }
 
 /* ===== DASHBOARD ===== */
@@ -348,7 +370,13 @@ function renderRoadmap(a, m) {
         ' Активируйте 2–3 источника одновременно для стабильности потока. <strong>Результат к концу 3-го месяца:</strong> выстроенная система привлечения, повышенные чеки, сниженная рутина.</p></div>' +
     '</div>' +
 
-    '<div class="report-insight"><strong>Важно:</strong> этот план — каркас, а не жёсткая инструкция. Эксперт Финтабло адаптирует его под вашу конкретную ситуацию при персональном разборе: учтёт вашу отрасль, тип клиентов и личные приоритеты.</div>';
+    '<div class="report-insight">' +
+      '<strong>Почему с Финтабло этот план реалистичен:</strong><br><br>' +
+      '• <strong>Поток клиентов</strong> — вам не нужно искать и продавать. Финтабло направляет входящие заявки от бизнеса, который уже ищет финансового директора на аутсорсе.<br>' +
+      '• <strong>Автоматизация</strong> — инструменты Финтабло сокращают рутину с ' + a.manualWorkPct + '% до ~20%, высвобождая ' + m.routineFreedHours + ' часов в месяц.<br>' +
+      '• <strong>Поддержка</strong> — персональный менеджер, готовые шаблоны, сообщество финдиректоров. Вы не один.<br><br>' +
+      'Без этих инструментов план выполним, но займёт в 2–3 раза больше времени. С Финтабло — это реалистичные 90 дней.' +
+    '</div>';
 }
 
 /* ===== FINTABLO BENEFITS ===== */
@@ -402,11 +430,13 @@ function renderInlineCTA(a, m) {
 /* ===== FINAL CTA ===== */
 function renderCTA(a, m) {
   var el = document.getElementById('report-cta');
+  var incomeWithFT = m.currentIncome + 2 * m.checkMid;
   el.innerHTML =
     '<div class="report-cta">' +
-      '<h3>Готовы сделать первый шаг?</h3>' +
-      '<p>' + a.name + ', эксперт Финтабло изучит ваш отчёт до разговора и подготовит индивидуальные рекомендации. Это не продажа — это разбор вашей конкретной ситуации. 20–30 минут. Бесплатно.</p>' +
-      '<button class="btn-primary" onclick="goToThankYou()">Записаться на разбор с экспертом →</button>' +
+      '<h3>' + a.name + ', вы видите свой потенциал. Давайте реализуем его вместе.</h3>' +
+      '<p>Эксперт Финтабло уже видит ваш профиль «' + m.practiceType + '» и подготовит персональные рекомендации: какой сценарий выбрать, с чего начать, как выйти на ' + formatMoneyShort(m.targetIncome) + '/мес. Это не презентация — это разбор конкретно вашей ситуации.</p>' +
+      '<button class="btn-primary" onclick="goToThankYou()">Получить персональный разбор — бесплатно →</button>' +
+      '<p style="font-size:12px;opacity:0.6;margin-top:10px">20–30 минут · без обязательств</p>' +
     '</div>';
 
   window.goToThankYou = function() {
