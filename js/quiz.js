@@ -349,9 +349,12 @@ function onManualChange(input) {
 }
 
 // Step 8 — Sources (multi-select)
+var VALID_SOURCES = ['Рекомендации и сарафанное радио', 'Сообщества и соцсети', 'Площадки и маркетплейсы', 'Партнёрские программы', 'Пока клиентов нет'];
+
 function toggleSource(value, el) {
   var a = getAllAnswers();
-  var sources = a.clientSources || [];
+  // Filter out legacy values from previous quiz versions
+  var sources = (a.clientSources || []).filter(function(s) { return VALID_SOURCES.indexOf(s) >= 0; });
   var idx = sources.indexOf(value);
 
   if (idx >= 0) {
@@ -694,9 +697,14 @@ function restoreStepState(step) {
   }
 
   if (step === 8 && a.clientSources && a.clientSources.length > 0) {
+    // Filter legacy values before restoring
+    var validSources = a.clientSources.filter(function(s) { return VALID_SOURCES.indexOf(s) >= 0; });
+    if (validSources.length !== a.clientSources.length) {
+      saveAnswer('clientSources', validSources);
+    }
     document.querySelectorAll('#step-8 .option-card').forEach(function(c) {
       var onclick = c.getAttribute('onclick') || '';
-      a.clientSources.forEach(function(src) {
+      validSources.forEach(function(src) {
         if (onclick.indexOf(src) >= 0) c.classList.add('selected');
       });
     });
