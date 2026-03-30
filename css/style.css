@@ -1677,12 +1677,63 @@ input[type=range]::-moz-range-thumb {
 
 .inline-cta .btn-primary { max-width: 360px; margin: 0 auto; }
 
-/* ===== Responsive ===== */
+/* ===== Cross-browser ===== */
+input[type=range]::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: #E5E7EB;
+}
+
+/* Safari touch-action fix */
+.option-card, .btn-primary, .btn-secondary, .btn-back, .action-card {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Firefox scrollbar hide for report nav */
+.report-nav { scrollbar-width: none; }
+
+/* Ensure smooth scroll on iOS */
+html { -webkit-overflow-scrolling: touch; }
+
+/* ===== Responsive: 375px (iPhone SE) ===== */
+@media (max-width: 389px) {
+  body { font-size: 14px; }
+  .start-screen h1 { font-size: 20px; }
+  .start-screen .subtitle { font-size: 14px; }
+  .start-benefit-item { padding: 10px 12px; }
+  .start-benefit-item .sb-text { font-size: 13px; }
+  .step-question { font-size: 18px; }
+  .slider-value { font-size: 28px; }
+  .option-card { padding: 12px 14px; font-size: 14px; min-height: 44px; }
+  .container, .container-wide { padding: 0 14px; }
+  .step-nav { padding: 10px 14px; }
+  .btn-primary { padding: 14px 24px; font-size: 15px; }
+  .metrics-grid { gap: 6px; }
+  .metric-card { padding: 14px 10px; }
+  .metric-card .metric-value { font-size: 22px; }
+  .steps-preview { padding: 12px; gap: 4px; }
+  .steps-preview .sp-item { width: 48px; font-size: 9px; }
+  .steps-preview .sp-icon { width: 26px; height: 26px; font-size: 12px; }
+  .steps-preview .sp-arrow { font-size: 12px; }
+  .insight-box { font-size: 12px; padding: 10px 12px; }
+  .inter-next-items { grid-template-columns: 1fr; }
+  .report-hero h1 { font-size: 20px; }
+  .report-hero .rh-stats { gap: 16px; }
+  .report-hero .rh-stat-value { font-size: 22px; }
+  .dash-card .dash-value { font-size: 24px; }
+  .profile-card { padding: 20px 16px; }
+  .profile-card .profile-type { font-size: 18px; }
+  .scenario-card { padding: 18px; }
+  .sticky-report-cta .banner-text { font-size: 12px; }
+  .persistent-banner .banner-text { font-size: 12px; }
+}
+
+/* ===== Responsive: up to 480px (small phones) ===== */
 @media (max-width: 480px) {
   .start-screen h1 { font-size: 22px; }
   .step-question { font-size: 20px; }
   .trust-badges { gap: 12px; }
-  .trust-badges span { font-size: 13px; }
+  .trust-badges span { font-size: 12px; }
   .metrics-grid { gap: 8px; }
   .metric-card .metric-value { font-size: 24px; }
   .dash-card .dash-value { font-size: 26px; }
@@ -1692,18 +1743,54 @@ input[type=range]::-moz-range-thumb {
   .slider-value { font-size: 30px; }
   .steps-preview .sp-item { width: 54px; font-size: 10px; }
   .steps-preview .sp-icon { width: 28px; height: 28px; font-size: 13px; }
+  .inter-next-items { grid-template-columns: 1fr; }
+  .report-hero .rh-stats { gap: 16px; }
+  .capture-hook { font-size: 14px; }
+  .fintablo-calc { padding: 18px; }
+  .roadmap-week p { padding: 12px; font-size: 13px; }
 }
 
+/* ===== Responsive: 481-768px (large phones, small tablets) ===== */
+@media (min-width: 481px) and (max-width: 768px) {
+  .container { max-width: 540px; }
+  .start-benefits { max-width: 460px; }
+  .dashboard-grid { gap: 12px; }
+}
+
+/* ===== Responsive: 769px+ (tablets landscape, desktop) ===== */
 @media (min-width: 769px) {
   .start-screen { padding: 64px 0 80px; }
   .start-screen h1 { font-size: 32px; }
-  .start-screen .subtitle { font-size: 17px; }
+  .start-screen .subtitle { font-size: 17px; max-width: 520px; }
+  .start-benefits { max-width: 480px; }
   .step-content { padding: 40px 0 120px; }
   .step-question { font-size: 26px; }
   .dashboard-grid { gap: 16px; }
   .dash-card { padding: 24px; }
   .dash-card .dash-value { font-size: 36px; }
   .report-section { margin: 36px 0; }
+  .report-hero { padding: 40px 32px; }
+  .report-hero h1 { font-size: 28px; }
+  .report-hero .rh-stat-value { font-size: 32px; }
+  .scenario-card { padding: 28px; }
+  .fintablo-calc { padding: 28px; }
+  .profile-card { padding: 36px 32px; }
+  .inter-benchmark { padding: 20px; }
+}
+
+/* ===== Responsive: 1024px+ (desktop) ===== */
+@media (min-width: 1024px) {
+  .container-wide { max-width: 880px; }
+  .report-hero .rh-stats { gap: 40px; }
+  .dashboard-grid { grid-template-columns: repeat(4, 1fr); }
+  .story-card .story-before-after { grid-template-columns: 1fr 1fr; }
+}
+
+/* ===== Responsive: 1440px+ (wide desktop) ===== */
+@media (min-width: 1440px) {
+  .container { max-width: 640px; }
+  .container-wide { max-width: 960px; }
+  body { font-size: 16px; }
 }
 
 /* ===== Utility ===== */

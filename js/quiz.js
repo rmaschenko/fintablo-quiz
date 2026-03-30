@@ -151,8 +151,7 @@ function goToStep(step) {
   showMotivation(step);
 
   // Yandex.Metrika
-  if (typeof ym === 'function') {
-    if (step === 0) return;
+  if (typeof ym === 'function' && step > 0) {
     if (step === 65) ym(61131877, 'reachGoal', 'quiz_intermediate');
     else if (step === 11) ym(61131877, 'reachGoal', 'quiz_capture_screen');
     else ym(61131877, 'reachGoal', 'quiz_step_' + step);
