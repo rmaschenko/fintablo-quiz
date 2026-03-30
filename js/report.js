@@ -79,6 +79,12 @@ function initNavScroll() {
   });
 }
 
+/* ===== GLOBAL FUNCTIONS ===== */
+function goToThankYou() {
+  if (typeof ym === 'function') ym(61131877, 'reachGoal', 'report_cta_clicked');
+  window.location.href = 'thankyou.html';
+}
+
 /* ===== HERO ===== */
 function renderHero(a, m) {
   var el = document.getElementById('report-hero');
@@ -521,11 +527,6 @@ function renderCTA(a, m) {
       '<button class="btn-primary" onclick="goToThankYou()">Получить персональный разбор — бесплатно →</button>' +
       '<p style="font-size:12px;opacity:0.6;margin-top:10px">20–30 минут · без обязательств</p>' +
     '</div>';
-
-  window.goToThankYou = function() {
-    if (typeof ym === 'function') ym(61131877, 'reachGoal', 'report_cta_clicked');
-    window.location.href = 'thankyou.html';
-  };
 
   // Sticky CTA — show after user scrolls past first section
   initStickyCTA();

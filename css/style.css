@@ -1949,6 +1949,53 @@ body.page-thankyou .site-footer { padding-bottom: 24px; }
   .footer-links { align-items: center; }
 }
 
+/* ===== Cookie Banner ===== */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--brand-navy);
+  color: #fff;
+  padding: 14px 24px;
+  padding-bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 300;
+  display: none;
+}
+
+.cookie-banner.visible { display: block; }
+
+.cookie-banner .cb-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cookie-banner .cb-text {
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.4;
+  min-width: 200px;
+}
+
+.cookie-banner .cb-text a { color: #fff; text-decoration: underline; }
+
+.cookie-banner .cb-btn {
+  background: #fff;
+  color: var(--brand-navy);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font);
+}
+
 /* ===== Utility ===== */
 .hidden { display: none !important; }
 .text-center { text-align: center; }

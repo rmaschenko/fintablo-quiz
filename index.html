@@ -305,7 +305,7 @@
         <div class="slider-sub" id="target-gap">—</div>
         <input type="range" id="target-slider" min="50000" max="1000000" step="25000" value="500000" oninput="onTargetChange(this)" style="--pct:47%">
         <div class="slider-labels">
-          <span>100к</span><span>200к</span><span>300к</span><span>500к</span><span>700к</span><span>1 млн</span>
+          <span>50к</span><span>200к</span><span>300к</span><span>500к</span><span>700к</span><span>1 млн</span>
         </div>
         <div class="text-center mt-8"><span id="target-badge" class="rate-badge blue">—</span></div>
       </div>
@@ -395,9 +395,21 @@
   </div>
 </footer>
 
+<!-- Cookie Banner -->
+<div class="cookie-banner" id="cookie-banner">
+  <div class="cb-inner">
+    <div class="cb-text">Мы используем файлы cookie для улучшения работы сервиса. Продолжая использовать сайт, вы соглашаетесь с <a href="https://fintablo.ru/position" target="_blank">политикой обработки персональных данных</a>.</div>
+    <button class="cb-btn" onclick="acceptCookies()">Принять</button>
+  </div>
+</div>
+
 <script src="js/storage.js"></script>
 <script src="js/calculator.js"></script>
 <script src="js/email.js"></script>
 <script src="js/quiz.js"></script>
+<script>
+function acceptCookies(){localStorage.setItem('fintablo_cookies','1');document.getElementById('cookie-banner').classList.remove('visible')}
+if(!localStorage.getItem('fintablo_cookies')){document.getElementById('cookie-banner').classList.add('visible')}
+</script>
 </body>
 </html>

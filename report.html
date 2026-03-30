@@ -41,6 +41,7 @@
     <a href="#sec-profile">Профиль</a>
     <a href="#sec-scenarios">Сценарии</a>
     <a href="#sec-metrics">Метрики</a>
+    <a href="#sec-potential">Потенциал</a>
     <a href="#sec-roadmap">План</a>
     <a href="#sec-fintablo">Финтабло</a>
   </div>
@@ -154,8 +155,19 @@
   </div>
 </footer>
 
+<div class="cookie-banner" id="cookie-banner">
+  <div class="cb-inner">
+    <div class="cb-text">Мы используем файлы cookie для улучшения работы сервиса. Продолжая использовать сайт, вы соглашаетесь с <a href="https://fintablo.ru/position" target="_blank">политикой обработки персональных данных</a>.</div>
+    <button class="cb-btn" onclick="acceptCookies()">Принять</button>
+  </div>
+</div>
+
 <script src="js/storage.js"></script>
 <script src="js/calculator.js"></script>
 <script src="js/report.js"></script>
+<script>
+function acceptCookies(){localStorage.setItem('fintablo_cookies','1');document.getElementById('cookie-banner').classList.remove('visible')}
+if(!localStorage.getItem('fintablo_cookies')){document.getElementById('cookie-banner').classList.add('visible')}
+</script>
 </body>
 </html>

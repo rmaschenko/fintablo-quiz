@@ -476,9 +476,9 @@ function renderIntermediate() {
   document.getElementById('inter-insight').innerHTML = insightText;
 
   // === Key finding ===
+  var monthlyPotential = Math.max(0, (benchRate - rate)) * totalH;
   var findEl = document.getElementById('inter-finding');
   if (findEl) {
-    var monthlyPotential = Math.max(0, (benchRate - rate)) * totalH;
     var findClass = '';
     var findText = '';
 
@@ -596,10 +596,7 @@ function formatPhone(input) {
 }
 
 function updateSubmitButton() {
-  var phoneVal = (document.getElementById('phone').value || '').replace(/\D/g, '');
-  var phoneValid = phoneVal.length === 11 || (phoneVal.length === 10 && !phoneVal.startsWith('7') && !phoneVal.startsWith('8'));
-  // Accept 10 digits (without leading 7/8) or 11 digits (with)
-  var rawDigits = document.getElementById('phone').value.replace(/\D/g, '');
+  var rawDigits = (document.getElementById('phone').value || '').replace(/\D/g, '');
   if (rawDigits.startsWith('7') || rawDigits.startsWith('8')) rawDigits = rawDigits.slice(1);
   var isPhoneValid = rawDigits.length === 10;
 
