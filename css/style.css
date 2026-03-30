@@ -1891,12 +1891,18 @@ html { -webkit-overflow-scrolling: touch; }
 .name-step-info .nsi-icon { font-size: 16px; flex-shrink: 0; }
 
 /* ===== Footer ===== */
+/* Footer needs bottom padding to clear fixed elements (step-nav ~76px, sticky CTA ~56px) */
 .site-footer {
   margin-top: 40px;
   padding: 24px 24px;
+  padding-bottom: 80px; /* clears fixed nav/sticky CTA */
   border-top: 1px solid var(--border);
   background: var(--surface);
 }
+
+/* On quiz pages, footer is mostly hidden behind steps. On report — needs clearance for sticky CTA */
+body.page-report .site-footer { padding-bottom: 72px; }
+body.page-thankyou .site-footer { padding-bottom: 24px; }
 
 .footer-inner {
   max-width: 800px;
