@@ -71,6 +71,7 @@ function submitLead() {
   === */
 
   // Redirect to report (full version, not preview)
+  if (typeof isNavigatingAway !== 'undefined') isNavigatingAway = true;
   window.location.href = 'report.html';
 }
 

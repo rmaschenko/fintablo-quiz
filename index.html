@@ -22,7 +22,7 @@
   <div class="header-inner">
     <div class="logo">
       <img src="https://static.tildacdn.com/tild3138-6332-4262-a166-613434313066/Logo.png" alt="FinTablo" height="32">
-      <span class="logo-fallback">FinTablo</span>
+      <span class="logo-fallback">Финтабло</span>
     </div>
   </div>
 </header>
@@ -150,6 +150,7 @@
           <span>0</span><span>3</span><span>5</span><span>7</span><span>10</span><span>15+</span>
         </div>
         <div class="text-center mt-8"><span id="clients-badge" class="rate-badge yellow">Переходная зона</span></div>
+        <div class="slider-hint" id="slider-hint-4">↔ Сдвиньте ползунок, чтобы указать количество</div>
       </div>
       <div id="insight-4"></div>
     </div>
@@ -349,12 +350,12 @@
       <p class="form-label">Получите полный отчёт и разбор с экспертом</p>
 
       <div class="field-group">
-        <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" oninput="formatPhone(this)">
+        <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" oninput="formatPhone(this)" autocomplete="tel">
         <p class="field-hint">Эксперт Финтабло свяжется в течение 1 рабочего дня</p>
       </div>
 
       <div class="field-group">
-        <input type="email" id="email" placeholder="email@example.com">
+        <input type="email" id="email" placeholder="email@example.com" autocomplete="email">
         <p class="field-hint">Необязательно — отправим копию отчёта на почту</p>
       </div>
 

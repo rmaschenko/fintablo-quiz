@@ -284,6 +284,8 @@ function onClientsChange(input) {
     ['red', 'yellow', 'blue', 'green']
   );
 
+  var hint4 = document.getElementById('slider-hint-4');
+  if (hint4) hint4.classList.add('hidden-hint');
   showInsight('insight-4', INSIGHTS.clients(val));
   document.getElementById('btn-next').disabled = false;
 }
@@ -733,8 +735,9 @@ function restoreStepState(step) {
 }
 
 /* ============ BEFOREUNLOAD ============ */
+var isNavigatingAway = false;
 window.addEventListener('beforeunload', function(e) {
-  if (currentStep >= 4) {
+  if (currentStep >= 4 && !isNavigatingAway) {
     e.preventDefault();
     e.returnValue = '';
   }
