@@ -13,7 +13,7 @@ function calculate(answers) {
   var clients = answers.clients || 0;
   var hoursPerClient = answers.hoursPerClient || 20;
   var manualWorkPct = answers.manualWorkPct !== undefined ? answers.manualWorkPct : 50;
-  var targetIncome = answers.targetIncome || 300000;
+  var targetIncome = answers.targetIncome || 500000;
 
   var currentIncome = clients * checkMid;
   var hourlyRate = hoursPerClient > 0 ? Math.round(checkMid / hoursPerClient) : 0;

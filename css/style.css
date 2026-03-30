@@ -822,10 +822,10 @@ input[type=range]::-moz-range-thumb {
 
 .field-group input {
   width: 100%;
-  padding: 16px;
+  padding: 12px 14px;
   border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  font-size: 16px;
+  border-radius: 10px;
+  font-size: 15px;
   font-family: var(--font);
   color: var(--text-primary);
   background: #fff;
@@ -1203,14 +1203,16 @@ input[type=range]::-moz-range-thumb {
 }
 
 .scenario-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-.scenario-card .scenario-time { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+.scenario-card .scenario-time { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
 
 .scenario-card .scenario-actions {
   font-size: 14px;
   color: var(--text-secondary);
-  margin-bottom: 16px;
-  line-height: 1.6;
+  margin-bottom: 20px;
+  line-height: 1.7;
 }
+
+.scenario-card .scenario-actions br { content: ''; display: block; margin-top: 6px; }
 
 .scenario-card .scenario-forecast {
   background: var(--bg);

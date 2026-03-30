@@ -36,12 +36,11 @@
 <!-- Report navigation -->
 <nav class="report-nav" id="report-nav">
   <div class="report-nav-inner">
-    <a href="#sec-dashboard">Обзор</a>
-    <a href="#sec-findings">Находки</a>
-    <a href="#sec-metrics">Метрики</a>
+    <a href="#sec-findings">Выводы</a>
+    <a href="#sec-dashboard">Цифры</a>
     <a href="#sec-profile">Профиль</a>
-    <a href="#sec-potential">Потенциал</a>
     <a href="#sec-scenarios">Сценарии</a>
+    <a href="#sec-metrics">Метрики</a>
     <a href="#sec-roadmap">План</a>
     <a href="#sec-fintablo">Финтабло</a>
   </div>
@@ -52,41 +51,29 @@
   <!-- Report hero -->
   <div id="report-hero" class="report-hero"></div>
 
-  <!-- Dashboard -->
-  <div class="report-section" id="sec-dashboard">
-    <h2>Ваша практика сейчас</h2>
-    <div id="dashboard"></div>
-  </div>
-
-  <!-- Diagnostic Findings -->
+  <!-- What we found -->
   <div class="report-section" id="sec-findings">
-    <h2>Ключевые находки диагностики</h2>
+    <h2>Что мы выяснили о вашей практике</h2>
     <div id="findings"></div>
   </div>
 
-  <!-- 5 Metrics -->
-  <div class="report-section" id="sec-metrics">
-    <h2>5 ключевых метрик вашей практики</h2>
-    <div id="metrics"></div>
+  <!-- Dashboard -->
+  <div class="report-section" id="sec-dashboard">
+    <h2>Ваша практика в цифрах</h2>
+    <div id="dashboard"></div>
   </div>
 
   <!-- Profile -->
   <div class="report-section" id="sec-profile">
-    <h2>Ваш финансовый профиль</h2>
+    <h2>Ваш профиль финансиста</h2>
     <div id="profile"></div>
-  </div>
-
-  <!-- Lost Potential -->
-  <div class="report-section" id="sec-potential">
-    <h2>Упущенный потенциал</h2>
-    <div id="lost-potential"></div>
   </div>
 
   <!-- Locked overlay for preview mode -->
   <div id="locked-section" class="hidden">
     <div class="locked-cta">
-      <h3>Полный отчёт доступен после регистрации</h3>
-      <p>Вы видите 30% отчёта. Ещё 3 сценария роста, пошаговый план на 90 дней и расчёт вашего потенциала с Финтабло — доступны в полной версии.</p>
+      <h3>Это 30% вашего отчёта</h3>
+      <p>Далее: 3 сценария роста с конкретными расчётами под ваши данные, пошаговый план на 90 дней и расчёт вашего дохода с партнёрской программой Финтабло.</p>
       <button class="btn-primary" onclick="window.location.href='index.html?go=capture'">Получить полный отчёт →</button>
     </div>
   </div>
@@ -96,22 +83,34 @@
 
     <!-- 3 Scenarios -->
     <div class="report-section" id="sec-scenarios">
-      <h2>3 сценария роста</h2>
+      <h2>3 сценария роста вашего дохода</h2>
       <div id="scenarios"></div>
     </div>
 
     <!-- Inline CTA after scenarios -->
     <div id="inline-cta-1"></div>
 
+    <!-- 5 Metrics -->
+    <div class="report-section" id="sec-metrics">
+      <h2>5 метрик вашей практики</h2>
+      <div id="metrics"></div>
+    </div>
+
+    <!-- Lost Potential -->
+    <div class="report-section" id="sec-potential">
+      <h2>Потенциал роста дохода</h2>
+      <div id="lost-potential"></div>
+    </div>
+
     <!-- 90-day Roadmap -->
     <div class="report-section" id="sec-roadmap">
-      <h2>Карта пути: 90 дней</h2>
+      <h2>Ваш план на 90 дней</h2>
       <div id="roadmap"></div>
     </div>
 
     <!-- Финтабло Benefits -->
     <div class="report-section" id="sec-fintablo">
-      <h2 id="fintablo-heading">Ваш потенциал с Финтабло</h2>
+      <h2 id="fintablo-heading">Как Финтабло ускорит ваш рост</h2>
       <div id="fintablo"></div>
     </div>
 
@@ -136,8 +135,8 @@
 <!-- Sticky CTA for full report mode -->
 <div class="sticky-report-cta" id="sticky-report-cta" style="display:none">
   <div class="banner-inner">
-    <div class="banner-text">Получите разбор вашего плана с экспертом Финтабло</div>
-    <button class="btn-banner" onclick="goToThankYou()">Бесплатно →</button>
+    <div class="banner-text">Запустите свой план роста с Финтабло</div>
+    <button class="btn-banner" onclick="goToThankYou()">Начать →</button>
   </div>
 </div>
 
