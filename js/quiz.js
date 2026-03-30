@@ -111,14 +111,15 @@ function updateProgress() {
   fill.style.width = pct + '%';
 
   if (currentStep === 11) {
-    label.innerHTML = '<span>Почти готово!</span><span>' + pct + '%</span>';
+    label.innerHTML = '<span>Почти готово!</span>';
   } else if (currentStep === 65) {
-    label.innerHTML = '<span>Промежуточный результат</span><span>' + pct + '%</span>';
-  } else if (currentStep >= 10) {
-    label.innerHTML = '<span>Последний вопрос</span><span>' + pct + '%</span>';
+    label.innerHTML = '<span>Промежуточный результат</span>';
+  } else if (currentStep >= 9) {
+    label.innerHTML = '<span>Почти готово</span>';
+  } else if (idx >= 7) {
+    label.innerHTML = '<span>Осталось совсем немного</span>';
   } else {
-    var stepNum = idx;
-    label.innerHTML = '<span>Шаг ' + stepNum + ' из ' + TOTAL_QUESTION_STEPS + '</span><span>' + pct + '%</span>';
+    label.innerHTML = '<span>Шаг ' + idx + '</span>';
   }
 }
 
@@ -572,7 +573,7 @@ function renderCapturePreview() {
   // Personalize FinTablo value line
   var ftLine = document.getElementById('capture-value-fintablo');
   if (ftLine && m.scenarioB_bonus > 0) {
-    ftLine.textContent = 'Расчёт: +' + formatMoney(2 * m.checkMid) + ' ₽/мес дополнительно через партнёрскую программу FinTablo';
+    ftLine.textContent = 'Расчёт: +' + formatMoney(2 * m.checkMid) + ' ₽/мес дополнительно через партнёрскую программу Финтабло';
   }
 }
 
@@ -667,9 +668,10 @@ function restoreStepState(step) {
     });
   }
 
-  if (step === 4) {
+  // Sliders: only restore and run onChange if user previously saved a value
+  if (step === 4 && a.clients !== undefined) {
     var cSlider = document.getElementById('clients-slider');
-    if (cSlider) { if (a.clients !== undefined) cSlider.value = a.clients; onClientsChange(cSlider); }
+    if (cSlider) { cSlider.value = a.clients; onClientsChange(cSlider); }
   }
 
   if (step === 5 && a.avgCheckRange) {
@@ -679,14 +681,14 @@ function restoreStepState(step) {
     });
   }
 
-  if (step === 6) {
+  if (step === 6 && a.hoursPerClient !== undefined) {
     var hSlider = document.getElementById('hours-slider');
-    if (hSlider) { if (a.hoursPerClient !== undefined) hSlider.value = a.hoursPerClient; onHoursChange(hSlider); }
+    if (hSlider) { hSlider.value = a.hoursPerClient; onHoursChange(hSlider); }
   }
 
-  if (step === 7) {
+  if (step === 7 && a.manualWorkPct !== undefined) {
     var mSlider = document.getElementById('manual-slider');
-    if (mSlider) { if (a.manualWorkPct !== undefined) mSlider.value = a.manualWorkPct; onManualChange(mSlider); }
+    if (mSlider) { mSlider.value = a.manualWorkPct; onManualChange(mSlider); }
   }
 
   if (step === 8 && a.clientSources && a.clientSources.length > 0) {
@@ -713,9 +715,9 @@ function restoreStepState(step) {
     }
   }
 
-  if (step === 10) {
+  if (step === 10 && a.targetIncome !== undefined) {
     var tSlider = document.getElementById('target-slider');
-    if (tSlider) { if (a.targetIncome !== undefined) tSlider.value = a.targetIncome; onTargetChange(tSlider); }
+    if (tSlider) { tSlider.value = a.targetIncome; onTargetChange(tSlider); }
   }
 }
 

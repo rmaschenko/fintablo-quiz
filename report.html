@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Персональный отчёт — FinTablo</title>
+  <title>Персональный отчёт — Финтабло</title>
   <link rel="stylesheet" href="css/style.css">
   <!-- Yandex.Metrika -->
   <script type="text/javascript">
@@ -42,7 +42,7 @@
     <a href="#sec-potential">Потенциал</a>
     <a href="#sec-scenarios">Сценарии</a>
     <a href="#sec-roadmap">План</a>
-    <a href="#sec-fintablo">FinTablo</a>
+    <a href="#sec-fintablo">Финтабло</a>
   </div>
 </nav>
 
@@ -76,7 +76,7 @@
   <div id="locked-section" class="hidden">
     <div class="locked-cta">
       <h3>Полный отчёт доступен после регистрации</h3>
-      <p>Вы видите 30% отчёта. Ещё 3 сценария роста, пошаговый план на 90 дней и расчёт вашего потенциала с FinTablo — доступны в полной версии.</p>
+      <p>Вы видите 30% отчёта. Ещё 3 сценария роста, пошаговый план на 90 дней и расчёт вашего потенциала с Финтабло — доступны в полной версии.</p>
       <button class="btn-primary" onclick="window.location.href='index.html?go=capture'">Получить полный отчёт →</button>
     </div>
   </div>
@@ -90,19 +90,22 @@
       <div id="scenarios"></div>
     </div>
 
+    <!-- Inline CTA after scenarios -->
+    <div id="inline-cta-1"></div>
+
     <!-- 90-day Roadmap -->
     <div class="report-section" id="sec-roadmap">
       <h2>Карта пути: 90 дней</h2>
       <div id="roadmap"></div>
     </div>
 
-    <!-- FinTablo Benefits -->
+    <!-- Финтабло Benefits -->
     <div class="report-section" id="sec-fintablo">
-      <h2>Ваш потенциал с FinTablo</h2>
+      <h2 id="fintablo-heading">Ваш потенциал с Финтабло</h2>
       <div id="fintablo"></div>
     </div>
 
-    <!-- CTA -->
+    <!-- Final CTA -->
     <div id="report-cta"></div>
 
     <!-- Share -->
@@ -117,6 +120,14 @@
   <div class="banner-inner">
     <div class="banner-text">Получите полный отчёт и персональный разбор с экспертом</div>
     <button class="btn-banner" onclick="window.location.href='index.html?go=capture'">Получить →</button>
+  </div>
+</div>
+
+<!-- Sticky CTA for full report mode -->
+<div class="sticky-report-cta" id="sticky-report-cta" style="display:none">
+  <div class="banner-inner">
+    <div class="banner-text">Обсудить ваш план с экспертом</div>
+    <button class="btn-banner" onclick="goToThankYou()">Записаться →</button>
   </div>
 </div>
 

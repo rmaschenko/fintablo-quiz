@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (typeof ym === 'function') ym(61131877, 'reachGoal', 'report_preview_viewed');
   } else {
     renderScenarios(answers, m);
+    renderInlineCTA(answers, m);
     renderRoadmap(answers, m);
     renderFinTablo(answers, m);
     renderCTA(answers, m);
@@ -143,7 +144,7 @@ function getMetricRec(type, m) {
       if (m.portfolioStability < 80) return 'Хорошая база. Для полной устойчивости диверсифицируйте клиентов по размеру бизнеса и отрасли — это защитит от сезонности.';
       return 'Устойчивый портфель. Фокус — на качество: оставляйте самых прибыльных клиентов, повышайте средний чек.';
     case 'automation':
-      if (m.automationLevel < 40) return 'Автоматизация рутины высвободит ~' + m.routineFreedHours + ' часов/мес. Начните с одного процесса: автоматический сбор данных или шаблонизация отчётов. FinTablo сокращает рутину в среднем на 60% у партнёров.';
+      if (m.automationLevel < 40) return 'Автоматизация рутины высвободит ~' + m.routineFreedHours + ' часов/мес. Начните с одного процесса: автоматический сбор данных или шаблонизация отчётов. Финтабло сокращает рутину в среднем на 60% у партнёров.';
       if (m.automationLevel < 70) return 'Умеренная автоматизация. Следующий шаг — шаблонизация типовых операций и автоматический импорт данных из источников клиента.';
       return 'Высокая степень автоматизации — вы в числе лучших 20%. Поддерживайте и оптимизируйте процессы.';
     case 'scale':
@@ -263,10 +264,10 @@ function renderScenarios(a, m) {
 
     '<div class="scenario-card recommended">' +
       '<div class="scenario-badge">Рекомендован</div>' +
-      '<h3>Сценарий Б — Рост через партнёрский канал FinTablo</h3>' +
+      '<h3>Сценарий Б — Рост через партнёрский канал Финтабло</h3>' +
       '<div class="scenario-time">3–5 месяцев · минимальные риски</div>' +
       '<div class="scenario-actions">' +
-        '• Подключиться к партнёрской программе FinTablo — получить менеджера и готовые инструменты<br>' +
+        '• Подключиться к партнёрской программе Финтабло — получить менеджера и готовые инструменты<br>' +
         '• Получить 2–3 клиентов через входящий поток заявок (без самостоятельного поиска)<br>' +
         '• Автоматизировать рутину: с ' + a.manualWorkPct + '% до ~20% — высвободить ' + m.routineFreedHours + ' ч/мес<br>' +
         '• Использовать высвободившееся время на ' + freedClients + ' дополнительных клиентов</div>' +
@@ -276,7 +277,7 @@ function renderScenarios(a, m) {
         'Партнёрская комиссия: ' + formatMoney(m.scenarioB_bonus) + ' ₽ единовременно (50% от первого чека каждого клиента)<br>' +
         'Итого за первые 6 мес: <strong>' + formatMoney(scenarioBIncome * 3 + m.scenarioB_bonus) + ' ₽</strong><br>' +
         '<span style="font-size:13px;color:var(--text-muted)">Уровень риска: минимальный — клиенты приходят через готовый поток</span></div>' +
-      '<div class="scenario-why">Почему это лучший сценарий: вам не нужно искать клиентов, продавать или придумывать инструменты с нуля. FinTablo даёт входящий поток, готовые материалы и экспертное сообщество. Вы сосредоточены на том, что умеете лучше всего — на финансовой экспертизе.</div>' +
+      '<div class="scenario-why">Почему это лучший сценарий: вам не нужно искать клиентов, продавать или придумывать инструменты с нуля. Финтабло даёт входящий поток, готовые материалы и экспертное сообщество. Вы сосредоточены на том, что умеете лучше всего — на финансовой экспертизе.</div>' +
     '</div>' +
 
     '<div class="scenario-card">' +
@@ -306,7 +307,7 @@ function renderRoadmap(a, m) {
   // Personalized barrier action for month 2
   var barrierAction = '';
   if (barrierIsFlow) {
-    barrierAction = '<h4>Решение вашего главного барьера: поток клиентов</h4><p>Вы указали отсутствие стабильного потока как главную проблему. Партнёрский канал FinTablo решает её напрямую: входящие заявки от бизнеса, который ищет внешнего финансового директора. Вам не нужно продавать — вы выбираете, с кем работать. Первый клиент через партнёрский канал появляется в среднем за 3–5 недель после подключения.</p>';
+    barrierAction = '<h4>Решение вашего главного барьера: поток клиентов</h4><p>Вы указали отсутствие стабильного потока как главную проблему. Партнёрский канал Финтабло решает её напрямую: входящие заявки от бизнеса, который ищет внешнего финансового директора. Вам не нужно продавать — вы выбираете, с кем работать. Первый клиент через партнёрский канал появляется в среднем за 3–5 недель после подключения.</p>';
   } else if (barrierIsRoutine) {
     barrierAction = '<h4>Решение вашего главного барьера: рутина</h4><p>При ' + a.manualWorkPct + '% рутины вы тратите ' + m.routineHours + ' часов в месяц на задачи, которые можно автоматизировать. Внедрите один инструмент автоматизации для 2–3 клиентов: автоматический сбор данных, шаблоны отчётов, визуальные дашборды вместо ручных таблиц. Цель: сократить рутину до 30% за первый месяц.</p>';
   } else if (barrierIsSell) {
@@ -314,7 +315,7 @@ function renderRoadmap(a, m) {
   } else if (barrierIsCheck) {
     barrierAction = '<h4>Решение вашего главного барьера: повышение чека</h4><p>Сценарий разговора: «За последние месяцы я значительно расширил работу — [перечислите конкретные улучшения]. Я планирую развивать это направление, что потребует пересмотра условий с ' + formatMoney(m.checkMid) + ' до ' + formatMoney(newCheck) + ' ₽». По данным финансового сообщества, 70–80% лояльных клиентов принимают обоснованное повышение.</p>';
   } else {
-    barrierAction = '<h4>Новый источник клиентов</h4><p>Добавьте партнёрский канал — он даёт самый предсказуемый результат с минимальными затратами вашего времени. Первый клиент через FinTablo появляется в среднем за 3–5 недель.</p>';
+    barrierAction = '<h4>Новый источник клиентов</h4><p>Добавьте партнёрский канал — он даёт самый предсказуемый результат с минимальными затратами вашего времени. Первый клиент через Финтабло появляется в среднем за 3–5 недель.</p>';
   }
 
   el.innerHTML =
@@ -347,7 +348,7 @@ function renderRoadmap(a, m) {
         ' Активируйте 2–3 источника одновременно для стабильности потока. <strong>Результат к концу 3-го месяца:</strong> выстроенная система привлечения, повышенные чеки, сниженная рутина.</p></div>' +
     '</div>' +
 
-    '<div class="report-insight"><strong>Важно:</strong> этот план — каркас, а не жёсткая инструкция. Эксперт FinTablo адаптирует его под вашу конкретную ситуацию при персональном разборе: учтёт вашу отрасль, тип клиентов и личные приоритеты.</div>';
+    '<div class="report-insight"><strong>Важно:</strong> этот план — каркас, а не жёсткая инструкция. Эксперт Финтабло адаптирует его под вашу конкретную ситуацию при персональном разборе: учтёт вашу отрасль, тип клиентов и личные приоритеты.</div>';
 }
 
 /* ===== FINTABLO BENEFITS ===== */
@@ -359,10 +360,10 @@ function renderFinTablo(a, m) {
   var growthPct = m.currentIncome > 0 ? Math.round(2 * m.checkMid / m.currentIncome * 100) : 100;
 
   el.innerHTML =
-    '<p style="font-size:15px;color:var(--text-secondary);margin-bottom:20px;line-height:1.6">Вот что конкретно меняется в вашей ситуации при подключении к партнёрской программе FinTablo, ' + a.name + ':</p>' +
+    '<p style="font-size:15px;color:var(--text-secondary);margin-bottom:20px;line-height:1.6">Вот что конкретно меняется в вашей ситуации при подключении к партнёрской программе Финтабло, ' + a.name + ':</p>' +
 
     '<div class="benefit-card"><div class="benefit-icon">📉</div><h4>Снижение рутины</h4>' +
-      '<p>Сейчас: ' + a.manualWorkPct + '% времени на рутину → С FinTablo: ~20%<br>Высвобождается: ' + m.routineFreedHours + ' часов в месяц<br>Это время на ' + freedClients + ' дополнительных клиентов или на повышение качества работы с текущими</p></div>' +
+      '<p>Сейчас: ' + a.manualWorkPct + '% времени на рутину → С Финтабло: ~20%<br>Высвобождается: ' + m.routineFreedHours + ' часов в месяц<br>Это время на ' + freedClients + ' дополнительных клиентов или на повышение качества работы с текущими</p></div>' +
 
     '<div class="benefit-card"><div class="benefit-icon">💰</div><h4>Партнёрская комиссия</h4>' +
       '<p>50% от первого чека каждого привлечённого клиента<br>При 2 новых клиентах в квартал: ' + formatMoney(commissionQuarter) + ' ₽ единовременно<br>Макс. выплата с одного клиента: до 170 000 ₽</p></div>' +
@@ -378,7 +379,7 @@ function renderFinTablo(a, m) {
 
     '<div class="fintablo-calc">' +
       '<h4>Расчёт для ' + a.name + '</h4>' +
-      '<p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Прогноз: вы привлекаете 2 клиентов через FinTablo за 3 месяца</p>' +
+      '<p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Прогноз: вы привлекаете 2 клиентов через Финтабло за 3 месяца</p>' +
       '<div class="calc-row"><span>Комиссия (единовременно)</span><span>' + formatMoney(commissionQuarter) + ' ₽</span></div>' +
       '<div class="calc-row"><span>Дополнительный регулярный доход</span><span>+' + formatMoney(2 * m.checkMid) + ' ₽/мес</span></div>' +
       '<div class="calc-row total"><span>Ваш доход через 3 мес</span><span>' + formatMoney(newIncome) + ' ₽/мес</span></div>' +
@@ -386,20 +387,55 @@ function renderFinTablo(a, m) {
     '</div>';
 }
 
-/* ===== CTA ===== */
+/* ===== INLINE CTA (after scenarios) ===== */
+function renderInlineCTA(a, m) {
+  var el = document.getElementById('inline-cta-1');
+  if (!el) return;
+  el.innerHTML =
+    '<div class="inline-cta">' +
+      '<h4>Хотите понять, какой сценарий подходит именно вам?</h4>' +
+      '<p>Эксперт Финтабло уже видит ваши данные и подготовит индивидуальный разбор: какой из сценариев реалистичен, с чего начать и каких результатов ожидать. 20–30 минут, бесплатно.</p>' +
+      '<button class="btn-primary" onclick="goToThankYou()">Обсудить с экспертом →</button>' +
+    '</div>';
+}
+
+/* ===== FINAL CTA ===== */
 function renderCTA(a, m) {
   var el = document.getElementById('report-cta');
   el.innerHTML =
     '<div class="report-cta">' +
-      '<h3>Следующий шаг: персональный разбор с экспертом</h3>' +
-      '<p>Эксперт FinTablo изучит ваш отчёт до разговора и подготовит индивидуальные рекомендации, которых нет в автоматическом отчёте. 20–30 минут. Бесплатно. Без обязательств.</p>' +
-      '<button class="btn-primary" onclick="goToThankYou()">Записаться на разбор →</button>' +
+      '<h3>Готовы сделать первый шаг?</h3>' +
+      '<p>' + a.name + ', эксперт Финтабло изучит ваш отчёт до разговора и подготовит индивидуальные рекомендации. Это не продажа — это разбор вашей конкретной ситуации. 20–30 минут. Бесплатно.</p>' +
+      '<button class="btn-primary" onclick="goToThankYou()">Записаться на разбор с экспертом →</button>' +
     '</div>';
 
   window.goToThankYou = function() {
     if (typeof ym === 'function') ym(61131877, 'reachGoal', 'report_cta_clicked');
     window.location.href = 'thankyou.html';
   };
+
+  // Sticky CTA — show after user scrolls past first section
+  initStickyCTA();
+}
+
+function initStickyCTA() {
+  var sticky = document.getElementById('sticky-report-cta');
+  if (!sticky) return;
+  var scenariosSection = document.getElementById('sec-scenarios');
+  if (!scenariosSection) return;
+
+  window.addEventListener('scroll', function() {
+    var triggerPoint = scenariosSection.offsetTop;
+    var reportCta = document.getElementById('report-cta');
+    var bottomHide = reportCta ? reportCta.offsetTop - window.innerHeight : 99999;
+
+    if (window.scrollY > triggerPoint && window.scrollY < bottomHide) {
+      sticky.style.display = 'block';
+      setTimeout(function() { sticky.classList.add('visible'); }, 10);
+    } else {
+      sticky.classList.remove('visible');
+    }
+  });
 }
 
 /* ===== SHARE ===== */
@@ -409,7 +445,7 @@ function renderShareCard(a, m) {
   el.innerHTML = '<button class="btn-share" onclick="shareResult()">Поделиться результатом</button>';
 
   window.shareResult = function() {
-    var text = 'Прошёл диагностику практики финансиста на FinTablo.\n' +
+    var text = 'Прошёл диагностику практики финансиста на Финтабло.\n' +
       'Мой профиль: ' + m.practiceType + '\nПотенциал роста: +' + potential + '%';
     if (navigator.share) {
       navigator.share({ text: text });
