@@ -22,6 +22,9 @@ function submitLead() {
   var leadData = {};
   for (var k in answers) { leadData[k] = answers[k]; }
   for (var j in contact) { leadData[j] = contact[j]; }
+  leadData.utm = getUtmParams();
+  leadData.referrer = document.referrer || '';
+  leadData.pageUrl = window.location.href;
 
   // Save locally
   saveLead(leadData);
@@ -38,37 +41,12 @@ function submitLead() {
     });
   }
 
-  /* === AmoCRM webhook (uncomment when ready) ===
-  fetch('YOUR_AMOCRM_WEBHOOK_URL', {
+  // Send to server (CSV backup + AmoCRM when configured)
+  fetch('api/lead.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name: answers.name,
-      phone: phone,
-      email: email,
-      wantExpert: wantExpert,
-      // Quiz data
-      experience: answers.experience,
-      status: answers.workFormat,
-      clients: answers.clients,
-      avgCheck: answers.avgCheckRange,
-      hoursPerClient: answers.hoursPerClient,
-      manualWorkPct: answers.manualWorkPct,
-      clientSources: (answers.clientSources || []).join(', '),
-      barriers: (answers.barriers || []).join(', '),
-      targetIncome: answers.targetIncome,
-      // Computed
-      currentIncome: metrics.currentIncome,
-      hourlyRate: metrics.hourlyRate,
-      practiceType: metrics.practiceType,
-      incomeGap: metrics.incomeGap,
-      // UTM
-      utm: getUtmParams(),
-      referrer: document.referrer,
-      pageUrl: window.location.href
-    })
+    body: JSON.stringify(leadData)
   }).catch(function() {});
-  === */
 
   // Redirect to report (full version, not preview)
   if (typeof isNavigatingAway !== 'undefined') isNavigatingAway = true;
