@@ -42,7 +42,8 @@ function submitLead() {
   }
 
   // Send to server (CSV backup + AmoCRM when configured)
-  fetch('api/lead.php', {
+  var apiPath = (window.location.pathname.replace(/[^/]*$/, '')) + 'api/lead.php';
+  fetch(apiPath, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(leadData)
