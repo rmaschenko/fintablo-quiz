@@ -1561,7 +1561,9 @@ input[type=range]::-moz-range-thumb {
   margin-bottom: 12px;
 }
 
-.story-card .story-name { font-size: 14px; font-weight: 600; color: var(--brand-navy); margin-bottom: 8px; }
+.story-card .story-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.story-card .story-photo { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.story-card .story-name { font-size: 14px; font-weight: 600; color: var(--brand-navy); }
 
 .story-card .story-before-after {
   display: grid;

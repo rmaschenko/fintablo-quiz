@@ -525,13 +525,11 @@ function renderFinTablo(a, m) {
     '<div style="margin:20px 0">' +
       '<h4 style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:12px">Партнёры Финтабло о результатах</h4>' +
       '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px">' +
-        '<div style="font-weight:700;margin-bottom:4px">Екатерина Яхонтова</div>' +
-        '<div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Финансовый директор, эксперт по автоматизации финансового учёта, Краснодар</div>' +
+        '<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px"><img src="img/yakhontova.webp" alt="Екатерина Яхонтова" style="width:48px;height:48px;border-radius:50%;object-fit:cover"><div><div style="font-weight:700">Екатерина Яхонтова</div><div style="font-size:12px;color:var(--text-muted)">Финансовый директор, Краснодар</div></div></div>' +
         '<div style="font-size:14px;color:var(--text-primary);line-height:1.5">«С партнёрской программой я не только заработала <strong>1 401 262 руб.</strong>, но и повысила качество услуг»</div>' +
       '</div>' +
       '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px">' +
-        '<div style="font-weight:700;margin-bottom:4px">Артём Дикушин</div>' +
-        '<div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Финдиректор, опыт работы с финансами более 6 лет</div>' +
+        '<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px"><img src="img/dikushin.png" alt="Артём Дикушин" style="width:48px;height:48px;border-radius:50%;object-fit:cover"><div><div style="font-weight:700">Артём Дикушин</div><div style="font-size:12px;color:var(--text-muted)">Финдиректор, опыт более 6 лет</div></div></div>' +
         '<div style="font-size:14px;color:var(--text-primary);line-height:1.5">«Финтабло способствует созданию потока клиентов и позволяет зарабатывать больше за счёт партнёрских выплат»</div>' +
       '</div>' +
       '<div style="text-align:center;font-size:13px;color:var(--blue);font-weight:500;padding:8px 0">На встрече эксперт расскажет больше историй партнёров с похожим на ваш профилем</div>' +
