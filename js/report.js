@@ -522,6 +522,21 @@ function renderFinTablo(a, m) {
     '<div class="benefit-card"><div class="benefit-icon">📋</div><h4>Готовые инструменты</h4>' +
       '<p>Шаблоны коммерческого предложения, типовой договор, SLA, примеры кейсов. Первое внедрение — совместно с отделом заботы Финтабло.</p></div>' +
 
+    '<div style="margin:20px 0">' +
+      '<h4 style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:12px">Партнёры Финтабло о результатах</h4>' +
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px">' +
+        '<div style="font-weight:700;margin-bottom:4px">Екатерина Яхонтова</div>' +
+        '<div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Финансовый директор, эксперт по автоматизации финансового учёта, Краснодар</div>' +
+        '<div style="font-size:14px;color:var(--text-primary);line-height:1.5">«С партнёрской программой я не только заработала <strong>1 401 262 руб.</strong>, но и повысила качество услуг»</div>' +
+      '</div>' +
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px">' +
+        '<div style="font-weight:700;margin-bottom:4px">Артём Дикушин</div>' +
+        '<div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Финдиректор, опыт работы с финансами более 6 лет</div>' +
+        '<div style="font-size:14px;color:var(--text-primary);line-height:1.5">«Финтабло способствует созданию потока клиентов и позволяет зарабатывать больше за счёт партнёрских выплат»</div>' +
+      '</div>' +
+      '<div style="text-align:center;font-size:13px;color:var(--blue);font-weight:500;padding:8px 0">На встрече эксперт расскажет больше историй партнёров с похожим на ваш профилем</div>' +
+    '</div>' +
+
     '<div class="fintablo-calc">' +
       '<h4>Расчёт для ' + a.name + '</h4>' +
       '<p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Расчёт: вы подключаете 2 клиентов через партнёрскую программу за 3 месяца</p>' +
