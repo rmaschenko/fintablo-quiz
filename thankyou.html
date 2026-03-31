@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no">
   <title>Ваш план роста — Финтабло</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -183,10 +184,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var leads = JSON.parse(localStorage.getItem(LEADS_KEY) || '[]');
   var lastLead = leads.length > 0 ? leads[leads.length - 1] : null;
-  if (lastLead && lastLead.phone) {
-    document.getElementById('ty-subtitle').innerHTML =
-      'Эксперт перезвонит по номеру <strong>' + lastLead.phone + '</strong> — обычно в тот же рабочий день';
-  }
+  // Subtitle without phone number
+  document.getElementById('ty-subtitle').innerHTML =
+    'Эксперт Финтабло свяжется с вами — обычно в тот же рабочий день';
 
   if (answers.name) {
     var m = calculate(answers);
