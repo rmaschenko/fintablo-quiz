@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ваш разбор готовится — Финтабло</title>
+  <title>Ваш план роста — Финтабло</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <script type="text/javascript">
     (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -27,72 +29,92 @@
 
 <div class="container">
 
+  <!-- Hero -->
   <div class="thankyou-hero">
     <div class="check-icon">✅</div>
-    <h1 id="ty-title">Ваш персональный разбор готовится</h1>
-    <p id="ty-subtitle">Эксперт Финтабло изучает ваши результаты и подготовит индивидуальные рекомендации</p>
+    <h1 id="ty-title">Ваш план роста передан эксперту</h1>
+    <p id="ty-subtitle" style="font-size:16px">Эксперт Финтабло изучит ваши результаты и подготовит персональные рекомендации</p>
   </div>
 
-  <div id="ty-summary" class="preview-block">
-    <div class="preview-title">Ваш профиль</div>
+  <!-- Key metrics summary -->
+  <div id="ty-summary" class="preview-block" style="margin-bottom:20px">
+    <div class="preview-title">Ваши ключевые показатели</div>
     <div id="ty-metrics"></div>
   </div>
 
+  <!-- WHY meet — the core value block -->
+  <div style="background:linear-gradient(135deg,var(--brand-navy),#1a3a7a);color:#fff;border-radius:var(--radius);padding:28px 24px;margin-bottom:24px">
+    <h3 style="font-size:18px;margin-bottom:16px">Что вы получите на встрече с экспертом</h3>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:18px;flex-shrink:0">📋</span>
+        <div>
+          <div style="font-weight:600;margin-bottom:2px">Детальный разбор вашего плана роста</div>
+          <div style="font-size:13px;opacity:0.8">Какой из 3 сценариев реалистичен именно для вас — с конкретными сроками и цифрами</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:18px;flex-shrink:0">🎯</span>
+        <div>
+          <div style="font-weight:600;margin-bottom:2px">Первые 3 шага к целевому доходу</div>
+          <div style="font-size:13px;opacity:0.8">Не шаблонные советы, а действия под вашу конкретную ситуацию</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:18px;flex-shrink:0">🤝</span>
+        <div>
+          <div style="font-weight:600;margin-bottom:2px">Условия партнёрства: 50% от первого чека</div>
+          <div style="font-size:13px;opacity:0.8">Как устроена программа, сколько зарабатывают партнёры, и подходит ли она вам</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:18px;flex-shrink:0">📥</span>
+        <div>
+          <div style="font-weight:600;margin-bottom:2px">Входящий поток клиентов</div>
+          <div style="font-size:13px;opacity:0.8">Как получить первых клиентов через Финтабло — без поиска и продаж</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:12px;opacity:0.6;margin-top:16px">20–30 минут · бесплатно · без обязательств</p>
+  </div>
+
+  <!-- Timer -->
   <div class="timer-block">
     <div class="timer-label" id="timer-label">Обычно перезваниваем в течение</div>
     <div class="timer-value" id="timer-value">—</div>
   </div>
 
-  <div class="call-value-block">
-    <h3>Что вы получите в разговоре</h3>
-    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;line-height:1.5">Это не холодный звонок — эксперт уже видит ваши данные и подготовит разбор именно вашей ситуации:</p>
-    <ul>
-      <li>Какой из 3 сценариев роста реалистичен для вас — с конкретными цифрами</li>
-      <li>Первые 3 шага, которые дадут результат в ближайший месяц</li>
-      <li>Реальные примеры партнёров с похожим профилем и их результаты</li>
-      <li>Честный разбор: подходит ли вам партнёрство и в каком формате</li>
-      <li>Доступ в закрытое сообщество финансовых директоров-партнёров</li>
-    </ul>
-    <p style="font-size:13px;color:var(--text-muted);margin-top:12px">20–30 минут · бесплатно · без обязательств</p>
-  </div>
-
-  <div class="next-steps">
-    <h3 style="font-size:18px;font-weight:700;color:var(--brand-navy);margin-bottom:20px">Как это работает</h3>
+  <!-- How it works -->
+  <div class="next-steps" style="margin-top:24px">
+    <h3 style="font-size:16px;font-weight:700;color:var(--brand-navy);margin-bottom:16px">Как проходит встреча</h3>
 
     <div class="next-step">
       <div class="step-num">1</div>
       <div class="step-body">
-        <h4>Эксперт изучает ваш профиль</h4>
-        <p>Перед разговором он видит ваш тип практики, ставку, барьеры и цели. Подготовит конкретные рекомендации.</p>
+        <h4>Эксперт готовится к разговору</h4>
+        <p>Он уже видит ваш профиль, ставку, барьеры и цель. Это не холодный звонок — а подготовленная консультация.</p>
       </div>
     </div>
 
     <div class="next-step">
       <div class="step-num">2</div>
       <div class="step-body">
-        <h4>Персональный разбор: 20–30 минут</h4>
-        <ul>
-          <li>Ваш сценарий роста — с реальными сроками и цифрами</li>
-          <li>Конкретные первые действия под вашу ситуацию</li>
-          <li>Честный ответ: стоит ли вам рассматривать партнёрство</li>
-        </ul>
+        <h4>Разбор вашего плана: 20–30 минут</h4>
+        <p>Какой сценарий выбрать, с чего начать, как выйти на целевой доход. Конкретные шаги, а не общие рекомендации.</p>
       </div>
     </div>
 
     <div class="next-step">
       <div class="step-num">3</div>
       <div class="step-body">
-        <h4>После разговора</h4>
-        <ul>
-          <li>Закрытое профессиональное сообщество партнёров Финтабло</li>
-          <li>Готовые шаблоны: коммерческое предложение, договор, кейсы</li>
-          <li>Персональный менеджер и первое внедрение совместно с отделом заботы</li>
-        </ul>
+        <h4>Вы получаете инструменты для старта</h4>
+        <p>Доступ в профессиональное сообщество партнёров, готовые шаблоны (КП, договор, SLA), персонального менеджера. Первое внедрение — совместно с отделом заботы Финтабло.</p>
       </div>
     </div>
   </div>
 
-  <div class="stories">
+  <!-- Partner results -->
+  <div class="stories" style="margin-top:24px">
     <h3>Результаты партнёров Финтабло</h3>
 
     <div class="story-card">
@@ -102,7 +124,6 @@
         <div class="story-before">До: 3 клиента, 90 000 ₽/мес</div>
         <div class="story-after">Через 4 мес: 6 клиентов, 290 000 ₽/мес</div>
       </div>
-      <div class="story-quote">«Первый клиент через Финтабло появился за 3 недели — я выбрала из входящих заявок»</div>
     </div>
 
     <div class="story-card">
@@ -112,47 +133,25 @@
         <div class="story-before">До: 5 клиентов, 150 000 ₽/мес</div>
         <div class="story-after">Сейчас: 7 клиентов, 320 000 ₽/мес</div>
       </div>
-      <div class="story-quote">«Главное — не нужно ничего придумывать: предложение, договор, метрики — всё готово»</div>
-    </div>
-
-    <div class="story-card">
-      <div class="story-name">Дмитрий, финансовый консультант, Казань</div>
-      <div class="story-context" style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Клиенты: строительство и проектные компании</div>
-      <div class="story-before-after">
-        <div class="story-before">До: нестабильный поток клиентов</div>
-        <div class="story-after">Через 6 мес: 4 клиента, 220 000 ₽/мес</div>
-      </div>
-      <div class="story-quote">«Впервые за полтора года фриланса — предсказуемый доход. Это меняет всё»</div>
     </div>
   </div>
 
-  <div class="partner-block">
-    <h3 style="font-size:18px;font-weight:700;color:var(--brand-navy);margin-bottom:16px">Партнёрская программа Финтабло</h3>
-    <div class="partner-format primary">
-      <h4>Партнёр-внедренец</h4>
-      <p>Вы внедряете Финтабло клиенту и сопровождаете его<br>→ 50% от суммы первого чека и повышения тарифа<br>→ Выплата в течение 3 рабочих дней</p>
-    </div>
-    <div class="partner-format">
-      <h4>Агент-рекомендатель</h4>
-      <p>Вы приводите контакт, Финтабло проводит продажу и внедрение<br>→ 30% от суммы первого чека<br>→ Средняя комиссия: 20 000 ₽ за клиента</p>
-    </div>
-  </div>
-
+  <!-- Actions -->
   <div style="margin:24px 0 20px">
-    <h4 style="font-size:15px;font-weight:600;color:var(--brand-navy);margin-bottom:12px">Пока ждёте звонка:</h4>
-    <a href="https://fintablo.ru/partners_nds" class="action-card" target="_blank">📋 Подробнее о партнёрской программе</a>
-    <button class="action-card" onclick="addToCalendar()">📅 Добавить напоминание в календарь</button>
+    <a href="https://fintablo.ru/partners_nds" class="action-card" target="_blank">📋 Подробнее о партнёрской программе на сайте</a>
+    <button class="action-card" onclick="addToCalendar()">📅 Добавить напоминание о встрече</button>
   </div>
 
+  <!-- Late email -->
   <div class="late-email-form" id="late-email-form">
-    <p>Хотите получить отчёт на электронную почту?</p>
+    <p>Отправить копию отчёта на почту?</p>
     <div class="input-row">
       <input type="email" placeholder="ваш@email.com" id="late-email">
       <button onclick="saveLateEmail()">Отправить</button>
     </div>
   </div>
 
-  <div style="height:40px"></div>
+  <div style="height:24px"></div>
 </div>
 
 <footer class="site-footer">
@@ -197,14 +196,14 @@ document.addEventListener('DOMContentLoaded', function() {
   var name = answers.name || '';
 
   if (name) {
-    document.getElementById('ty-title').textContent = name + ', ваш персональный разбор готовится';
+    document.getElementById('ty-title').textContent = name + ', ваш план роста передан эксперту';
   }
 
   var leads = JSON.parse(localStorage.getItem(LEADS_KEY) || '[]');
   var lastLead = leads.length > 0 ? leads[leads.length - 1] : null;
   if (lastLead && lastLead.phone) {
     document.getElementById('ty-subtitle').innerHTML =
-      'Эксперт Финтабло перезвонит по номеру <strong>' + lastLead.phone + '</strong><br>Обычно — в тот же рабочий день';
+      'Эксперт перезвонит по номеру <strong>' + lastLead.phone + '</strong> — обычно в тот же рабочий день';
   }
 
   if (answers.name) {
@@ -214,7 +213,8 @@ document.addEventListener('DOMContentLoaded', function() {
       metricsEl.innerHTML =
         '<div class="preview-item"><span class="check">✓</span> Тип практики: <strong>' + m.practiceType + '</strong></div>' +
         '<div class="preview-item"><span class="check">✓</span> Расчётная ставка: <strong>' + formatMoney(m.hourlyRate) + ' ₽/ч</strong></div>' +
-        '<div class="preview-item"><span class="check">✓</span> Потенциал роста: <strong>+' + formatMoney(m.incomeGap) + ' ₽/мес</strong></div>';
+        '<div class="preview-item"><span class="check">✓</span> Целевой доход: <strong>' + formatMoneyShort(m.targetIncome) + '/мес</strong></div>' +
+        '<div class="preview-item"><span class="check">✓</span> Потенциал роста: <strong>+' + formatMoney(Math.max(m.incomeGap, m.currentIncome * 0.1)) + ' ₽/мес</strong></div>';
     }
   }
 
@@ -237,7 +237,7 @@ function updateTimer() {
 
   if (day >= 1 && day <= 5 && hour >= 9 && hour < 18) {
     label.textContent = 'Обычно перезваниваем в течение';
-    value.textContent = '2\u20133 часов';
+    value.textContent = '2–3 часов';
   } else {
     var next = new Date(now);
     do { next.setDate(next.getDate() + 1); } while (next.getDay() === 0 || next.getDay() === 6);
@@ -256,10 +256,10 @@ function addToCalendar() {
   tomorrow.setHours(10, 0, 0, 0);
   var end = new Date(tomorrow); end.setHours(10, 30, 0, 0);
   var fmt = function(d) { return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); };
-  var ics = 'BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nDTSTART:' + fmt(tomorrow) + '\nDTEND:' + fmt(end) + '\nSUMMARY:Звонок от эксперта Финтабло\nDESCRIPTION:Персональный разбор практики\nEND:VEVENT\nEND:VCALENDAR';
+  var ics = 'BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nDTSTART:' + fmt(tomorrow) + '\nDTEND:' + fmt(end) + '\nSUMMARY:Встреча с экспертом Финтабло\nDESCRIPTION:Персональный разбор плана роста практики\nEND:VEVENT\nEND:VCALENDAR';
   var blob = new Blob([ics], {type: 'text/calendar'});
   var url = URL.createObjectURL(blob);
-  var a = document.createElement('a'); a.href = url; a.download = 'fintablo-call.ics'; a.click();
+  var a = document.createElement('a'); a.href = url; a.download = 'fintablo-meeting.ics'; a.click();
   URL.revokeObjectURL(url);
 }
 

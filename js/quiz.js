@@ -112,16 +112,16 @@ function updateProgress() {
   var pct = Math.min(100, Math.round((idx / (STEP_ORDER.length - 1)) * 100));
   fill.style.width = pct + '%';
 
+  // Block 1: steps 1-6 (about you & practice), Block 2: steps 7-10 (barriers & goals)
   if (currentStep === 11) {
-    label.innerHTML = '<span>Почти готово!</span>';
+    label.innerHTML = '<span>Получите ваш план</span>';
   } else if (currentStep === 65) {
-    label.innerHTML = '<span>Промежуточный результат</span>';
-  } else if (currentStep >= 9) {
-    label.innerHTML = '<span>Почти готово</span>';
-  } else if (idx >= 7) {
-    label.innerHTML = '<span>Осталось совсем немного</span>';
-  } else {
-    label.innerHTML = '<span>Шаг ' + idx + '</span>';
+    label.innerHTML = '<span>Блок 1 завершён — промежуточный результат</span>';
+  } else if (currentStep >= 7 && currentStep <= 10) {
+    var block2step = currentStep - 6;
+    label.innerHTML = '<span>Блок 2 · вопрос ' + block2step + ' из 4</span>';
+  } else if (idx >= 1 && idx <= 6) {
+    label.innerHTML = '<span>Блок 1 · вопрос ' + idx + ' из 6</span>';
   }
 }
 
@@ -130,20 +130,11 @@ function goToStep(step, direction) {
   var targetEl = document.getElementById('step-' + step);
   if (!targetEl) return;
 
+  // Instant transition — no gap where footer is visible
   if (activeEl) {
     activeEl.classList.remove('active');
-    activeEl.classList.add('leaving');
-    setTimeout(function() { activeEl.classList.remove('leaving'); }, 220);
   }
-
-  setTimeout(function() {
-    if (direction === 'back') {
-      targetEl.classList.add('entering-back');
-      setTimeout(function() { targetEl.classList.remove('entering-back'); targetEl.classList.add('active'); }, 220);
-    } else {
-      targetEl.classList.add('active');
-    }
-  }, activeEl ? 50 : 0);
+  targetEl.classList.add('active');
 
   currentStep = step;
   updateProgress();
@@ -543,6 +534,10 @@ function renderCapturePreview() {
   var el = document.getElementById('capture-name');
   if (el) el.textContent = (a.name || '') + ', ваш персональный план роста готов';
 
+  // Pre-fill name from step 1
+  var captureNameInput = document.getElementById('capture-name-input');
+  if (captureNameInput && a.name) captureNameInput.value = a.name;
+
   // Personalized hook
   var hookEl = document.getElementById('capture-hook');
   if (hookEl) {
@@ -608,15 +603,21 @@ function formatPhone(input) {
 }
 
 function updateSubmitButton() {
+  var nameVal = (document.getElementById('capture-name-input').value || '').trim();
+  var isNameValid = nameVal.length >= 2 && !/\d/.test(nameVal);
+
   var rawDigits = (document.getElementById('phone').value || '').replace(/\D/g, '');
   if (rawDigits.startsWith('7') || rawDigits.startsWith('8')) rawDigits = rawDigits.slice(1);
   var isPhoneValid = rawDigits.length === 10;
 
   var consentEl = document.getElementById('consent-pd');
-  var isConsent = consentEl ? consentEl.checked : true;
+  var isConsent = consentEl ? consentEl.checked : false;
+
+  var wantExpert = document.getElementById('want-expert');
+  var isExpert = wantExpert ? wantExpert.checked : false;
 
   var submitBtn = document.getElementById('btn-submit-lead');
-  if (submitBtn) submitBtn.disabled = !(isPhoneValid && isConsent);
+  if (submitBtn) submitBtn.disabled = !(isNameValid && isPhoneValid && isConsent && isExpert);
 }
 
 /* ============ HELPERS ============ */
@@ -700,9 +701,14 @@ function restoreStepState(step) {
     });
   }
 
-  if (step === 6 && a.hoursPerClient !== undefined) {
-    var hSlider = document.getElementById('hours-slider');
-    if (hSlider) { hSlider.value = a.hoursPerClient; onHoursChange(hSlider); }
+  if (step === 6) {
+    if (a.hoursPerClient === undefined) {
+      var hSliderInit = document.getElementById('hours-slider');
+      if (hSliderInit) onHoursChange(hSliderInit);
+    } else {
+      var hSlider = document.getElementById('hours-slider');
+      if (hSlider) { hSlider.value = a.hoursPerClient; onHoursChange(hSlider); }
+    }
   }
 
   if (step === 7) {
@@ -744,9 +750,14 @@ function restoreStepState(step) {
     }
   }
 
-  if (step === 10 && a.targetIncome !== undefined) {
-    var tSlider = document.getElementById('target-slider');
-    if (tSlider) { tSlider.value = a.targetIncome; onTargetChange(tSlider); }
+  if (step === 10) {
+    if (a.targetIncome === undefined) {
+      var tSliderInit = document.getElementById('target-slider');
+      if (tSliderInit) onTargetChange(tSliderInit);
+    } else {
+      var tSlider = document.getElementById('target-slider');
+      if (tSlider) { tSlider.value = a.targetIncome; onTargetChange(tSlider); }
+    }
   }
 }
 

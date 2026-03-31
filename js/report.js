@@ -23,11 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Render all sections
   renderHero(answers, m);
-  renderDashboard(answers, m);
   renderFindings(answers, m);
-  renderMetrics(answers, m);
+  renderDashboard(answers, m);
   renderProfile(answers, m);
-  renderLostPotential(answers, m);
 
   if (isPreview) {
     // Preview mode: hide full report, show locked CTA and banner
@@ -44,6 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
   } else {
     renderScenarios(answers, m);
     renderInlineCTA(answers, m);
+    renderLostPotential(answers, m);
+    renderMetrics(answers, m);
     renderRoadmap(answers, m);
     renderFinTablo(answers, m);
     renderCTA(answers, m);
@@ -293,7 +293,7 @@ function renderProfile(a, m) {
   var icon = icons[m.practiceType] || '📊';
   var desc = descs[m.practiceType] || '';
   var pts = points[m.practiceType] || [];
-  var potential = m.currentIncome > 0 ? Math.round(m.incomeGap / m.currentIncome * 100) : 100;
+  var potential = m.currentIncome > 0 ? Math.max(10, Math.round(m.incomeGap / m.currentIncome * 100)) : 100;
 
   el.innerHTML =
     '<div class="profile-card" id="share-card">' +
@@ -538,7 +538,7 @@ function renderInlineCTA(a, m) {
     '<div class="inline-cta">' +
       '<h4>Хотите понять, какой сценарий подходит именно вам?</h4>' +
       '<p>Эксперт Финтабло уже видит ваши данные и подготовит индивидуальный разбор: какой из сценариев реалистичен, с чего начать и каких результатов ожидать. 20–30 минут, бесплатно.</p>' +
-      '<button class="btn-primary" onclick="goToThankYou()">Обсудить с экспертом →</button>' +
+      '<button class="btn-primary" onclick="goToThankYou()">Начать реализацию плана →</button>' +
     '</div>';
 }
 
@@ -548,10 +548,9 @@ function renderCTA(a, m) {
   var incomeWithFT = m.currentIncome + 2 * m.checkMid;
   el.innerHTML =
     '<div class="report-cta">' +
-      '<h3>' + a.name + ', вы видите свой потенциал. Давайте реализуем его вместе.</h3>' +
-      '<p>Эксперт Финтабло уже видит ваш профиль ' + m.practiceType + ' и подготовит персональные рекомендации: какой сценарий выбрать, с чего начать, как выйти на ' + formatMoneyShort(m.targetIncome) + '/мес. Это не презентация — это разбор конкретно вашей ситуации.</p>' +
-      '<button class="btn-primary" onclick="goToThankYou()">Получить персональный разбор — бесплатно →</button>' +
-      '<p style="font-size:12px;opacity:0.6;margin-top:10px">20–30 минут · без обязательств</p>' +
+      '<h3>' + a.name + ', мы готовы помочь вам выйти на ' + formatMoneyShort(m.targetIncome) + '/мес</h3>' +
+      '<p>Эксперт Финтабло уже видит ваш профиль и подготовит конкретный план: какой сценарий выбрать, первые 3 шага, условия партнёрства — 50% от первого чека каждого клиента. Встреча бесплатная, без обязательств.</p>' +
+      '<button class="btn-primary" onclick="goToThankYou()">Начать реализацию плана — бесплатно →</button>' +
     '</div>';
 
   // Sticky CTA — show after user scrolls past first section

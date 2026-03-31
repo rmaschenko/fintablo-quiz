@@ -52,7 +52,7 @@
         </div>
         <div class="start-benefit-item">
           <div class="sb-icon">🎯</div>
-          <div class="sb-text"><strong>3 сценария роста</strong> с расчётами под ваши данные</div>
+          <div class="sb-text"><strong>3 сценария роста</strong> с конкретными расчётами — от оптимизации до партнёрства</div>
         </div>
         <div class="start-benefit-item">
           <div class="sb-icon">📋</div>
@@ -345,25 +345,22 @@
         </ul>
       </div>
 
-      <p class="form-label">Получите полный отчёт и разбор с экспертом</p>
+      <p class="form-label">Получите полный отчёт и персональный план</p>
+
+      <div class="field-group">
+        <input type="text" id="capture-name-input" placeholder="Ваше имя" autocomplete="given-name" oninput="updateSubmitButton()">
+      </div>
 
       <div class="field-group">
         <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" oninput="formatPhone(this)" autocomplete="tel">
-        <p class="field-hint">Эксперт Финтабло свяжется в течение 1 рабочего дня</p>
       </div>
 
       <div class="field-group">
-        <input type="email" id="email" placeholder="email@example.com" autocomplete="email">
-        <p class="field-hint">Необязательно — отправим копию отчёта на почту</p>
-      </div>
-
-      <div class="field-group">
-        <input type="text" id="vk" placeholder="vk.com/ваш_логин" autocomplete="off">
-        <p class="field-hint">Необязательно — если удобнее переписываться ВКонтакте</p>
+        <input type="email" id="email" placeholder="Email (необязательно)" autocomplete="email">
       </div>
 
       <label class="checkbox-row">
-        <input type="checkbox" id="want-expert" checked>
+        <input type="checkbox" id="want-expert" checked onchange="updateSubmitButton()">
         <span>Хочу персональный разбор с экспертом Финтабло (бесплатно, 20–30 мин)</span>
       </label>
 
