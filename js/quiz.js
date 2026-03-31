@@ -581,7 +581,7 @@ function updateSubmitButton() {
 
   var rawDigits = (document.getElementById('phone').value || '').replace(/\D/g, '');
   if (rawDigits.startsWith('7') || rawDigits.startsWith('8')) rawDigits = rawDigits.slice(1);
-  var isPhoneValid = rawDigits.length === 10;
+  var isPhoneValid = rawDigits.length === 10 && validatePhoneReal(rawDigits);
 
   var consentEl = document.getElementById('consent-pd');
   var isConsent = consentEl ? consentEl.checked : false;
@@ -591,6 +591,30 @@ function updateSubmitButton() {
 
   var submitBtn = document.getElementById('btn-submit-lead');
   if (submitBtn) submitBtn.disabled = !(isNameValid && isPhoneValid && isConsent);
+}
+
+/* ============ PHONE VALIDATION ============ */
+function validatePhoneReal(digits) {
+  // digits = 10 chars without leading 7/8, e.g. "9161234567"
+  if (digits.length !== 10) return false;
+
+  // 1. Check operator code (first 3 digits)
+  var code = parseInt(digits.substring(0, 3));
+  var validMobileCodes = (code >= 900 && code <= 999); // mobile
+  var validCityCodes = [495, 499, 498, 496, 812, 343, 383, 831, 846, 863, 861, 351, 342, 347, 391, 381, 473, 843, 844, 845, 848, 855, 862, 865, 866, 867, 869, 871, 872, 873, 877, 878, 879].indexOf(code) >= 0;
+  if (!validMobileCodes && !validCityCodes) return false;
+
+  // 2. Block obvious fakes — all same digits
+  if (/^(\d)\1{9}$/.test(digits)) return false;
+
+  // 3. Block sequential numbers
+  if (digits === '1234567890' || digits === '0987654321' || digits === '9876543210') return false;
+
+  // 4. Block repeating patterns
+  if (/^(\d{2})\1{4}$/.test(digits)) return false; // e.g. 1212121212
+  if (/^(\d{3})\1{2}\d$/.test(digits)) return false; // e.g. 1231231231
+
+  return true;
 }
 
 /* ============ HELPERS ============ */
