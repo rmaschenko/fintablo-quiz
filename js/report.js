@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Render all sections
   renderHero(answers, m);
+  renderLostPotential(answers, m);
   renderFindings(answers, m);
   renderDashboard(answers, m);
   renderProfile(answers, m);
@@ -42,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
   } else {
     renderScenarios(answers, m);
     renderInlineCTA(answers, m);
-    renderLostPotential(answers, m);
     renderMetrics(answers, m);
     renderRoadmap(answers, m);
     renderFinTablo(answers, m);
@@ -312,28 +312,35 @@ function renderProfile(a, m) {
 /* ===== LOST POTENTIAL ===== */
 function renderLostPotential(a, m) {
   var el = document.getElementById('lost-potential');
-  if (m.hourlyRate >= m.benchmarkRate) {
-    el.innerHTML = '<div class="report-insight">Ваша ставка ' + formatMoney(m.hourlyRate) + ' ₽/ч уже на уровне или выше рыночного уровня для финансовых директоров на аутсорсе (' + formatMoney(m.benchmarkRate) + ' ₽/ч). Отличный результат — фокусируйтесь на масштабировании.</div>';
+  if (!el) return;
+
+  // Even if rate is above benchmark, show income gap if exists
+  if (m.hourlyRate >= m.benchmarkRate && m.incomeGap <= 0) {
+    el.innerHTML = '<div class="report-insight">Ваша ставка ' + formatMoney(m.hourlyRate) + ' ₽/ч уже выше рыночного уровня, и вы достигли целевого дохода. Фокусируйтесь на устойчивости и масштабировании практики.</div>';
     return;
   }
 
-  var monthly = m.lostPotential;
+  // Calculate the gap — either rate-based or income-based, whichever is bigger
+  var rateLoss = m.lostPotential; // from rate difference
+  var incomeMonthly = m.incomeGap; // from target vs current
+  var monthly = Math.max(rateLoss, incomeMonthly);
   var yearly = monthly * 12;
+  var daily = Math.round(monthly / 22);
 
   el.innerHTML =
     '<div class="lost-counter">' +
-      '<div class="lost-label">Разница в доходе за 12 месяцев при вашей ставке vs. рыночного уровня</div>' +
+      '<div class="lost-label">' + a.name + ', вот сколько вы недополучаете каждый год при текущей модели работы</div>' +
       '<div class="lost-value" id="lost-counter-value">0 ₽</div>' +
-      '<div class="lost-sub">Это не потерянные деньги — это ваш потенциал роста при правильном позиционировании</div>' +
+      '<div class="lost-sub">Это <strong>' + formatMoney(daily) + ' ₽ каждый рабочий день</strong> — деньги, которые уже есть в вашей практике, но не доходят до вас</div>' +
     '</div>' +
     '<div class="lost-details">' +
-      '<div class="row"><span>Ваша ставка</span><span>' + formatMoney(m.hourlyRate) + ' ₽/ч</span></div>' +
-      '<div class="row"><span>Рыночный уровень (медиана)</span><span>' + formatMoney(m.benchmarkRate) + ' ₽/ч</span></div>' +
-      '<div class="row"><span>Разница</span><span>' + formatMoney(m.benchmarkRate - m.hourlyRate) + ' ₽/ч</span></div>' +
-      '<div class="row"><span>Ваших часов в месяц</span><span>' + m.totalHours + '</span></div>' +
-      '<div class="row"><span>Потенциал роста в месяц</span><span>+' + formatMoney(monthly) + ' ₽</span></div>' +
-      '<div class="row highlight"><span>Потенциал за 12 месяцев</span><span>+' + formatMoney(yearly) + ' ₽</span></div>' +
-    '</div>';
+      '<div class="row"><span>Ваш текущий доход</span><span>' + formatMoney(m.currentIncome) + ' ₽/мес</span></div>' +
+      '<div class="row"><span>Ваша цель</span><span>' + formatMoney(m.targetIncome) + ' ₽/мес</span></div>' +
+      '<div class="row"><span>Разрыв</span><span>' + formatMoney(m.incomeGap) + ' ₽/мес</span></div>' +
+      (rateLoss > 0 ? '<div class="row"><span>Потеря на ставке (' + formatMoney(m.hourlyRate) + ' vs. ' + formatMoney(m.benchmarkRate) + ' ₽/ч)</span><span>' + formatMoney(rateLoss) + ' ₽/мес</span></div>' : '') +
+      '<div class="row highlight"><span>Недополученный доход за 12 месяцев</span><span>' + formatMoney(yearly) + ' ₽</span></div>' +
+    '</div>' +
+    '<div style="text-align:center;margin-top:16px;font-size:14px;color:var(--text2);line-height:1.5">Ниже — конкретный план, как это исправить. Три сценария с расчётами под ваши данные.</div>';
 
   animateCounter('lost-counter-value', yearly, ' ₽');
 }
