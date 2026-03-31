@@ -376,34 +376,47 @@ function renderScenarios(a, m) {
 
     '<div class="scenario-card recommended">' +
       '<div class="scenario-badge">Рекомендован</div>' +
-      '<h3>Сценарий Б — Рост через партнёрский канал Финтабло</h3>' +
+      '<h3>Сценарий Б — Партнёрская программа Финтабло</h3>' +
       '<div class="scenario-time">3–5 месяцев · минимальные риски</div>' +
-      '<div class="scenario-actions">' +
-        '• Подключиться к партнёрской программе Финтабло — получить менеджера и готовые инструменты<br>' +
-        '• Получить 2–3 клиентов через входящий поток заявок (без самостоятельного поиска)<br>' +
-        '• Автоматизировать рутину: с ' + a.manualWorkPct + '% до ~20% — высвободить ' + m.routineFreedHours + ' ч/мес<br>' +
-        '• Использовать высвободившееся время на ' + freedClients + ' дополнительных клиентов</div>' +
-      '<div class="scenario-forecast">' +
-        '<strong>Прогноз через 3 месяца:</strong><br>' +
-        'Регулярный доход: <strong>' + formatMoney(scenarioBIncome) + ' ₽/мес</strong> (сейчас ' + formatMoneyShort(m.currentIncome) + ')<br>' +
-        'Партнёрская комиссия: ' + formatMoney(m.scenarioB_bonus) + ' ₽ единовременно (50% от первого чека каждого клиента)<br>' +
-        'Итого за первые 6 мес: <strong>' + formatMoney(scenarioBIncome * 3 + m.scenarioB_bonus) + ' ₽</strong><br>' +
-        '<span style="font-size:13px;color:var(--text-muted)">Уровень риска: минимальный — клиенты приходят через готовый поток</span></div>' +
-      '<div class="scenario-why">Почему это лучший сценарий: вам не нужно искать клиентов, продавать или придумывать инструменты с нуля. Финтабло даёт входящий поток, готовые материалы и экспертное сообщество. Вы сосредоточены на том, что умеете лучше всего — на финансовой экспертизе.</div>' +
+      '<div class="scenario-actions" style="display:flex;flex-direction:column;gap:8px">' +
+        '<div style="display:flex;gap:8px;align-items:flex-start"><span style="color:var(--accent-green);font-weight:700;flex-shrink:0">01</span><span>Подключиться к программе — персональный менеджер и готовые инструменты с первого дня</span></div>' +
+        '<div style="display:flex;gap:8px;align-items:flex-start"><span style="color:var(--accent-green);font-weight:700;flex-shrink:0">02</span><span>Получить 2–3 клиентов через входящий поток заявок — без поиска и продаж</span></div>' +
+        '<div style="display:flex;gap:8px;align-items:flex-start"><span style="color:var(--accent-green);font-weight:700;flex-shrink:0">03</span><span>Автоматизировать рутину: с ' + a.manualWorkPct + '% до ~20% — высвободить ' + m.routineFreedHours + ' ч/мес</span></div>' +
+      '</div>' +
+      '<div class="scenario-forecast" style="margin-top:16px">' +
+        '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span>Регулярный доход</span><strong>' + formatMoney(scenarioBIncome) + ' ₽/мес</strong></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span>Партнёрская комиссия</span><strong>' + formatMoney(m.scenarioB_bonus) + ' ₽ разово</strong></div>' +
+        '<div style="display:flex;justify-content:space-between;padding:6px 0;font-weight:700;color:var(--brand-blue)"><span>Рост к текущему</span><span>+' + (m.currentIncome > 0 ? Math.round((scenarioBIncome - m.currentIncome) / m.currentIncome * 100) : 100) + '%</span></div>' +
+      '</div>' +
     '</div>' +
 
     '<div class="scenario-card">' +
-      '<h3>Сценарий В — Полная трансформация практики</h3>' +
+      '<h3>Сценарий В — Трансформация практики</h3>' +
       '<div class="scenario-time">6–12 месяцев · системные изменения</div>' +
       '<div class="scenario-actions">' +
-        '• Перейти на чек от 120 тыс. через позиционирование финансовый партнёр бизнеса<br>' +
-        '• Делегировать операционный учёт помощнику (от ' + formatMoney(Math.round(m.routineHours * 500)) + ' ₽/мес)<br>' +
-        '• Развивать экспертный контент и личный бренд для притяжения крупных клиентов<br>' +
-        '• Создать команду из 1–2 специалистов для тиражирования методологии</div>' +
-      '<div class="scenario-forecast"><strong>Прогноз:</strong> ' + formatMoney(Math.max(m.targetIncome, 450000)) + ' ₽/мес<br>Срок выхода на целевой доход: 8–12 месяцев<br><span style="font-size:13px;color:var(--text-muted)">Уровень риска: высокий — требует инвестиций времени и пересмотра всей модели</span></div>' +
+        '• Чек от 120 тыс. через позиционирование как финансовый партнёр бизнеса<br>' +
+        '• Делегирование операционного учёта (от ' + formatMoney(Math.round(m.routineHours * 500)) + ' ₽/мес)<br>' +
+        '• Экспертный контент и личный бренд</div>' +
+      '<div class="scenario-forecast"><strong>Прогноз:</strong> ' + formatMoney(Math.max(m.targetIncome, 450000)) + ' ₽/мес за 8–12 месяцев</div>' +
     '</div>' +
 
-    '<div class="report-insight" style="margin-top:8px"><strong>Рекомендация для ' + a.name + ':</strong> Начните со сценария Б — он даёт результат быстрее всего при минимальных рисках. Элементы сценария А (повышение чека, оптимизация) можно внедрять параллельно. Сценарий В — ваш горизонт на год, когда база и процессы уже выстроены.</div>';
+    '<div class="scenario-card" style="border-left:3px solid var(--warning)">' +
+      '<h3>Сценарий Г — Самодельная автоматизация (скрипты, ИИ)</h3>' +
+      '<div class="scenario-time">Без вложений · высокие риски</div>' +
+      '<div class="scenario-actions">' +
+        '• Написать скрипты для сбора данных и формирования отчётов самостоятельно<br>' +
+        '• Использовать ChatGPT, Google Sheets, Python для автоматизации</div>' +
+      '<div class="scenario-forecast" style="background:var(--warning-light)">' +
+        '<strong>Риски этого подхода:</strong><br>' +
+        '• <strong>152-ФЗ:</strong> данные клиентов уходят в зарубежные сервисы — юрлицо не примет<br>' +
+        '• <strong>Нет аудитного следа:</strong> ФНС требует историю изменений — у скриптов её нет<br>' +
+        '• <strong>Зависимость от одного человека:</strong> если вы заболели — клиент без отчётов<br>' +
+        '• <strong>Нет поддержки:</strong> ошибка в формуле = ошибка в отчёте клиенту<br>' +
+        '<span style="font-size:13px;color:var(--text-muted);margin-top:6px;display:block">Финтабло — в реестре российского ПО. Автоимпорт из банков и 1С, аудитный след, SLA для клиента.</span>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="report-insight" style="margin-top:8px"><strong>Рекомендация для ' + a.name + ':</strong> Сценарий Б даёт результат быстрее всего при минимальных рисках. Повышение чека (А) можно делать параллельно. Трансформация (В) — горизонт на год. Самодельные скрипты (Г) работают для личных задач, но не масштабируются для клиентов-юрлиц.</div>';
 }
 
 /* ===== 90-DAY ROADMAP ===== */
@@ -527,10 +540,12 @@ function renderFinTablo(a, m) {
       '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px">' +
         '<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px"><img src="img/yakhontova.webp" alt="Екатерина Яхонтова" style="width:48px;height:48px;border-radius:50%;object-fit:cover"><div><div style="font-weight:700">Екатерина Яхонтова</div><div style="font-size:12px;color:var(--text-muted)">Финансовый директор, Краснодар</div></div></div>' +
         '<div style="font-size:14px;color:var(--text-primary);line-height:1.5">«С партнёрской программой я не только заработала <strong>1 401 262 руб.</strong>, но и повысила качество услуг»</div>' +
+        '<div style="font-size:13px;color:var(--accent-green);font-weight:500;margin-top:6px">Партнёрский доход: 1,4 млн ₽</div>' +
       '</div>' +
       '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px">' +
         '<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px"><img src="img/dikushin.png" alt="Артём Дикушин" style="width:48px;height:48px;border-radius:50%;object-fit:cover"><div><div style="font-weight:700">Артём Дикушин</div><div style="font-size:12px;color:var(--text-muted)">Финдиректор, опыт более 6 лет</div></div></div>' +
         '<div style="font-size:14px;color:var(--text-primary);line-height:1.5">«Финтабло способствует созданию потока клиентов и позволяет зарабатывать больше за счёт партнёрских выплат»</div>' +
+        '<div style="font-size:13px;color:var(--accent-green);font-weight:500;margin-top:6px">Стабильный входящий поток клиентов</div>' +
       '</div>' +
       '<div style="text-align:center;font-size:13px;color:var(--blue);font-weight:500;padding:8px 0">На встрече эксперт расскажет больше историй партнёров с похожим на ваш профилем</div>' +
     '</div>' +
