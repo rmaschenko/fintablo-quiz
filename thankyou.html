@@ -84,7 +84,7 @@
       <div class="step-body">
         <h4>После разговора</h4>
         <ul>
-          <li>Закрытый Telegram-чат финансовых директоров-партнёров</li>
+          <li>Закрытое профессиональное сообщество партнёров Финтабло</li>
           <li>Готовые шаблоны: коммерческое предложение, договор, кейсы</li>
           <li>Персональный менеджер для первого проекта</li>
         </ul>
@@ -97,6 +97,7 @@
 
     <div class="story-card">
       <div class="story-name">Елена, внешний финансовый директор, Москва</div>
+      <div class="story-context" style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Клиенты: e-commerce и агентства</div>
       <div class="story-before-after">
         <div class="story-before">До: 3 клиента, 90 000 ₽/мес</div>
         <div class="story-after">Через 4 мес: 6 клиентов, 290 000 ₽/мес</div>
@@ -106,6 +107,7 @@
 
     <div class="story-card">
       <div class="story-name">Алексей, финдиректор на аутсорсе, Санкт-Петербург</div>
+      <div class="story-context" style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Клиенты: производство и оптовая торговля</div>
       <div class="story-before-after">
         <div class="story-before">До: 5 клиентов, 150 000 ₽/мес</div>
         <div class="story-after">Сейчас: 7 клиентов, 320 000 ₽/мес</div>
@@ -115,6 +117,7 @@
 
     <div class="story-card">
       <div class="story-name">Дмитрий, финансовый консультант, Казань</div>
+      <div class="story-context" style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Клиенты: строительство и проектные компании</div>
       <div class="story-before-after">
         <div class="story-before">До: нестабильный поток клиентов</div>
         <div class="story-after">Через 6 мес: 4 клиента, 220 000 ₽/мес</div>
@@ -127,7 +130,7 @@
     <h3 style="font-size:18px;font-weight:700;color:var(--brand-navy);margin-bottom:16px">Партнёрская программа Финтабло</h3>
     <div class="partner-format primary">
       <h4>Партнёр-внедренец</h4>
-      <p>Вы внедряете Финтабло клиенту и сопровождаете его<br>→ 50% от первого чека клиента (до 170 000 ₽)<br>→ Выплата в течение 3 рабочих дней</p>
+      <p>Вы внедряете Финтабло клиенту и сопровождаете его<br>→ 50% от первого чека клиента<br>→ Выплата в течение 3 рабочих дней</p>
     </div>
     <div class="partner-format">
       <h4>Агент-рекомендатель</h4>
@@ -253,10 +256,11 @@ function addToCalendar() {
   tomorrow.setHours(10, 0, 0, 0);
   var end = new Date(tomorrow); end.setHours(10, 30, 0, 0);
   var fmt = function(d) { return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); };
-  window.open('https://calendar.google.com/calendar/r/eventedit?' +
-    'text=' + encodeURIComponent('Звонок от эксперта Финтабло') +
-    '&dates=' + fmt(tomorrow) + '/' + fmt(end) +
-    '&details=' + encodeURIComponent('Эксперт Финтабло перезвонит для персонального разбора'), '_blank');
+  var ics = 'BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nDTSTART:' + fmt(tomorrow) + '\nDTEND:' + fmt(end) + '\nSUMMARY:Звонок от эксперта Финтабло\nDESCRIPTION:Персональный разбор практики\nEND:VEVENT\nEND:VCALENDAR';
+  var blob = new Blob([ics], {type: 'text/calendar'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a'); a.href = url; a.download = 'fintablo-call.ics'; a.click();
+  URL.revokeObjectURL(url);
 }
 
 function saveLateEmail() {

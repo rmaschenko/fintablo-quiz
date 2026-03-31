@@ -471,6 +471,32 @@ function renderRoadmap(a, m) {
 /* ===== FINTABLO BENEFITS ===== */
 function renderFinTablo(a, m) {
   var el = document.getElementById('fintablo');
+
+  // Vibe-coding comparison block for high-routine users
+  if (a.manualWorkPct >= 60) {
+    var vibeCodingBlock =
+      '<div style="margin-bottom:24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px">' +
+        '<h4 style="font-size:15px;font-weight:600;margin-bottom:12px">Профессиональный инструмент или самодельное решение?</h4>' +
+        '<p style="font-size:14px;color:var(--text-secondary);margin-bottom:12px">При ' + a.manualWorkPct + '% рутины вопрос автоматизации — это вопрос выживания практики. Важно выбрать правильный инструмент:</p>' +
+        '<table style="width:100%;font-size:13px;border-collapse:collapse">' +
+          '<tr><th style="text-align:left;padding:8px;border-bottom:2px solid var(--border)">Критерий</th>' +
+              '<th style="text-align:center;padding:8px;border-bottom:2px solid var(--border)">Скрипты / AI-таблицы</th>' +
+              '<th style="text-align:center;padding:8px;border-bottom:2px solid var(--border);color:var(--brand-blue)">Финтабло</th></tr>' +
+          '<tr><td style="padding:8px;border-bottom:1px solid var(--border)">Автоимпорт из банков и 1С</td>' +
+              '<td style="text-align:center;padding:8px;border-bottom:1px solid var(--border);color:var(--danger)">✗</td>' +
+              '<td style="text-align:center;padding:8px;border-bottom:1px solid var(--border);color:var(--accent-green)">✓</td></tr>' +
+          '<tr><td style="padding:8px;border-bottom:1px solid var(--border)">История изменений и аудит</td>' +
+              '<td style="text-align:center;padding:8px;border-bottom:1px solid var(--border);color:var(--danger)">✗</td>' +
+              '<td style="text-align:center;padding:8px;border-bottom:1px solid var(--border);color:var(--accent-green)">✓</td></tr>' +
+          '<tr><td style="padding:8px">Поддержка и SLA для клиента</td>' +
+              '<td style="text-align:center;padding:8px;color:var(--danger)">✗</td>' +
+              '<td style="text-align:center;padding:8px;color:var(--accent-green)">✓</td></tr>' +
+        '</table>' +
+        '<p style="font-size:13px;color:var(--text-muted);margin-top:10px">Финтабло входит в реестр российского ПО. Клиент-юрлицо может принять расходы на него официально.</p>' +
+      '</div>';
+    if (el) el.insertAdjacentHTML('afterbegin', vibeCodingBlock);
+  }
+
   var freedClients = m.hoursPerClient > 0 ? Math.floor(m.routineFreedHours / m.hoursPerClient) : 0;
   var commissionQuarter = Math.round(2 * m.checkMid * 0.5);
   var newIncome = m.currentIncome + 2 * m.checkMid;

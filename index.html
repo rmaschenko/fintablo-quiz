@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Диагностика роста практики финансиста — Финтабло</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <!-- Yandex.Metrika -->
   <script type="text/javascript">
@@ -58,7 +60,7 @@
         </div>
       </div>
 
-      <button class="btn-primary" onclick="startQuiz()" style="margin-top:24px">Начать диагностику — это бесплатно</button>
+      <button class="btn-primary" onclick="startQuiz()" style="margin-top:24px">Пройти диагностику бесплатно — 4 минуты</button>
 
       <div class="trust-badges" style="margin-top:16px">
         <span>⏱ ~4 минуты</span>
@@ -159,7 +161,7 @@
   <!-- STEP 5 — Avg Check -->
   <div class="step" id="step-5">
     <div class="step-content">
-      <h2 class="step-question">Какой средний ежемесячный чек с одного клиента?</h2>
+      <h2 class="step-question"><span id="q5-name"></span>, какой средний ежемесячный гонорар с одного клиента?</h2>
       <div class="step-motivation" id="motivation-5"></div>
       <div class="options-group">
         <div class="option-card" onclick="selectCheck('До 20 000 ₽',this)">До 20 000 ₽</div>
@@ -287,8 +289,6 @@
         <div class="option-card" onclick="toggleBarrier('Перегружен — некогда заниматься развитием',this)"><span class="card-icon">⏰</span> Перегружен — некогда развиваться</div>
         <div class="option-card" onclick="toggleBarrier('Не знаю, как повысить чек без потери клиентов',this)"><span class="card-icon">💰</span> Не знаю, как повысить чек</div>
         <div class="option-card" onclick="toggleBarrier('Много рутины — нет времени на рост',this)"><span class="card-icon">🔄</span> Много рутины — нет времени на рост</div>
-        <div class="option-card" onclick="toggleBarrier('Нет кейсов и портфолио под NDA',this)"><span class="card-icon">📂</span> Нет кейсов / портфолио из-за NDA</div>
-        <div class="option-card" onclick="toggleBarrier('Одиночество — не к кому обратиться',this)"><span class="card-icon">👤</span> Одиночество — не к кому обратиться</div>
         <div class="option-card" onclick="toggleBarrier('Страх потерять стабильный доход',this)"><span class="card-icon">😰</span> Страх потерять стабильный доход</div>
       </div>
       <div id="insight-9"></div>
@@ -357,6 +357,11 @@
         <p class="field-hint">Необязательно — отправим копию отчёта на почту</p>
       </div>
 
+      <div class="field-group">
+        <input type="text" id="vk" placeholder="vk.com/ваш_логин" autocomplete="off">
+        <p class="field-hint">Необязательно — если удобнее переписываться ВКонтакте</p>
+      </div>
+
       <label class="checkbox-row">
         <input type="checkbox" id="want-expert" checked>
         <span>Хочу персональный разбор с экспертом Финтабло (бесплатно, 20–30 мин)</span>
@@ -367,7 +372,7 @@
         <span>Даю согласие на обработку персональных данных в соответствии с <a href="https://fintablo.ru/position" target="_blank" style="color:var(--brand-blue)">политикой конфиденциальности</a></span>
       </label>
 
-      <button class="btn-primary" id="btn-submit-lead" disabled onclick="submitLead()">Получить полный отчёт →</button>
+      <button class="btn-primary" id="btn-submit-lead" disabled onclick="submitLead()">Получить мой план роста →</button>
     </div>
   </div>
 

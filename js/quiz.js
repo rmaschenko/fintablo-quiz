@@ -79,16 +79,16 @@ var INSIGHTS = {
 
 /* ============ MOTIVATIONS — why we ask this question ============ */
 var MOTIVATIONS = {
-  1: { icon: '👤', text: 'Имя нужно для персонализации вашего отчёта' },
-  2: { icon: '📊', text: 'Опыт влияет на вашу рыночную стоимость и стратегию роста' },
-  3: { icon: '💼', text: 'Формат работы определяет стратегию: в найме и на фрилансе — разные пути к цели' },
-  4: { icon: '👥', text: 'Количество клиентов определяет устойчивость и потенциал вашей практики' },
-  5: { icon: '💰', text: 'Средний чек — ключевая метрика, от которой зависит ваш расчётный доход' },
-  6: { icon: '⏱', text: 'Время на клиента определяет вашу реальную ставку — результат может удивить' },
-  7: { icon: '🔄', text: 'Доля рутины показывает, есть ли у вас ресурс для роста без выгорания' },
-  8: { icon: '📥', text: 'Источники клиентов — основа предсказуемости вашего дохода' },
-  9: { icon: '🚧', text: 'Понимание ваших барьеров позволит дать точные рекомендации именно для вашей ситуации' },
-  10: { icon: '🎯', text: 'Целевой доход определяет сценарий роста и конкретные шаги в вашем плане' }
+  1: { icon: '👤', text: 'Персонализируем отчёт под вас — результаты будут с вашим именем и вашими цифрами' },
+  2: { icon: '📊', text: 'Стаж определяет рыночную ставку — разброс между финансистами одного уровня достигает 3 раз' },
+  3: { icon: '💼', text: 'Формат работы меняет стратегию роста: в найме и на аутсорсе — принципиально разные пути' },
+  4: { icon: '👥', text: 'От количества клиентов зависит устойчивость практики и ваш потолок дохода' },
+  5: { icon: '💰', text: 'Средний гонорар — главная цифра: именно она определяет, сколько вы зарабатываете в час' },
+  6: { icon: '⏱', text: 'Часы на клиента покажут вашу реальную ставку — она может сильно отличаться от ожиданий' },
+  7: { icon: '🔄', text: 'Доля рутины = потолок масштабирования. Больше 60% — и новый клиент только прибавит нагрузку, не доход' },
+  8: { icon: '📥', text: 'Один источник клиентов — это риск. Посмотрим, насколько предсказуем ваш поток' },
+  9: { icon: '🚧', text: 'Честный ответ здесь — самое ценное. Именно барьеры определят первые шаги в вашем плане' },
+  10: { icon: '🎯', text: 'Цель задаёт горизонт: под конкретную цифру рассчитаем конкретный сценарий' }
 };
 
 /* ============ NAVIGATION ============ */
@@ -125,7 +125,7 @@ function updateProgress() {
   }
 }
 
-function goToStep(step) {
+function goToStep(step, direction) {
   var activeEl = document.querySelector('.step.active');
   var targetEl = document.getElementById('step-' + step);
   if (!targetEl) return;
@@ -136,7 +136,14 @@ function goToStep(step) {
     setTimeout(function() { activeEl.classList.remove('leaving'); }, 220);
   }
 
-  setTimeout(function() { targetEl.classList.add('active'); }, activeEl ? 50 : 0);
+  setTimeout(function() {
+    if (direction === 'back') {
+      targetEl.classList.add('entering-back');
+      setTimeout(function() { targetEl.classList.remove('entering-back'); targetEl.classList.add('active'); }, 220);
+    } else {
+      targetEl.classList.add('active');
+    }
+  }, activeEl ? 50 : 0);
 
   currentStep = step;
   updateProgress();
@@ -222,7 +229,7 @@ function nextStep() {
 function prevStep() {
   var idx = STEP_ORDER.indexOf(currentStep);
   if (idx > 0) {
-    goToStep(STEP_ORDER[idx - 1]);
+    goToStep(STEP_ORDER[idx - 1], 'back');
   }
 }
 
@@ -276,6 +283,7 @@ function selectWorkFormat(value, el) {
 function onClientsChange(input) {
   var val = parseInt(input.value);
   saveAnswer('clients', val);
+  saveAnswer('isZeroClients', val === 0);
   document.getElementById('clients-value').textContent = val >= 15 ? '15+' : val;
   document.getElementById('clients-label').textContent = declension(val, 'клиент', 'клиента', 'клиентов');
   input.style.setProperty('--pct', ((val / 15) * 100) + '%');
@@ -580,7 +588,8 @@ function renderCapturePreview() {
 
   // Personalize FinTablo value line
   var ftLine = document.getElementById('capture-value-fintablo');
-  if (ftLine && m.scenarioB_bonus > 0) {
+  if (a.isZeroClients && ftLine) ftLine.style.display = 'none';
+  if (ftLine && m.scenarioB_bonus > 0 && !a.isZeroClients) {
     ftLine.textContent = 'Расчёт: +' + formatMoney(2 * m.checkMid) + ' ₽/мес дополнительно через партнёрскую программу Финтабло';
   }
 }
@@ -622,7 +631,7 @@ function declension(n, one, two, five) {
 
 function updateStepNames() {
   var name = getName();
-  ['q2-name', 'q3-name', 'q4-name', 'q6-name', 'q10-name'].forEach(function(id) {
+  ['q2-name', 'q3-name', 'q4-name', 'q5-name', 'q6-name', 'q10-name'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.textContent = name;
   });
@@ -673,10 +682,15 @@ function restoreStepState(step) {
     });
   }
 
-  // Sliders: only restore and run onChange if user previously saved a value
-  if (step === 4 && a.clients !== undefined) {
-    var cSlider = document.getElementById('clients-slider');
-    if (cSlider) { cSlider.value = a.clients; onClientsChange(cSlider); }
+  // Sliders: restore saved value, or save default on first visit
+  if (step === 4) {
+    if (a.clients === undefined) {
+      var cSliderInit = document.getElementById('clients-slider');
+      if (cSliderInit) onClientsChange(cSliderInit);
+    } else {
+      var cSlider = document.getElementById('clients-slider');
+      if (cSlider) { cSlider.value = a.clients; onClientsChange(cSlider); }
+    }
   }
 
   if (step === 5 && a.avgCheckRange) {
@@ -691,9 +705,14 @@ function restoreStepState(step) {
     if (hSlider) { hSlider.value = a.hoursPerClient; onHoursChange(hSlider); }
   }
 
-  if (step === 7 && a.manualWorkPct !== undefined) {
-    var mSlider = document.getElementById('manual-slider');
-    if (mSlider) { mSlider.value = a.manualWorkPct; onManualChange(mSlider); }
+  if (step === 7) {
+    if (a.manualWorkPct === undefined) {
+      var mSliderInit = document.getElementById('manual-slider');
+      if (mSliderInit) onManualChange(mSliderInit);
+    } else {
+      var mSlider = document.getElementById('manual-slider');
+      if (mSlider) { mSlider.value = a.manualWorkPct; onManualChange(mSlider); }
+    }
   }
 
   if (step === 8 && a.clientSources && a.clientSources.length > 0) {
