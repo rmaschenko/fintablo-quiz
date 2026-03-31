@@ -244,7 +244,7 @@ function onNameInput(input) {
   var valid = val.length >= 2 && !/\d/.test(val);
   document.getElementById('btn-next').disabled = !valid;
   if (valid) {
-    showInsight('insight-1', 'Отлично, ' + val + '. Следующие 4 минуты дадут вам больше ясности о вашей практике, чем большинство коллег получают за месяц самоанализа.');
+    showInsight('insight-1', 'Готово, ' + val + '. Сейчас мы зададим 10 вопросов о вашей практике и рассчитаем ключевые метрики с привязкой к рыночным данным 2026 года.');
   } else {
     document.getElementById('insight-1').innerHTML = '';
   }
@@ -558,7 +558,7 @@ function renderCapturePreview() {
       '<div class="cs-row"><span class="cs-label">Рутина</span><span class="cs-value" style="color:' + routineColor + '">' + a.manualWorkPct + '% (' + m.routineHours + ' ч/мес)</span></div>' +
       '<div class="cs-row"><span class="cs-label">Тип практики</span><span class="cs-value">' + m.practiceType + '</span></div>' +
       '<div class="cs-row"><span class="cs-label">Потенциал роста</span><span class="cs-value" style="color:var(--brand-blue)">+' + m.checkGrowthPct + '%</span></div>' +
-      '<div style="text-align:center;margin-top:12px;font-size:14px;font-weight:600;color:var(--accent-green)">Мы знаем, как это исправить — у нас есть конкретный план ↓</div>';
+      '<div style="text-align:center;margin-top:12px;font-size:14px;font-weight:600;color:var(--accent-green)">Что именно вы получите в полном отчёте ↓</div>';
   }
 }
 
@@ -590,7 +590,7 @@ function updateSubmitButton() {
   var isExpert = wantExpert ? wantExpert.checked : false;
 
   var submitBtn = document.getElementById('btn-submit-lead');
-  if (submitBtn) submitBtn.disabled = !(isNameValid && isPhoneValid && isConsent && isExpert);
+  if (submitBtn) submitBtn.disabled = !(isNameValid && isPhoneValid && isConsent);
 }
 
 /* ============ HELPERS ============ */

@@ -134,6 +134,11 @@
   </div>
 
 
+  <!-- CTA: view report -->
+  <div style="margin:24px 0">
+    <a href="report.html" style="display:block;text-align:center;padding:16px;background:var(--brand-blue);color:#fff;border-radius:var(--radius);font-size:16px;font-weight:600;text-decoration:none">Посмотреть полный отчёт →</a>
+  </div>
+
   <div style="height:24px"></div>
 </div>
 
@@ -203,8 +208,9 @@ document.addEventListener('DOMContentLoaded', function() {
   updateTimer();
   setInterval(updateTimer, 1000);
 
-  if ((lastLead && lastLead.email) || answers.lateEmail) {
-    document.getElementById('late-email-form').style.display = 'none';
+  var lateForm = document.getElementById('late-email-form');
+  if (lateForm && ((lastLead && lastLead.email) || answers.lateEmail)) {
+    lateForm.style.display = 'none';
   }
 
   if (typeof ym === 'function') ym(61131877, 'reachGoal', 'thankyou_viewed');
