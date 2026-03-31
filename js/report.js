@@ -459,7 +459,7 @@ function renderRoadmap(a, m) {
     '<div class="roadmap-month">' +
       '<h3>Месяц 2 — Первые результаты <span style="font-size:12px;color:var(--blue);font-weight:500">входящий поток от Финтабло</span></h3>' +
       '<div class="roadmap-week"><h4>Новые клиенты через партнёрский канал</h4>' +
-        '<p>Финтабло направляет вам входящие заявки от бизнеса. Вам не нужно искать и продавать — вы выбираете, с кем работать. Первый клиент через канал Финтабло появляется в среднем за 3–5 недель. <strong>Комиссия:</strong> 50% от первого чека каждого клиента, выплата за 3 рабочих дня.</p></div>' +
+        '<p>Финтабло направляет вам входящие заявки от бизнеса. Вам не нужно искать и продавать — вы выбираете, с кем работать. Первый клиент через канал Финтабло появляется в среднем за 3–5 недель. <strong>Комиссия:</strong> до 50% от выручки клиента, выплата за 3 рабочих дня.</p></div>' +
       '<div class="roadmap-week">' + barrierAction + '</div>' +
       '<div class="roadmap-week"><h4>Повышение чека у текущих клиентов</h4>' +
         '<p>Менеджер Финтабло поможет подготовить сценарий разговора. Целевой новый чек: ' + formatMoney(newCheck) + ' ₽/мес. При повышении у 2 клиентов — это +' + formatMoney(2 * (newCheck - m.checkMid)) + ' ₽/мес. <strong>Результат:</strong> рост без нового клиента.</p></div>' +
@@ -479,7 +479,7 @@ function renderRoadmap(a, m) {
       '<strong>Месяц 1</strong> — готовые шаблоны для переупаковки предложения, персональный менеджер помогает с первым внедрением.<br>' +
       '<strong>Месяц 2</strong> — входящий поток заявок от бизнеса. Вам не нужно искать клиентов — они приходят через Финтабло. Автоматизация сокращает рутину с ' + a.manualWorkPct + '% до ~20%.<br>' +
       '<strong>Месяц 3</strong> — профессиональное сообщество партнёров для разбора сложных кейсов. Система привлечения работает, вы фокусируетесь на экспертизе.<br><br>' +
-      'Комиссия — 50% от первого чека каждого клиента. Выплата за 3 рабочих дня. Без Финтабло этот план займёт в 2–3 раза больше времени.' +
+      'Комиссия — до 50% от выручки клиента. Выплата за 3 рабочих дня. Без Финтабло этот план займёт в 2–3 раза больше времени.' +
     '</div>';
 }
 
@@ -501,7 +501,7 @@ function renderFinTablo(a, m) {
       '<p>Сейчас: ' + a.manualWorkPct + '% времени на рутину → С Финтабло: ~20%<br>Высвобождается: ' + m.routineFreedHours + ' часов в месяц<br>Это время на ' + freedClients + ' дополнительных клиентов или на повышение качества работы с текущими</p></div>' +
 
     '<div class="benefit-card"><div class="benefit-icon">💰</div><h4>Партнёрская комиссия</h4>' +
-      '<p>50% от суммы первого чека и повышения тарифа<br>При 2 новых клиентах в квартал: ' + formatMoney(commissionQuarter) + ' ₽ единовременно<br>Выплата в течение 3 рабочих дней</p></div>' +
+      '<p>До 50% от выручки клиента в Финтабло<br>При 2 новых клиентах в квартал: ' + formatMoney(commissionQuarter) + ' ₽ единовременно<br>Выплата в течение 3 рабочих дней</p></div>' +
 
     '<div class="benefit-card"><div class="benefit-icon">📥</div><h4>Входящий поток заявок</h4>' +
       '<p>Активные партнёры получают входящие заявки от бизнеса, который ищет внешнего финансового директора. Вам не нужно продавать — вы выбираете, с кем работать.</p></div>' +
@@ -555,16 +555,15 @@ function renderCTA(a, m) {
   var incomeWithFT = m.currentIncome + 2 * m.checkMid;
   el.innerHTML =
     '<div class="report-cta">' +
-      '<h3>' + a.name + ', этот план рассчитан — осталось начать его выполнять</h3>' +
-      '<p style="text-align:left;max-width:560px;margin:0 auto 16px">' +
-        'На встрече с экспертом вы получите:<br>' +
-        '• <strong>Детальный разбор вашего сценария</strong> — с конкретными сроками и цифрами<br>' +
-        '• <strong>Первые 3 шага</strong>, которые дадут результат в ближайший месяц<br>' +
-        '• <strong>Доступ к партнёрской программе</strong> — 50% от первого чека, входящий поток клиентов<br>' +
-        '• <strong>Готовые инструменты</strong> — шаблоны КП, договор, менеджер с первого дня' +
-      '</p>' +
-      '<button class="btn-primary" onclick="goToThankYou()">Запланировать встречу — бесплатно →</button>' +
-      '<p style="font-size:12px;opacity:.6;margin-top:8px">20–30 минут · без обязательств · эксперт уже видит ваши данные</p>' +
+      '<h3 style="font-size:22px;margin-bottom:16px">' + a.name + ', план готов — следующий шаг за вами</h3>' +
+      '<div style="text-align:left;max-width:480px;margin:0 auto 20px;display:flex;flex-direction:column;gap:10px">' +
+        '<div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">📋</span><span><strong>Разбор вашего сценария</strong> — сроки, цифры, конкретика</span></div>' +
+        '<div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">🎯</span><span><strong>Первые шаги</strong> — что делать в ближайший месяц</span></div>' +
+        '<div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">🤝</span><span><strong>Партнёрская программа</strong> — до 50% от чека, входящий поток</span></div>' +
+        '<div style="display:flex;gap:10px;align-items:flex-start"><span style="font-size:18px">📥</span><span><strong>Инструменты</strong> — шаблоны, договор, менеджер</span></div>' +
+      '</div>' +
+      '<button class="btn-primary" onclick="goToThankYou()" style="max-width:400px;margin:0 auto">Запланировать встречу — бесплатно →</button>' +
+      '<p style="font-size:13px;opacity:.7;margin-top:10px">20–30 минут · без обязательств</p>' +
     '</div>';
 
   // Sticky CTA — show after user scrolls past first section

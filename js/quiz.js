@@ -558,7 +558,7 @@ function renderCapturePreview() {
       '<div class="cs-row"><span class="cs-label">Рутина</span><span class="cs-value" style="color:' + routineColor + '">' + a.manualWorkPct + '% (' + m.routineHours + ' ч/мес)</span></div>' +
       '<div class="cs-row"><span class="cs-label">Тип практики</span><span class="cs-value">' + m.practiceType + '</span></div>' +
       '<div class="cs-row"><span class="cs-label">Потенциал роста</span><span class="cs-value" style="color:var(--brand-blue)">+' + m.checkGrowthPct + '%</span></div>' +
-      '<div style="text-align:center;margin-top:12px;font-size:14px;font-weight:600;color:var(--accent-green)">Что именно вы получите в полном отчёте ↓</div>';
+      '<div style="text-align:center;margin-top:12px;font-size:14px;font-weight:600;color:var(--accent-green)">Ваш полный отчёт готов — осталось получить доступ</div>';
   }
 }
 
