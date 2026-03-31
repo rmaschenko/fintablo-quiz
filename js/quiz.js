@@ -530,62 +530,35 @@ function renderCapturePreview() {
   var a = getAllAnswers();
   var m = calculate(a);
 
-  // Title
-  var el = document.getElementById('capture-name');
-  if (el) el.textContent = (a.name || '') + ', ваш персональный план роста готов';
-
-  // Pre-fill name from step 1
+  // Pre-fill name
   var captureNameInput = document.getElementById('capture-name-input');
   if (captureNameInput && a.name) captureNameInput.value = a.name;
 
-  // Personalized hook
-  var hookEl = document.getElementById('capture-hook');
-  if (hookEl) {
-    var hookText = '';
-    if (m.hourlyRate < 1500 && m.lostPotential > 0) {
-      hookText = 'При вашей ставке <strong>' + formatMoney(m.hourlyRate) + ' ₽/ч</strong> и <strong>' + m.clients + '</strong> клиентах ваш потенциал роста дохода — <strong>+' + formatMoney(m.lostPotential) + ' ₽/мес</strong>. Полный отчёт покажет, как этого достичь.';
-    } else {
-      hookText = 'При <strong>' + m.clients + '</strong> клиентах и доходе <strong>' + formatMoneyShort(m.currentIncome) + '/мес</strong> у вас сильная позиция. Полный отчёт покажет, как выйти на <strong>' + formatMoneyShort(m.targetIncome) + '/мес</strong>.';
-    }
-    hookEl.innerHTML = hookText;
+  // 1. PROBLEM — loss counter (red block)
+  var lossEl = document.getElementById('capture-loss');
+  if (lossEl) {
+    var monthly = Math.max(m.lostPotential, m.incomeGap, 10000);
+    var yearly = monthly * 12;
+    var daily = Math.round(monthly / 22);
+    lossEl.innerHTML =
+      '<div class="cl-label">' + (a.name || '') + ', при текущей модели работы вы недополучаете</div>' +
+      '<div class="cl-value">' + formatMoney(yearly) + ' ₽/год</div>' +
+      '<div class="cl-daily">Это ' + formatMoney(daily) + ' ₽ каждый рабочий день</div>';
   }
 
-  // Visual gauge preview (2 visible + locked)
-  var gaugesEl = document.getElementById('capture-gauges');
-  if (gaugesEl) {
-    var rateColor = m.rateEfficiency >= 70 ? 'green' : m.rateEfficiency >= 40 ? 'yellow' : 'red';
-    var portColor = m.portfolioStability >= 70 ? 'green' : m.portfolioStability >= 40 ? 'yellow' : 'red';
-
-    var autoColor = m.automationLevel >= 70 ? 'green' : m.automationLevel >= 40 ? 'yellow' : 'red';
-
-    gaugesEl.innerHTML =
-      '<div class="capture-gauge-item">' +
-        '<div class="cg-header"><span class="cg-title">Эффективность ставки</span><span class="cg-value">' + m.rateEfficiency + '%</span></div>' +
-        '<div class="cg-bar"><div class="cg-fill ' + rateColor + '" style="width:' + m.rateEfficiency + '%"></div></div>' +
-      '</div>' +
-      '<div class="capture-gauge-item">' +
-        '<div class="cg-header"><span class="cg-title">Устойчивость портфеля</span><span class="cg-value">' + m.portfolioStability + '%</span></div>' +
-        '<div class="cg-bar"><div class="cg-fill ' + portColor + '" style="width:' + m.portfolioStability + '%"></div></div>' +
-      '</div>' +
-      '<div class="capture-gauge-item" style="opacity:0.4">' +
-        '<div class="cg-header"><span class="cg-title">🔒 Автоматизация</span><span class="cg-value" style="filter:blur(4px)">' + m.automationLevel + '%</span></div>' +
-        '<div class="cg-bar"><div class="cg-fill ' + autoColor + '" style="width:' + m.automationLevel + '%;filter:blur(3px)"></div></div>' +
-      '</div>' +
-      '<div class="capture-gauge-item" style="opacity:0.35">' +
-        '<div class="cg-header"><span class="cg-title">🔒 Масштабируемость</span><span class="cg-value" style="filter:blur(4px)">—</span></div>' +
-        '<div class="cg-bar"><div class="cg-fill blue" style="width:55%;filter:blur(3px)"></div></div>' +
-      '</div>' +
-      '<div class="capture-gauge-item" style="opacity:0.3">' +
-        '<div class="cg-header"><span class="cg-title">🔒 Предсказуемость потока</span><span class="cg-value" style="filter:blur(4px)">—</span></div>' +
-        '<div class="cg-bar"><div class="cg-fill yellow" style="width:40%;filter:blur(3px)"></div></div>' +
-      '</div>';
-  }
-
-  // Personalize FinTablo value line
-  var ftLine = document.getElementById('capture-value-fintablo');
-  if (a.isZeroClients && ftLine) ftLine.style.display = 'none';
-  if (ftLine && m.scenarioB_bonus > 0 && !a.isZeroClients) {
-    ftLine.textContent = 'Расчёт: +' + formatMoney(2 * m.checkMid) + ' ₽/мес дополнительно через партнёрскую программу Финтабло';
+  // 2. AGITATION → transition — summary of their data
+  var sumEl = document.getElementById('capture-summary');
+  if (sumEl) {
+    var rateColor = m.hourlyRate >= 1500 ? 'var(--accent-green)' : m.hourlyRate >= 800 ? 'var(--warning)' : 'var(--danger)';
+    var routineColor = m.automationLevel >= 60 ? 'var(--accent-green)' : m.automationLevel >= 40 ? 'var(--warning)' : 'var(--danger)';
+    sumEl.innerHTML =
+      '<div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Рассчитано по вашим данным</div>' +
+      '<div class="cs-row"><span class="cs-label">Ваша ставка</span><span class="cs-value" style="color:' + rateColor + '">' + formatMoney(m.hourlyRate) + ' ₽/ч</span></div>' +
+      '<div class="cs-row"><span class="cs-label">Текущий доход</span><span class="cs-value">' + formatMoney(m.currentIncome) + ' ₽/мес</span></div>' +
+      '<div class="cs-row"><span class="cs-label">Рутина</span><span class="cs-value" style="color:' + routineColor + '">' + a.manualWorkPct + '% (' + m.routineHours + ' ч/мес)</span></div>' +
+      '<div class="cs-row"><span class="cs-label">Тип практики</span><span class="cs-value">' + m.practiceType + '</span></div>' +
+      '<div class="cs-row"><span class="cs-label">Потенциал роста</span><span class="cs-value" style="color:var(--brand-blue)">+' + m.checkGrowthPct + '%</span></div>' +
+      '<div style="text-align:center;margin-top:12px;font-size:14px;font-weight:600;color:var(--accent-green)">Мы знаем, как это исправить — у нас есть конкретный план ↓</div>';
   }
 }
 

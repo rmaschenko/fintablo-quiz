@@ -314,38 +314,28 @@
     </div>
   </div>
 
-  <!-- STEP 11 — Contact capture -->
+  <!-- STEP 11 — Contact capture (PAS: Problem → Agitation → Solution) -->
   <div class="step" id="step-11">
     <div class="capture-form">
-      <h2 id="capture-name">Ваш персональный план готов</h2>
 
-      <!-- Personalized hook -->
-      <div id="capture-hook" class="capture-hook"></div>
+      <!-- 1. PROBLEM — loss counter (red, emotional) -->
+      <div id="capture-loss" class="capture-loss"></div>
 
-      <!-- Visual preview: gauge bars (partially revealed) -->
-      <div class="preview-block">
-        <div class="preview-title">Ваши результаты</div>
-        <div id="capture-gauges"></div>
-        <div class="preview-locked">
-          <div style="display:flex;align-items:flex-start;gap:8px">
-            <span style="font-size:16px;flex-shrink:0">🔒</span>
-            <span>В полном отчёте: ещё 3 метрики с рыночными бенчмарками, <strong>3 сценария роста с конкретными расчётами</strong> под ваши данные и <strong>пошаговый план на 90 дней</strong> — что делать каждую неделю</span>
-          </div>
+      <!-- 2. AGITATION → SOLUTION — summary + what you get -->
+      <div id="capture-summary" class="capture-summary"></div>
+
+      <!-- 3. HOPE — what report contains (green/positive) -->
+      <div class="capture-solution">
+        <div style="font-size:15px;font-weight:700;color:var(--accent-green);margin-bottom:12px">✓ У нас есть план, как это исправить</div>
+        <div class="capture-cards">
+          <div class="cc-item"><span class="cc-icon">📊</span><div><strong>3 сценария роста</strong><br><span style="color:var(--text-secondary)">С расчётами под ваши данные</span></div></div>
+          <div class="cc-item"><span class="cc-icon">📋</span><div><strong>План на 90 дней</strong><br><span style="color:var(--text-secondary)">Конкретные шаги каждую неделю</span></div></div>
+          <div class="cc-item"><span class="cc-icon">📈</span><div><strong>5 метрик vs. рынок</strong><br><span style="color:var(--text-secondary)">Где вы и где можете быть</span></div></div>
+          <div class="cc-item"><span class="cc-icon">💰</span><div><strong>Расчёт с Финтабло</strong><br><span style="color:var(--text-secondary)">Сколько заработаете как партнёр</span></div></div>
         </div>
       </div>
 
-      <!-- What full report contains — personalized -->
-      <div class="capture-value-block">
-        <h4>Что вы получите:</h4>
-        <ul>
-          <li>Полный анализ 5 ключевых метрик вашей практики vs. рыночные показатели</li>
-          <li>3 конкретных сценария роста дохода — с расчётами под ваши цифры</li>
-          <li>Пошаговый план на 90 дней: что делать на каждой неделе</li>
-          <li id="capture-value-fintablo">Расчёт: сколько вы заработаете с партнёрской программой Финтабло</li>
-          <li>Персональный разбор с экспертом, который уже видит ваши данные</li>
-        </ul>
-      </div>
-
+      <!-- 4. ACTION — form -->
       <p class="form-label">Получите полный отчёт и персональный план</p>
 
       <div class="field-group">

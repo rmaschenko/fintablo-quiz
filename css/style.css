@@ -690,20 +690,71 @@ input[type=range]::-moz-range-thumb {
   .inter-next-items { grid-template-columns: 1fr; }
 }
 
-/* Capture — personalized hook */
-.capture-hook {
-  background: var(--brand-blue-light);
+/* Capture — PAS structure */
+.capture-loss {
+  background: linear-gradient(135deg, #7F1D1D, #991B1B);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.capture-loss .cl-label { font-size: 13px; opacity: .75; margin-bottom: 4px; }
+.capture-loss .cl-value { font-size: 36px; font-weight: 700; margin: 4px 0; }
+.capture-loss .cl-daily { font-size: 14px; font-weight: 600; opacity: .9; }
+
+.capture-summary {
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px;
-  font-size: 15px;
-  color: var(--brand-navy);
-  line-height: 1.55;
+  margin-bottom: 16px;
+}
+
+.capture-summary .cs-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.capture-summary .cs-row:last-child { border-bottom: none; }
+.capture-summary .cs-label { color: var(--text-secondary); }
+.capture-summary .cs-value { font-weight: 600; color: var(--brand-navy); }
+
+.capture-solution {
   margin-bottom: 20px;
 }
 
-.capture-hook strong { color: var(--brand-blue); }
+.capture-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
 
-/* Capture — mini gauge preview */
+.cc-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.cc-item strong { color: var(--brand-navy); font-size: 14px; }
+.cc-icon { font-size: 20px; flex-shrink: 0; }
+
+@media (max-width: 480px) {
+  .capture-cards { grid-template-columns: 1fr; }
+  .capture-loss .cl-value { font-size: 30px; }
+}
+
+/* Capture — mini gauge preview (legacy, keep for compatibility) */
 .capture-gauge-item { margin-bottom: 12px; }
 
 .capture-gauge-item .cg-header {
