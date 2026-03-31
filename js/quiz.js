@@ -674,6 +674,7 @@ function restoreStepState(step) {
       var onclick = c.getAttribute('onclick') || '';
       if (onclick.indexOf(a.experience) >= 0) c.classList.add('selected');
     });
+    if (INSIGHTS.experience[a.experience]) showInsight('insight-2', INSIGHTS.experience[a.experience]);
   }
 
   if (step === 3 && a.workFormat) {
@@ -681,6 +682,7 @@ function restoreStepState(step) {
       var onclick = c.getAttribute('onclick') || '';
       if (onclick.indexOf(a.workFormat) >= 0) c.classList.add('selected');
     });
+    if (INSIGHTS.workFormat[a.workFormat]) showInsight('insight-3', INSIGHTS.workFormat[a.workFormat]);
   }
 
   // Sliders: restore saved value, or save default on first visit
@@ -699,6 +701,7 @@ function restoreStepState(step) {
       var onclick = c.getAttribute('onclick') || '';
       if (onclick.indexOf(a.avgCheckRange) >= 0) c.classList.add('selected');
     });
+    if (INSIGHTS.avgCheck[a.avgCheckRange]) showInsight('insight-5', INSIGHTS.avgCheck[a.avgCheckRange]);
   }
 
   if (step === 6) {
@@ -733,6 +736,7 @@ function restoreStepState(step) {
         if (onclick.indexOf(src) >= 0) c.classList.add('selected');
       });
     });
+    showInsight('insight-8', INSIGHTS.sources(validSources));
   }
 
   if (step === 9 && a.barriers && a.barriers.length > 0) {
@@ -748,6 +752,7 @@ function restoreStepState(step) {
         if (!c.classList.contains('selected')) c.classList.add('disabled');
       });
     }
+    if (a.barriers[0] && INSIGHTS.barriers[a.barriers[0]]) showInsight('insight-9', INSIGHTS.barriers[a.barriers[0]]);
   }
 
   if (step === 10) {
