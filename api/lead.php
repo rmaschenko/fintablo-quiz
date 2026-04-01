@@ -111,43 +111,79 @@ foreach ($csvFields as $field) {
 fputcsv($fp, $row, ';');
 fclose($fp);
 
-// === 2. SEND TO AMOCRM (uncomment when ready) ===
-/*
-$amoSubdomain = 'YOUR_SUBDOMAIN'; // e.g. 'fintablo'
-$amoToken = 'YOUR_API_TOKEN';
-$amoPipelineId = 0; // pipeline ID
-$amoStatusId = 0;   // status/stage ID
+// === 2. SEND TO AMOCRM ===
+$amoApiDomain = 'api-b.amocrm.ru'; // from token's api_domain field
+$amoToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjAyOTZiYWFjMTA5ODMxZmQxNTVhMWE4MjE0NjhlY2ZkNTRiZmZhM2Y2OTk4MTVlZDM4MGIxZGRkMTQ0YzIzYTM2NzgzODdmNzlkYTM0MDc5In0.eyJhdWQiOiIwMDdmNjMxZC1hYzNhLTRkNTctYTg1My1iNTJiOGM5MzdmYTYiLCJqdGkiOiIwMjk2YmFhYzEwOTgzMWZkMTU1YTFhODIxNDY4ZWNmZDU0YmZmYTNmNjk5ODE1ZWQzODBiMWRkZDE0NGMyM2EzNjc4Mzg3Zjc5ZGEzNDA3OSIsImlhdCI6MTc3NTAyOTc0MCwibmJmIjoxNzc1MDI5NzQwLCJleHAiOjE3OTg2NzUyMDAsInN1YiI6IjEwNjY1ODUwIiwiZ3JhbnRfdHlwZSI6IiIsImFjY291bnRfaWQiOjI4OTM4MzcwLCJiYXNlX2RvbWFpbiI6ImFtb2NybS5ydSIsInZlcnNpb24iOjIsInNjb3BlcyI6WyJwdXNoX25vdGlmaWNhdGlvbnMiLCJmaWxlcyIsImNybSIsImZpbGVzX2RlbGV0ZSIsIm5vdGlmaWNhdGlvbnMiXSwiaGFzaF91dWlkIjoiNGU5MjY1YzEtZmMwNS00NGJmLWE3YWItMzQxNzY3YjI2OThmIiwiYXBpX2RvbWFpbiI6ImFwaS1iLmFtb2NybS5ydSJ9.GBNlZDHLNSc-F1kTe2RQVUqhJHWyjxcYLgnbeGAztg5hzK8IvS0ufygnu8lpC73aL_cyIB5JcmIM0zAGwq5cGcP2ZhaQnr07JRoYdcUhN61euhgIixbcua-In_FvbhW5cbegyGhKka-3nep7V_yXKmLQ72umODLniibts63CHICwxXAXWdcQzEhqiSz-_ds_LU_AmXfWHNi85tjFKGw9WqOoq7S7nKWzIP6XOkTZll3jxp5XCrlSHpF-WbwImHFdqz0kZpu385KEFyFBhQiMeDuAAxEMyGRkUVsizdJx92GUmuXU3PaGpherxusUPOBVulz6pQojftnDIELWbmLFJw';
+$amoPipelineId = 5278171;
+$amoStatusId = 47065159;
 
+// Build note with all quiz data + UTM
+$utm = $data['utm'] ?? [];
+$noteLines = [
+    '📊 ДАННЫЕ ИЗ КВИЗА «РОСТ ПРАКТИКИ ФИНАНСИСТА»',
+    '',
+    'Опыт: ' . ($data['experience'] ?? '—'),
+    'Формат работы: ' . ($data['workFormat'] ?? '—'),
+    'Клиентов: ' . ($data['clients'] ?? '—'),
+    'Средний гонорар: ' . ($data['avgCheckRange'] ?? '—'),
+    'Часов на клиента: ' . ($data['hoursPerClient'] ?? '—'),
+    'Доля рутины: ' . ($data['manualWorkPct'] ?? '—') . '%',
+    'Источники клиентов: ' . (is_array($data['clientSources'] ?? null) ? implode(', ', $data['clientSources']) : ($data['clientSources'] ?? '—')),
+    'Барьеры: ' . (is_array($data['barriers'] ?? null) ? implode(', ', $data['barriers']) : ($data['barriers'] ?? '—')),
+    'Целевой доход: ' . ($data['targetIncome'] ?? '—') . ' ₽/мес',
+    '',
+    '📈 РАСЧЁТНЫЕ ПОКАЗАТЕЛИ',
+    'Текущий доход: ' . ($data['currentIncome'] ?? '—') . ' ₽/мес',
+    'Ставка: ' . ($data['hourlyRate'] ?? '—') . ' ₽/ч',
+    'Тип практики: ' . ($data['practiceType'] ?? '—'),
+    'Разрыв до цели: ' . ($data['incomeGap'] ?? '—') . ' ₽/мес',
+    'Потенциал роста чека: ' . ($data['checkGrowthPct'] ?? '—') . '%',
+    'Хочет разбор с экспертом: ' . (!empty($data['wantExpert']) ? 'ДА' : 'нет'),
+];
+
+if (!empty($utm)) {
+    $noteLines[] = '';
+    $noteLines[] = '🔗 UTM-МЕТКИ';
+    foreach ($utm as $k => $v) {
+        if ($v) $noteLines[] = "$k: $v";
+    }
+}
+
+$noteLines[] = '';
+$noteLines[] = 'Реферер: ' . ($data['referrer'] ?? '—');
+$noteLines[] = 'URL: ' . ($data['pageUrl'] ?? '—');
+$noteLines[] = 'Время: ' . date('d.m.Y H:i:s');
+
+$noteText = implode("\n", $noteLines);
+
+// Create lead with embedded contact
 $amoLead = [
-    'name' => 'Квиз: ' . ($data['name'] ?? 'Без имени') . ' — ' . ($data['practiceType'] ?? ''),
+    'name' => 'Квиз ФД: ' . ($data['name'] ?? 'Без имени') . ' — ' . ($data['practiceType'] ?? ''),
     'pipeline_id' => $amoPipelineId,
     'status_id' => $amoStatusId,
-    'custom_fields_values' => [
-        // Add your custom field mappings here
-        // ['field_id' => 123, 'values' => [['value' => $data['phone']]]],
-    ],
     '_embedded' => [
+        'tags' => [
+            ['name' => 'micro_service'],
+            ['name' => 'growth_cfo']
+        ],
         'contacts' => [[
             'first_name' => $data['name'] ?? '',
             'custom_fields_values' => [
-                ['field_code' => 'PHONE', 'values' => [['value' => $data['phone'], 'enum_code' => 'WORK']]],
-                ['field_code' => 'EMAIL', 'values' => [['value' => $data['email'] ?? '', 'enum_code' => 'WORK']]],
+                ['field_code' => 'PHONE', 'values' => [['value' => $data['phone'] ?? '', 'enum_code' => 'WORK']]],
             ]
         ]]
     ]
 ];
 
-// Add UTM as note
-$utm = $data['utm'] ?? [];
-$utmNote = '';
-if (!empty($utm)) {
-    $utmNote = "UTM:\n";
-    foreach ($utm as $k => $v) {
-        if ($v) $utmNote .= "$k: $v\n";
-    }
+// Add email to contact if provided
+if (!empty($data['email'])) {
+    $amoLead['_embedded']['contacts'][0]['custom_fields_values'][] = [
+        'field_code' => 'EMAIL',
+        'values' => [['value' => $data['email'], 'enum_code' => 'WORK']]
+    ];
 }
 
-$ch = curl_init("https://{$amoSubdomain}.amocrm.ru/api/v4/leads/complex");
+$ch = curl_init("https://{$amoApiDomain}/api/v4/leads/complex");
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_POST => true,
@@ -161,17 +197,17 @@ $amoResponse = curl_exec($ch);
 $amoCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
-// If lead created and we have UTM, add note
-if ($amoCode >= 200 && $amoCode < 300 && $utmNote) {
+// Add note with all quiz data to the created lead
+if ($amoCode >= 200 && $amoCode < 300) {
     $amoResult = json_decode($amoResponse, true);
     $leadId = $amoResult[0]['id'] ?? null;
     if ($leadId) {
         $note = [
-            'entity_id' => $leadId,
+            'entity_id' => (int)$leadId,
             'note_type' => 'common',
-            'params' => ['text' => $utmNote . "\nРеферер: " . ($data['referrer'] ?? '') . "\nURL: " . ($data['pageUrl'] ?? '')]
+            'params' => ['text' => $noteText]
         ];
-        $ch2 = curl_init("https://{$amoSubdomain}.amocrm.ru/api/v4/leads/notes");
+        $ch2 = curl_init("https://{$amoApiDomain}/api/v4/leads/notes");
         curl_setopt_array($ch2, [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
@@ -185,7 +221,6 @@ if ($amoCode >= 200 && $amoCode < 300 && $utmNote) {
         curl_close($ch2);
     }
 }
-*/
 
 // === 3. RESPONSE ===
 echo json_encode(['success' => true, 'message' => 'Lead saved']);
