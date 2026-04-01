@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no">
+  <meta name="description" content="Персональный отчёт по диагностике практики финансиста. 5 метрик, 3 сценария роста, план на 90 дней.">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Персональный отчёт — Финтабло</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="fonts/inter-local.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Yandex.Metrika -->
+  <script type="text/javascript">
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();
+    for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}
+    k=e.createElement(t);a=e.getElementsByTagName(t)[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a)})
+    (window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
+    ym(61131877,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});
+  </script>
+</head>
+<body class="page-report">
+
+<header class="report-header">
+  <div class="header-inner">
+    <div class="logo">
+      <img src="https://static.tildacdn.com/tild3138-6332-4262-a166-613434313066/Logo.png" alt="FinTablo" height="28">
+      <span class="logo-fallback">Финтабло</span>
+    </div>
+    <div class="report-meta">
+      <span>Персональный отчёт</span>
+      <span class="dot">·</span>
+      <span id="report-name">Загрузка...</span>
+      <span class="dot">·</span>
+      <span id="report-date"></span>
+    </div>
+  </div>
+</header>
+
+<!-- Report navigation -->
+<nav class="report-nav" id="report-nav">
+  <div class="report-nav-inner">
+    <a href="#sec-potential">Потенциал</a>
+    <a href="#sec-findings">Выводы</a>
+    <a href="#sec-dashboard">Цифры</a>
+    <a href="#sec-profile">Профиль</a>
+    <a href="#sec-scenarios">Сценарии</a>
+    <a href="#sec-metrics">Метрики</a>
+    <a href="#sec-roadmap">План</a>
+    <a href="#sec-fintablo">Финтабло</a>
+  </div>
+</nav>
+
+<div class="container-wide">
+
+  <!-- Report hero -->
+  <div id="report-hero" class="report-hero"></div>
+
+  <!-- Lost Potential — FIRST after hero for maximum impact -->
+  <div class="report-section" id="sec-potential">
+    <h2>Сколько вы недополучаете прямо сейчас</h2>
+    <div id="lost-potential"></div>
+  </div>
+
+  <!-- What we found -->
+  <div class="report-section" id="sec-findings">
+    <h2>Что мы выяснили о вашей практике</h2>
+    <div id="findings"></div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="report-section" id="sec-dashboard">
+    <h2>Ваша практика в цифрах</h2>
+    <div id="dashboard"></div>
+  </div>
+
+  <!-- Profile -->
+  <div class="report-section" id="sec-profile">
+    <h2>Ваш профиль финансиста</h2>
+    <div id="profile"></div>
+  </div>
+
+  <!-- Locked overlay for preview mode -->
+  <div id="locked-section" class="hidden">
+    <div class="locked-cta">
+      <h3>Это 30% вашего отчёта</h3>
+      <p>Далее: 3 сценария роста с конкретными расчётами под ваши данные, пошаговый план на 90 дней и расчёт вашего дохода с партнёрской программой Финтабло.</p>
+      <button class="btn-primary" onclick="window.location.href='index.html?go=capture'">Получить полный отчёт →</button>
+    </div>
+  </div>
+
+  <!-- Full report sections (hidden in preview mode) -->
+  <div id="full-report">
+
+    <!-- 3 Scenarios -->
+    <div class="report-section" id="sec-scenarios">
+      <h2>3 сценария роста вашего дохода</h2>
+      <div id="scenarios"></div>
+    </div>
+
+    <!-- Inline CTA after scenarios -->
+    <div id="inline-cta-1"></div>
+
+    <!-- 5 Metrics -->
+    <div class="report-section" id="sec-metrics">
+      <h2>5 метрик вашей практики</h2>
+      <div id="metrics"></div>
+    </div>
+
+    <!-- 90-day Roadmap -->
+    <div class="report-section" id="sec-roadmap">
+      <h2>Ваш план на 90 дней</h2>
+      <div id="roadmap"></div>
+    </div>
+
+    <!-- Финтабло Benefits -->
+    <div class="report-section" id="sec-fintablo">
+      <h2 id="fintablo-heading">Как Финтабло ускорит ваш рост</h2>
+      <div id="fintablo"></div>
+    </div>
+
+    <!-- Final CTA -->
+    <div id="report-cta"></div>
+
+    <!-- Share -->
+    <div id="share-section" class="mb-24"></div>
+
+  </div>
+
+</div>
+
+<!-- Persistent banner for preview mode -->
+<div class="persistent-banner" id="persistent-banner">
+  <div class="banner-inner">
+    <div class="banner-text">Получите полный отчёт и персональный разбор с экспертом</div>
+    <button class="btn-banner" onclick="window.location.href='index.html?go=capture'">Получить →</button>
+  </div>
+</div>
+
+<!-- Sticky CTA for full report mode -->
+<div class="sticky-report-cta" id="sticky-report-cta" style="display:none">
+  <div class="banner-inner">
+    <div class="banner-text">Реализуйте свой план роста вместе с Финтабло</div>
+    <button class="btn-banner" onclick="goToThankYou()">Начать бесплатно →</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-company">
+      <div class="footer-brand">© 2026, «Финтабло»</div>
+      <div class="footer-legal">ООО «НЕСКУЧНЫЙ ФИНАНСОВЫЙ СОФТ»<br>ИНН 2311303019 · ОГРН 1202300015103</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://fintablo.ru/position" target="_blank">Политика обработки персональных данных</a>
+      <a href="https://fintablo.ru/oferta" target="_blank">Оферта</a>
+      <a href="mailto:support@help.fintablo.ru">support@help.fintablo.ru</a>
+    </div>
+  </div>
+</footer>
+
+<div class="cookie-banner" id="cookie-banner">
+  <div class="cb-inner">
+    <div class="cb-text">Мы используем файлы cookie для улучшения работы сервиса. Продолжая использовать сайт, вы соглашаетесь с <a href="https://fintablo.ru/position" target="_blank">политикой обработки персональных данных</a>.</div>
+    <button class="cb-btn" onclick="acceptCookies()">Принять</button>
+  </div>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/calculator.js"></script>
+<script src="js/report.js"></script>
+<script>
+function acceptCookies(){localStorage.setItem('fintablo_cookies','1');document.getElementById('cookie-banner').classList.remove('visible')}
+if(!localStorage.getItem('fintablo_cookies')){document.getElementById('cookie-banner').classList.add('visible')}
+</script>
+</body>
+</html>
