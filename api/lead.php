@@ -203,11 +203,10 @@ if ($amoCode >= 200 && $amoCode < 300) {
     $leadId = $amoResult[0]['id'] ?? null;
     if ($leadId) {
         $note = [
-            'entity_id' => (int)$leadId,
             'note_type' => 'common',
             'params' => ['text' => $noteText]
         ];
-        $ch2 = curl_init("https://{$amoApiDomain}/api/v4/leads/notes");
+        $ch2 = curl_init("https://{$amoApiDomain}/api/v4/leads/{$leadId}/notes");
         curl_setopt_array($ch2, [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
