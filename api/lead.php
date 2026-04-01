@@ -156,11 +156,57 @@ $noteLines[] = 'Время: ' . date('d.m.Y H:i:s');
 
 $noteText = implode("\n", $noteLines);
 
+// UTM field IDs in AmoCRM (tracking_data type)
+$utmFieldMap = [
+    'utm_source'   => 649363,
+    'utm_medium'   => 649365,
+    'utm_campaign' => 649367,
+    'utm_term'     => 649369,
+    'utm_content'  => 649371,
+    'utm_referrer' => 649373,
+    'referrer'     => 649381,
+];
+
+// Text UTM fields (backup)
+$utmTextFieldMap = [
+    'utm_source'   => 702447,
+    'utm_medium'   => 702449,
+    'utm_campaign' => 702451,
+    'utm_content'  => 702453,
+    'utm_term'     => 702455,
+];
+
+// Build custom fields for lead
+$leadCustomFields = [];
+$utm = $data['utm'] ?? [];
+
+// Fill tracking_data UTM fields
+foreach ($utmFieldMap as $utmKey => $fieldId) {
+    $val = '';
+    if ($utmKey === 'referrer' || $utmKey === 'utm_referrer') {
+        $val = $data['referrer'] ?? '';
+    } else {
+        $val = $utm[$utmKey] ?? '';
+    }
+    if ($val) {
+        $leadCustomFields[] = ['field_id' => $fieldId, 'values' => [['value' => $val]]];
+    }
+}
+
+// Fill text UTM fields (backup)
+foreach ($utmTextFieldMap as $utmKey => $fieldId) {
+    $val = $utm[$utmKey] ?? '';
+    if ($val) {
+        $leadCustomFields[] = ['field_id' => $fieldId, 'values' => [['value' => $val]]];
+    }
+}
+
 // Create lead with embedded contact
 $amoLead = [
     'name' => 'Квиз ФД: ' . ($data['name'] ?? 'Без имени') . ' — ' . ($data['practiceType'] ?? ''),
     'pipeline_id' => $amoPipelineId,
     'status_id' => $amoStatusId,
+    'custom_fields_values' => $leadCustomFields,
     '_embedded' => [
         'tags' => [
             ['name' => 'micro_service'],
